@@ -1,5 +1,5 @@
 {
-  "_comment": "Bu dosya /setup-project komutu tarafından doldurulur. Manuel de düzenlenebilir.",
+  "_comment": "This file is filled by the /setup-project command. It can also be edited manually.",
   "di": "vcontainer",
   "async": "unitask",
   "input": "new",

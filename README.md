@@ -1,42 +1,42 @@
 # Unity Claude AI Workflow
 
-Unity 6 projeleri için Claude Code entegreli multi-agent AI workflow sistemi.
+A multi-agent AI workflow system with Claude Code integration for Unity 6 projects.
 
-## Özellikler
+## Features
 
-- **25 slash command** — `/implement`, `/fix`, `/orchestrate`, `/qa` ve daha fazlası
-- **22 uzman agent** — coder, tester, reviewer, fixer, scout, critic ve daha fazlası
-- **12 mimari kural** — DI, async, lifecycle, performance, serialization...
-- **15 guardrail hook** — Singleton, coroutine, UnityEvent, direkt scene edit engeli
-- **Skills kütüphanesi** — VContainer, Zenject, UniTask, VR, URP ve daha fazlası
-- **Director Gates** — Kritik noktalarda insan onayı checkpoint'leri
-- **Auto-detect** — DI container, input sistemi manifest.json'dan otomatik tespit
+- **25 slash commands**: `/implement`, `/fix`, `/orchestrate`, `/qa`, and more
+- **22 specialist agents**: coder, tester, reviewer, fixer, scout, critic, and more
+- **12 architecture rules**: DI, async, lifecycle, performance, serialization, and more
+- **15 guardrail hooks**: singleton, coroutine, UnityEvent, and direct scene edit protection
+- **Skills library**: VContainer, Zenject, UniTask, VR, URP, and more
+- **Director Gates**: human approval checkpoints at critical moments
+- **Auto-detection**: DI container and input system detection from `manifest.json`
 
-## Kurulum
+## Setup
 
-1. Bu repoyu klonla
-2. `.claude/` klasörünü Unity projenin root dizinine kopyala
-3. Claude Code'u Unity proje dizininde aç
-4. `/setup-project` komutunu çalıştır
+1. Clone this repository.
+2. Copy the `.claude/` folder into the root of your Unity project.
+3. Open Claude Code in the Unity project directory.
+4. Run the `/setup-project` command.
 
-## Gereksinimler
+## Requirements
 
 - Unity 6 (6000.x)
 - Claude Code CLI
-- Git Bash (hook'lar için)
-- UniTask (manifest.json'da kayıtlı olmalı)
-- VContainer veya Zenject (birini seç)
+- Git Bash for hooks
+- UniTask listed in `manifest.json`
+- VContainer or Zenject
 
-## Hızlı Başlangıç
+## Quick Start
 
 ```
-/context-prime     Projeyi Claude'a tanıt
-/game-idea         Yeni oyun fikri → GDD
-/architect         GDD → TDD (teknik tasarım)
-/plan-workflow     TDD → WORKFLOW.md (fazlar + task'lar)
-/orchestrate       WORKFLOW.md'yi execute et
+/context-prime     Introduce the project to Claude
+/game-idea         New game idea -> GDD
+/architect         GDD -> TDD (technical design)
+/plan-workflow     TDD -> WORKFLOW.md (phases + tasks)
+/orchestrate       Execute WORKFLOW.md
 ```
 
-## Lisans
+## License
 
 MIT

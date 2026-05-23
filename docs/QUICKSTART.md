@@ -1,57 +1,57 @@
-# Hızlı Başlangıç
+# Quick Start
 
-## Yeni Proje Başlatma
-
-```
-/game-idea        → Ham fikri GDD'ye dönüştür
-/architect        → GDD'den TDD üret
-/plan-workflow    → TDD'yi fazlara böl → WORKFLOW.md
-/orchestrate      → WORKFLOW.md'yi execute et
-```
-
-## Mevcut Projeye Özellik Ekleme
+## Starting a New Project
 
 ```
-/implement "AudioService implement et"
+/game-idea        -> Convert a raw idea into a GDD
+/architect        -> Generate a TDD from the GDD
+/plan-workflow    -> Split the TDD into phases -> WORKFLOW.md
+/orchestrate      -> Execute WORKFLOW.md
 ```
 
-Pipeline otomatik çalışır:
-1. Testler yazılır (başarısız)
-2. Implementasyon yapılır (testleri geçer)
-3. Verify edilir
-4. Review yapılır
-5. Commit atılır
-
-## Bug Düzeltme
+## Adding a Feature to an Existing Project
 
 ```
-/fix "PlayerController NullReferenceException fırlatıyor"
-/fix-lite "typo: PlayerControler → PlayerController"
-/fix-deep "FixedUpdate arada kayıp frame atıyor, sebebi belirsiz"
+/implement "Implement AudioService"
 ```
 
-## Kalite Kontrolü
+The pipeline runs automatically:
+1. Tests are written and expected to fail.
+2. Implementation is written and expected to pass the tests.
+3. Verification runs.
+4. Review runs.
+5. A commit is created.
+
+## Bug Fixes
 
 ```
-/qa               → Tam kalite pipeline
-/review-code      → Belirli dosyaları review et
-/performance-audit → Hot path denetimi
+/fix "PlayerController throws a NullReferenceException"
+/fix-lite "typo: PlayerControler -> PlayerController"
+/fix-deep "FixedUpdate occasionally skips a frame and the root cause is unclear"
 ```
 
-## Review Modunu Değiştir
+## Quality Control
 
-`production/review-mode.txt` dosyasını düzenle:
-- `solo` — Jam/prototip için hızlı mod
-- `lean` — Normal geliştirme (default)
-- `full` — Takım review modu
+```
+/qa                 -> Full quality pipeline
+/review-code        -> Review specific files
+/performance-audit  -> Hot path audit
+```
 
-## Director Gates (İnsan Checkpoint'leri)
+## Change Review Mode
 
-Sistem kritik noktalarda durur ve senin onayını bekler:
+Edit `production/review-mode.txt`:
+- `solo`: Fast mode for jams and prototypes
+- `lean`: Normal development mode (default)
+- `full`: Team review mode
 
-| Gate | Ne zaman | Ne sorar |
+## Director Gates
+
+The system stops at critical points and waits for your approval:
+
+| Gate | When | Prompt |
 |---|---|---|
-| SCOPE_GATE | Pipeline başında | "go" yaz veya yönlendir |
-| BREAKING_GATE | 3+ dosya değişince | Geniş kapsam onayı |
-| QUALITY_GATE | Review "CHANGES NEEDED" dönünce | fix / skip / stop |
-| COMMIT_GATE | Verification sonrası | Final onay |
+| SCOPE_GATE | At the start of a pipeline | Type "go" or redirect the work |
+| BREAKING_GATE | When 3+ files change | Approve the wider scope |
+| QUALITY_GATE | When review returns "CHANGES NEEDED" | fix / skip / stop |
+| COMMIT_GATE | After verification | Final approval |
