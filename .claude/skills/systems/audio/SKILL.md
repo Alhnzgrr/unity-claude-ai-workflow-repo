@@ -1,0 +1,66 @@
+---
+name: audio
+description: Unity Audio sistemi pattern'leri. AudioSource, AudioMixer, modül yapısı.
+---
+
+# Audio System
+
+## Modül Yapısı
+
+```
+Abstracts/Audio/
+└── IAudioService.cs
+
+Concretes/Audio/
+├── AudioService.cs          ← sealed, UniTask async
+├── AudioConfiguration.cs    ← ScriptableObject (volume, clips dict)
+├── AudioInstaller.cs        ← VContainer/Zenject register
+├── AudioEvents.cs           ← AudioStartedEvent, AudioStoppedEvent
+└── AudioProvider.cs         ← MonoBehaviour, AudioSource wrapper
+```
+
+## IAudioService
+
+```csharp
+public interface IAudioService
+{
+    UniTask PlayAsync(string clipKey, CancellationToken ct);
+    void Stop(string clipKey);
+    void SetVolume(float volume);
+}
+```
+
+## AudioConfiguration
+
+```csharp
+[CreateAssetMenu(menuName = "Config/Audio")]
+public sealed class AudioConfiguration : ScriptableObject
+{
+    [SerializeField] private AudioClip[] _clips;
+    [SerializeField] private float _masterVolume = 1f;
+
+    private Dictionary<string, AudioClip> _clipMap;
+
+    public float MasterVolume => _masterVolume;
+    public AudioClip GetClip(string key) =>
+        _clipMap.TryGetValue(key, out var clip) ? clip : null;
+
+    void OnEnable()
+    {
+        _clipMap = _clips.ToDictionary(c => c.name, c => c);
+    }
+}
+```
+
+## AudioMixer Kullanımı
+
+Her AudioSource bir AudioMixerGroup'a bağlanır:
+- Master → Music, SFX, UI alt grupları
+- Mixer parametreleri exposed → runtime volume control
+
+## Pool Kullanımı
+
+Çok sayıda kısa ses efekti → AudioSource pool:
+```csharp
+private IObjectPool<AudioSource> _sourcePool;
+```
