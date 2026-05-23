@@ -1,6 +1,6 @@
 ---
 name: animation
-description: Animator Controller, Animation Rigging ve animasyon event pattern'leri.
+description: Animator Controller, Animation Rigging, and animation event patterns.
 ---
 
 # Animation System
@@ -27,14 +27,14 @@ public sealed class PlayerAnimationProvider : MonoBehaviour
 }
 ```
 
-## StringToHash Zorunlu
+## StringToHash Required
 
-Animator.StringToHash ile hash'leri cache'le — her frame string karşılaştırması pahalı.
+Cache hashes with Animator.StringToHash — string comparison every frame is expensive.
 
 ## Animation Events
 
 ```csharp
-// Animator'da animation event bağlanır, MonoBehaviour'da işlenir
+// Animation event is bound in the Animator, handled in MonoBehaviour
 public void OnAttackHitFrame()
 {
     _eventBus.Publish(new AttackHitEvent(_playerId));

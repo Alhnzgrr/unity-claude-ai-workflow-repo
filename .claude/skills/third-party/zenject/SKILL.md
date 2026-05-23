@@ -1,20 +1,20 @@
 ---
 name: zenject
-description: Zenject/Extenject DI framework pattern'leri. MonoInstaller, Bind, Inject, Signals.
+description: Zenject/Extenject DI framework patterns. MonoInstaller, Bind, Inject, Signals.
 ---
 
 # Zenject
 
-> `project-config.json` → `"di": "zenject"` ise auto-yüklenir.
+> Auto-loaded when `project-config.json` → `"di": "zenject"`.
 
-## Installer Hiyerarşisi
+## Installer Hierarchy
 
 ```
 ProjectContext (DontDestroyOnLoad)   ← ProjectInstaller
-└── SceneContext (Sahneye özel)      ← GameInstaller
+└── SceneContext (Scene-specific)    ← GameInstaller
 ```
 
-## Bind Yöntemleri
+## Bind Methods
 
 ```csharp
 public class GameInstaller : MonoInstaller
@@ -27,10 +27,10 @@ public class GameInstaller : MonoInstaller
         // Pure C# singleton
         Container.Bind<IAudioService>().To<AudioService>().AsSingle();
 
-        // MonoBehaviour (Hierarchy'de)
+        // MonoBehaviour (in Hierarchy)
         Container.Bind<AudioProvider>().FromComponentInHierarchy().AsSingle();
 
-        // MonoBehaviour (Prefab'dan)
+        // MonoBehaviour (from Prefab)
         Container.Bind<AudioProvider>()
             .FromComponentInNewPrefab(_audioProviderPrefab)
             .AsSingle();
@@ -41,7 +41,7 @@ public class GameInstaller : MonoInstaller
 }
 ```
 
-## Inject Yöntemleri
+## Inject Methods
 
 ```csharp
 // Constructor injection

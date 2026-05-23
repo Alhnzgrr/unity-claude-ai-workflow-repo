@@ -1,11 +1,11 @@
 ---
 name: physics
-description: Unity Physics ve Physics2D pattern'leri. Rigidbody, Collider, Layer yönetimi.
+description: Unity Physics and Physics2D patterns. Rigidbody, Collider, Layer management.
 ---
 
 # Physics System
 
-## Layer Tabanlı Collision
+## Layer-Based Collision
 
 ```csharp
 [CreateAssetMenu(menuName = "Config/Physics")]
@@ -21,28 +21,28 @@ public sealed class PhysicsConfiguration : ScriptableObject
 }
 ```
 
-## Rigidbody Kullanımı
+## Rigidbody Usage
 
 ```csharp
-// Physics'i FixedUpdate'te uygula
+// Apply physics in FixedUpdate
 void FixedUpdate()
 {
     _rb.MovePosition(_rb.position + _velocity * Time.fixedDeltaTime);
 }
 
-// Asla Transform.position = ... (fizik hesabını bozar)
+// Never Transform.position = ... (breaks physics calculation)
 ```
 
-## Raycast Optimizasyonu
+## Raycast Optimization
 
 ```csharp
-// YANLIŞ — her frame allocation
+// WRONG — allocation every frame
 void Update()
 {
     var hits = Physics.RaycastAll(origin, direction);
 }
 
-// DOĞRU — pre-allocated buffer
+// CORRECT — pre-allocated buffer
 private readonly RaycastHit[] _hitBuffer = new RaycastHit[10];
 
 void Update()
@@ -54,7 +54,7 @@ void Update()
 
 ## Trigger vs Collision
 
-- Trigger: `OnTriggerEnter/Exit` — fiziksel tepki yok, sadece tespit
-- Collision: `OnCollisionEnter/Exit` — fiziksel tepki var
+- Trigger: `OnTriggerEnter/Exit` — no physical response, detection only
+- Collision: `OnCollisionEnter/Exit` — physical response present
 
-Her ikisi de View'da işlenir, event ile servise bildirilir.
+Both are handled in the View, notified to the service via event.

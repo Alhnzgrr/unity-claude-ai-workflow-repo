@@ -1,32 +1,32 @@
 ---
 name: vcontainer
-description: VContainer DI framework pattern'leri. LifetimeScope, Register, Inject, EntryPoint.
+description: VContainer DI framework patterns. LifetimeScope, Register, Inject, EntryPoint.
 ---
 
 # VContainer
 
-> `project-config.json` → `"di": "vcontainer"` ise auto-yüklenir.
+> Auto-loaded when `project-config.json` → `"di": "vcontainer"`.
 
-## LifetimeScope Hiyerarşisi
+## LifetimeScope Hierarchy
 
 ```
-AppScope (DontDestroyOnLoad)        ← Global servisler
-└── GameScope (Sahneye özel)        ← Sahne servisleri
-    └── SubScope (Opsiyonel)        ← Alt scope'lar
+AppScope (DontDestroyOnLoad)        ← Global services
+└── GameScope (Scene-specific)      ← Scene services
+    └── SubScope (Optional)         ← Sub-scopes
 ```
 
-## Register Yöntemleri
+## Register Methods
 
 ```csharp
 protected override void Configure(IContainerBuilder builder)
 {
-    // Pure C# servis
+    // Pure C# service
     builder.Register<AudioService>(Lifetime.Singleton).As<IAudioService>();
 
-    // MonoBehaviour (Hierarchy'de var)
+    // MonoBehaviour (exists in Hierarchy)
     builder.RegisterComponentInHierarchy<AudioProvider>();
 
-    // MonoBehaviour (Prefab'dan)
+    // MonoBehaviour (from Prefab)
     builder.RegisterComponentInNewPrefab(_audioProviderPrefab, Lifetime.Singleton);
 
     // Factory
@@ -38,7 +38,7 @@ protected override void Configure(IContainerBuilder builder)
 }
 ```
 
-## Inject Yöntemleri
+## Inject Methods
 
 ```csharp
 // Constructor injection (pure C#)
@@ -68,6 +68,6 @@ public sealed class GameEntryPoint : IStartable, IDisposable
     public void Dispose() => _gameService.Cleanup();
 }
 
-// Register et
+// Register it
 builder.RegisterEntryPoint<GameEntryPoint>();
 ```

@@ -1,13 +1,13 @@
 ---
 name: vr
-description: XR Interaction Toolkit ve XR Origin pattern'leri. Controller input, performance, comfort.
+description: XR Interaction Toolkit and XR Origin patterns. Controller input, performance, comfort.
 ---
 
 # VR Development
 
-> Bu skill `project-config.json` → `"xr": true` ise auto-yüklenir.
+> This skill is auto-loaded when `project-config.json` → `"xr": true`.
 
-## XR Origin Yapısı
+## XR Origin Structure
 
 ```
 XR Origin
@@ -55,22 +55,22 @@ public sealed class VRInputProvider : MonoBehaviour
 }
 ```
 
-## VR Performans Kuralları
+## VR Performance Rules
 
-- **Hedef framerate:** 90 FPS (Quest 2), 120 FPS (Quest 3)
-- **Draw call limiti:** <100 per eye
-- **Foveated Rendering:** Oculus Foveated Rendering aktif et
-- **Single Pass Stereo:** Player Settings'de aktif et
-- **Fixed Foveated Rendering:** Quest için zorunlu
+- **Target framerate:** 90 FPS (Quest 2), 120 FPS (Quest 3)
+- **Draw call limit:** <100 per eye
+- **Foveated Rendering:** Enable Oculus Foveated Rendering
+- **Single Pass Stereo:** Enable in Player Settings
+- **Fixed Foveated Rendering:** Required for Quest
 
 ## Comfort (Locomotion)
 
-- Teleport locomotion → dizziness'ı azaltır
-- Continuous locomotion → vignette ekle (hareket sırasında kenarları karart)
-- Snap turn → ani yön değişiminde kullan
+- Teleport locomotion → reduces dizziness
+- Continuous locomotion → add vignette (darken edges during movement)
+- Snap turn → use for sudden direction changes
 
 ## XR Interaction Toolkit
 
-- XR Grab Interactable → obje tutma
-- XR Socket Interactor → slot yerleştirme
-- XR Ray Interactor → uzak etkileşim (UI için)
+- XR Grab Interactable → grabbing objects
+- XR Socket Interactor → slot placement
+- XR Ray Interactor → remote interaction (for UI)

@@ -1,11 +1,11 @@
 ---
 name: textmeshpro
-description: TextMeshPro kullanım pattern'leri. TMP_Text, rich text, font atlas yönetimi.
+description: TextMeshPro usage patterns. TMP_Text, rich text, font atlas management.
 ---
 
 # TextMeshPro
 
-## TMP_Text Kullanımı
+## TMP_Text Usage
 
 ```csharp
 public sealed class ScoreView : MonoBehaviour
@@ -27,23 +27,23 @@ public sealed class ScoreView : MonoBehaviour
 ## Rich Text
 
 ```csharp
-_label.text = "<color=#FF0000>Kırmızı</color> <b>Kalın</b> <size=24>Büyük</size>";
-_label.text = "Para: <sprite name=\"coin\"> 100";
+_label.text = "<color=#FF0000>Red</color> <b>Bold</b> <size=24>Large</size>";
+_label.text = "Coins: <sprite name=\"coin\"> 100";
 ```
 
-## Font Atlas Yönetimi
+## Font Atlas Management
 
-- Her farklı font → ayrı Font Asset
-- Dynamic Character Set: kullanılan karakterler otomatik eklenir
-- Static Character Set: belirli karakter seti için daha performanslı
+- Each different font → separate Font Asset
+- Dynamic Character Set: used characters are added automatically
+- Static Character Set: more performant for a specific character set
 
-## Performans
+## Performance
 
 ```csharp
-// YANLIŞ — her frame string allocation
+// WRONG — string allocation every frame
 void Update() { _text.text = "Score: " + _score; }
 
-// DOĞRU — sadece değişince güncelle
+// CORRECT — update only when changed
 public void OnScoreChanged(int score)
 {
     _sb.Clear();

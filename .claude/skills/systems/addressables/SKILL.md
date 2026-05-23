@@ -1,13 +1,13 @@
 ---
 name: addressables
-description: Addressables Asset System pattern'leri. Async yükleme, handle lifecycle, label yönetimi.
+description: Addressables Asset System patterns. Async loading, handle lifecycle, label management.
 ---
 
 # Addressables
 
-> Bu skill `project-config.json` → `"addressables": true` ise auto-yüklenir.
+> This skill is auto-loaded when `project-config.json` → `"addressables": true`.
 
-## Temel Yükleme Pattern
+## Basic Loading Pattern
 
 ```csharp
 public sealed class AssetLoader : IAssetLoader, IDisposable
@@ -47,11 +47,11 @@ public async UniTask<GameObject> InstantiateAsync(string key, Transform parent, 
     return handle.Result;
 }
 
-// Release etmek için Addressables.ReleaseInstance kullan (Destroy değil!)
+// Use Addressables.ReleaseInstance to release (not Destroy!)
 public void ReleaseInstance(GameObject go) => Addressables.ReleaseInstance(go);
 ```
 
-## Label ile Preload
+## Preload with Label
 
 ```csharp
 public async UniTask PreloadAsync(string label, CancellationToken ct)
@@ -62,8 +62,8 @@ public async UniTask PreloadAsync(string label, CancellationToken ct)
 }
 ```
 
-## Build ve Catalog
+## Build and Catalog
 
-- Addressable Groups → Remote veya Local
+- Addressable Groups → Remote or Local
 - Remote → Content Delivery Network (CDN)
 - Build → Window → Asset Management → Addressables → Build → New Build
