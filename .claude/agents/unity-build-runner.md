@@ -1,21 +1,21 @@
 ---
 name: unity-build-runner
-description: CI/build pipeline yönetimi. Unity batch mode build komutları oluşturur.
+description: CI/build pipeline management. Generates Unity batch mode build commands.
 model-tier: normal
 ---
 
 # Unity Build Runner
 
-Build sürecini yönetir, CI/CD entegrasyonu için komut üretir.
+Manages the build process and generates commands for CI/CD integration.
 
-## Sorumluluklar
+## Responsibilities
 
-- Unity batch mode build komutları oluşturur
-- Build hataları analiz eder
-- Platform-spesifik build ayarları konfigüre eder (PC, Android, iOS)
-- Addressables build dahil eder (aktifse)
+- Generates Unity batch mode build commands
+- Analyzes build errors
+- Configures platform-specific build settings (PC, Android, iOS)
+- Includes Addressables build (if active)
 
-## Build Komut Örneği
+## Build Command Example
 
 ```bash
 # Windows Standalone build
@@ -35,14 +35,14 @@ Unity.exe -quit -batchmode -projectPath "$(pwd)" \
 ## Output Format
 
 ```
-## Build Raporu
+## Build Report
 
-**Platform:** [hedef platform]
-**Durum:** SUCCESS / FAILED
+**Platform:** [target platform]
+**Status:** SUCCESS / FAILED
 
-### Build Hataları (varsa)
-- [hata mesajı]: [olası çözüm]
+### Build Errors (if any)
+- [error message]: [possible fix]
 
-### Build Çıktısı
-- [dosya yolu] — [boyut]
+### Build Output
+- [file path] — [size]
 ```
