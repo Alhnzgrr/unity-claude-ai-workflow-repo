@@ -1,10 +1,10 @@
 # /orchestrate
 
-Executes WORKFLOW.md phase by phase. Fully automated pipeline.
+Executes `docs/WORKFLOW.md` phase by phase.
 
 ## Usage
 
-```
+```text
 /orchestrate
 ```
 
@@ -14,62 +14,62 @@ Executes WORKFLOW.md phase by phase. Fully automated pipeline.
 
 ## Workflow
 
-### Step 0 — Initialization
+### Step 0 - Initialization
 
-1. Read `docs/WORKFLOW.md`
-2. Scan `Assets/_Framework/` and `Assets/_GameFolders/` — detect existing code
-3. Show Pre-Scan report (which code already exists)
+1. Read `docs/WORKFLOW.md`.
+2. Scan existing code and assets relevant to the workflow.
+3. Show a pre-scan report with already implemented systems.
 
-### ▶ SCOPE_GATE
+### SCOPE_GATE
 
-```
+```text
 WORKFLOW.md loaded.
 Phases: [N]
 Total tasks: [M]
-
-Pre-Scan: [systems already present]
+Pre-scan: [systems already present]
 
 Type "go" to start.
 ```
 
-### Step 1 — Phase Loop
+### Step 1 - Phase Loop
 
 For each phase:
 
+```text
+PHASE [N]: [Phase Name]
 ```
-=== PHASE [N]: [Phase Name] ===
+
+Task execution uses the compact agent chain:
+
+```text
+project-architect when design/research is needed
+test-validator when tests or validation are needed
+unity-implementer for implementation
+code-reviewer for review
+performance-auditor only for performance-sensitive work
+docs-maintainer only for documentation updates
 ```
 
-**Parallel task detection:**
-Tasks in the same `parallel_group` → spawn at the same time
-Conflicting output files → run sequentially
+Run `/validate` at the end of each phase.
 
-**Task execution:**
-→ tester → coder/unity-coder → verifier → reviewer → committer
+### Phase Gate
 
-**Automatic end-of-phase quality:**
-→ `/ralph` (verify-fix loop)
-→ `silent-failure-hunter`
-→ `/validate`
-
-**Phase Gate (manual):**
-```
+```text
 Phase [N] complete.
 Proceed to next phase? (yes / no / stop)
 ```
 
-### Step 2 — Completion
+### Step 2 - Completion
 
 Append to `docs/EVENTS.jsonl`:
+
 ```json
 {"event":"ORCHESTRATION_COMPLETED","timestamp":"...","phases":[N],"tasks":[M]}
 ```
 
-Delete `.claude/state/gate-cleared`.
+```text
+ORCHESTRATION COMPLETE
+Phases: [N]
+Tasks: [M]
+```
 
-```
-✅ ORCHESTRATION COMPLETE
-   Phases: [N]
-   Tasks: [M]
-   Commits: [K]
-```

@@ -20,13 +20,13 @@ Examples:
 
 Read the specified files with the Read tool (required to bypass gateguard).
 
-### Step 2 — unity-reviewer
+### Step 2 — code-reviewer
 
-Spawn `unity-reviewer`. With the full review checklist.
+Spawn `code-reviewer`. With the full review checklist.
 
 ### Step 3 — Show Report
 
-Display the reviewer output:
+Display the code-reviewer output:
 - Must Fix (blocker)
 - Should Improve (suggestion)
 - Optional (nice-to-have)

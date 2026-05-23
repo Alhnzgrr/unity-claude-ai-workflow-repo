@@ -15,13 +15,13 @@ iteration = 0
 
 LOOP:
   iteration += 1
-  unity-verifier → compile + test
+  test-validator → compile + test
   
   PASSED → "Green! Passed in [iteration] iteration(s)." → STOP
   
   FAILED:
     iteration >= 10 → "STUCK: Still red after 10 iterations." → STOP
-    unity-coder → fix the error
+    unity-implementer → fix the error
     go back to LOOP
 ```
 

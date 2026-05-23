@@ -1,46 +1,52 @@
 # Command Reference
 
 ## Design Phase
+
 | Command | Description |
 |---|---|
-| `/game-idea` | Converts raw idea into GDD |
-| `/architect` | GDD → TDD, adversarial review with unity-critic |
-| `/plan-workflow` | Splits TDD into phases → WORKFLOW.md |
-| `/dry-run` | Previews orchestration plan |
+| `/game-idea` | Converts a raw idea into a GDD |
+| `/architect` | Converts GDD into TDD with `project-architect` |
+| `/plan-workflow` | Splits TDD into phases and creates `WORKFLOW.md` |
+| `/dry-run` | Previews the orchestration plan |
 
 ## Implementation Phase
+
 | Command | Description |
 |---|---|
-| `/setup-project` | Detect + selection wizard, creates folder structure |
-| `/implement <task>` | TDD pipeline: test→coder→verifier→reviewer→committer |
-| `/fix <bug>` | Bug fix pipeline |
-| `/fix-lite <bug>` | Fast path: NullRef, typo, single line |
-| `/fix-deep <bug>` | Evidence-first: no fix without proven root cause |
-| `/orchestrate` | Executes WORKFLOW.md phase by phase |
-| `/continue` | Resumes an interrupted /orchestrate |
-| `/new-module` | 5-file scaffold (Interface, Service, Config, Installer, Events) |
+| `/setup-project` | Detects project settings and creates recommended folder structure |
+| `/implement <task>` | Runs test -> implement -> validate -> review |
+| `/fix <bug>` | Runs investigate -> fix -> regression test -> validate -> review |
+| `/fix-lite <bug>` | Fast path for obvious low-risk bugs |
+| `/fix-deep <bug>` | Evidence-first debugging when root cause is unclear |
+| `/orchestrate` | Executes `WORKFLOW.md` phase by phase |
+| `/continue` | Resumes an interrupted `/orchestrate` |
+| `/new-module` | Creates a module scaffold |
 
 ## Quality Phase
+
 | Command | Description |
 |---|---|
-| `/qa` | Full quality pipeline: ralph→silent-failure-hunt→validate |
-| `/ralph` | Verify-fix loop until green (max 10 iterations) |
+| `/qa` | Runs review and validation checks |
+| `/ralph` | Verify-fix loop until green, with a maximum iteration limit |
 | `/validate` | Exit criteria check for the current phase |
-| `/review-code` | Deep review of specific files |
-| `/performance-audit` | Hot path allocation & draw call audit |
+| `/review-code` | Focused review of specific files |
+| `/performance-audit` | Hot path, memory, rendering, and draw-call audit |
 
 ## Documentation & Learning
+
 | Command | Description |
 |---|---|
-| `/learn` | Saves patterns under skills/learned/ |
-| `/catch-up` | Human-readable codebase guide → docs/CATCH_UP.md |
+| `/learn` | Saves reusable patterns under `skills/learned/` |
+| `/catch-up` | Creates a human-readable codebase guide |
 | `/adr <decision>` | Creates an Architecture Decision Record |
 | `/smart-commit` | Splits dirty tree into semantic commits |
 
 ## Session & Context
+
 | Command | Description |
 |---|---|
 | `/context-prime` | Brings Claude into project context at session start |
 | `/checkpoint` | Saves conversation summary to state |
-| `/search <query>` | Codebase research → action router |
-| `/discover` | Scans manifest.json and generates package skills |
+| `/search <query>` | Performs codebase research and routes next action |
+| `/discover` | Scans packages and suggests relevant skills |
+

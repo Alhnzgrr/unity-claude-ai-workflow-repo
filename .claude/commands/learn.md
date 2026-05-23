@@ -22,7 +22,7 @@ Ask or observe one of the following:
 - "Where else has this pattern been used?"
 - "Does this error exist anywhere else?"
 
-Scan the codebase with `unity-scout`.
+Scan the codebase with `project-architect`.
 
 ### Step 2 — Create Skill
 

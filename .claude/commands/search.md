@@ -17,16 +17,16 @@ Examples:
 
 ## Workflow
 
-### Step 1 — unity-scout
+### Step 1 — project-architect
 
-Spawn `unity-scout`:
+Spawn `project-architect`:
 - Find relevant code using Grep and Glob
 - Build a dependency map
 - Report findings
 
-### Step 2 — unity-reviewer (if analysis is needed)
+### Step 2 — code-reviewer (if analysis is needed)
 
-If a finding requires review (architecture violation, etc.) → add `unity-reviewer`.
+If a finding requires review (architecture violation, etc.) → add `code-reviewer`.
 
 ### Step 3 — Action Router
 

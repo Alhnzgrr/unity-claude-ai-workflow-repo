@@ -1,48 +1,44 @@
 # Model Routing
 
-Which model is used for which task.
+Use the smallest model tier that can make the decision safely. Keep the agent layer compact; route package and subsystem details through skills instead of spawning more agents.
 
 ## Model Tiers
 
-| Tier | Model | When |
+| Tier | When |
+|---|---|
+| light | Documentation cleanup, summaries, index updates, simple read-only checks |
+| normal | Implementation, review, debugging, tests, validation, most Unity work |
+| heavy | Architecture design, high-risk dependency decisions, broad migrations |
+
+## Agent Tier Mapping
+
+| Agent | Default tier | Notes |
 |---|---|---|
-| light | Haiku | Read-only, formatting, quick summary, linting |
-| normal | Sonnet | Code generation, review, debugging, implementation |
-| heavy | Opus | Architecture design, adversarial review, critical decisions |
+| `docs-maintainer` | light | Use for README, skills, rules, indexes, ADRs, and learned patterns. |
+| `unity-implementer` | normal | Can handle small fixes and full implementation. Escalate only when design is unclear. |
+| `code-reviewer` | normal | Use stricter depth in `full` mode instead of spawning a second reviewer. |
+| `test-validator` | normal | Use for test authoring, compile checks, hook checks, and build validation. |
+| `performance-auditor` | normal | Use only when performance is central to the task. |
+| `project-architect` | heavy | Use for system design, discovery, package analysis, dependency boundaries, and migration planning. |
 
-## Agent → Tier Mapping
+## Complexity Score
 
-### light (Haiku)
-- `unity-verifier` — compile/test result reading
-- `committer` — commit message generation
-- `unity-scout` — read-only research
-- `unity-fixer-lite` — single-line fix
-- `unity-linter` — convention checking
-- `package-analyzer` — manifest reading
+```text
+0.0-0.3 -> light or normal
+0.4-0.6 -> normal
+0.7-1.0 -> heavy design pass, then normal implementation
+```
 
-### normal (Sonnet)
-- `unity-coder`, `coder`, `unity-coder-lite`
-- `tester`
-- `reviewer`, `unity-reviewer`, `unity-developer`
-- `unity-fixer`, `unity-migrator`
-- `silent-failure-hunter`
-- `unity-setup`, `unity-scene-builder`
-- `unity-optimizer`, `unity-build-runner`
+Complexity signals:
 
-### heavy (Opus)
-- `unity-architect` — system design
-- `unity-critic` — adversarial plan review
+- New module: +0.3
+- Multiple systems affected: +0.2
+- ECS, Addressables, networking, mobile, or VR risk: +0.2
+- Requires tests: +0.1
+- Modifies existing code: +0.1
+- Single file and single method: usually 0.1
 
-## Complexity Score → Model Selection
+## Routing Rule
 
-0.0 – 0.3 → light or normal
-0.4 – 0.6 → normal
-0.7 – 1.0 → heavy (architect) + normal (coder)
+Spawn another agent only when the next step needs a different decision responsibility. Do not spawn a new agent just because a named skill exists.
 
-Complexity calculation:
-- New module? +0.3
-- Affects multiple systems? +0.2
-- ECS or Addressables? +0.2
-- Requires tests? +0.1
-- Modifies existing code? +0.1
-- Single file single method? 0.1

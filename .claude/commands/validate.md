@@ -16,7 +16,7 @@ Exit criteria check for the completed phase.
 - [ ] Console: no errors or exceptions (warnings acceptable)
 - [ ] Serialization risk: FormerlySerializedAs checked
 - [ ] Silent failures: clean
-- [ ] Architecture rules: no violations (run unity-linter)
+- [ ] Architecture rules: no violations (run code-reviewer)
 
 ## Output
 

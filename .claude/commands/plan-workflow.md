@@ -43,14 +43,14 @@ Write to `docs/WORKFLOW.md`:
 ## Phase 1: Foundation
 
 ### Task 1.1: EventBus Implementation
-- **Agent:** coder
+- **Agent:** unity-implementer
 - **Input:** IEventBus interface definition
 - **Output:** EventBus.cs (Assets/_Framework/Events/)
 - **Acceptance:** EditMode tests passing
 - **parallel_group:** foundation
 
 ### Task 1.2: Logger Implementation
-- **Agent:** coder
+- **Agent:** unity-implementer
 - **Input:** ILogger interface definition
 - **Output:** UnityLogger.cs (Assets/_Framework/Logging/)
 - **Acceptance:** EditMode tests passing

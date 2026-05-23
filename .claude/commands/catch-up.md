@@ -12,7 +12,7 @@ Generates a human-readable codebase guide.
 
 ### Step 1 — Scan Codebase
 
-With `unity-scout`:
+With `project-architect`:
 - List all Interfaces
 - List all Services
 - Extract the dependency graph

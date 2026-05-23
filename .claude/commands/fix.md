@@ -1,61 +1,64 @@
 # /fix
 
-Bug fix pipeline: scout → fixer → test → reviewer → committer.
+Bug fix pipeline: investigate -> fix -> regression test -> validate -> review -> optional commit.
 
 ## Usage
 
-```
+```text
 /fix <error description or stack trace>
 ```
 
 ## Workflow
 
-### Step 0 — Calculate Complexity
+### Step 0 - Triage
 
-- Is there a stack trace? → is the root cause clear?
-- How many files are affected?
-- Complexity < 0.2 → suggest `/fix-lite`
-- Complexity unclear → suggest `/fix-deep`
+- If the root cause is unclear, spawn `project-architect` for dependency mapping and hypotheses.
+- If the root cause is clear, go directly to `unity-implementer`.
+- If the change is risky or wide-scope, stop at SCOPE_GATE.
 
-### ▶ SCOPE_GATE
+### SCOPE_GATE
 
-```
+```text
 Bug: [description]
 Estimated affected files: [list]
-Complexity: [0.0–1.0]
+Complexity: [0.0-1.0]
 
 Type "go" to continue.
 ```
 
-### Step 1 — unity-scout + unity-fixer (parallel, complexity ≥ 0.4)
+### Step 1 - project-architect
 
-- `unity-scout`: dependency map, affected files
-- `unity-fixer`: root cause analysis
+Use only when needed:
 
-**▶ BREAKING_GATE** (if 3+ files affected):
-```
-This fix affects [N] files. Wide-scope change.
-Type "go" to continue.
-```
+- Map affected systems.
+- Identify likely root cause.
+- Define the smallest safe fix boundary.
 
-### Step 2 — tester
+### Step 2 - unity-implementer
 
-`tester` agent: write a regression test (a test that reproduces the bug).
+Spawn `unity-implementer`:
 
-### Step 3 — unity-coder or unity-fixer
+- Apply the root-cause fix.
+- Avoid broad refactors unless the bug cannot be fixed safely without them.
+- Use MCP or manual Unity Editor steps for scene/prefab wiring.
 
-Apply the fix. Regression test must pass.
+### Step 3 - test-validator
 
-### Step 4 — unity-verifier
+Spawn `test-validator`:
 
-Compile + run all tests.
+- Add or update a regression test when practical.
+- Compile and run relevant tests.
+- Run hook checks when repository files changed.
 
-### Step 5 — Reviewer (lean/full mode)
+### Step 4 - code-reviewer
 
-Spawn `unity-reviewer`.
+Run `code-reviewer` in lean/full modes:
 
-**▶ QUALITY_GATE** (if CHANGES NEEDED).
+- Check the fix for regressions.
+- Check lifecycle, async, event, and serialization risks.
+- Check whether test coverage is enough for the bug.
 
-### Step 6 — committer
+### Step 5 - Commit
 
-**▶ COMMIT_GATE** → `committer` creates the commit.
+Ask for COMMIT_GATE before committing. The main Claude session creates the commit.
+

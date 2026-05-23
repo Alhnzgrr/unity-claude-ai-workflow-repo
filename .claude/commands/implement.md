@@ -1,99 +1,89 @@
 # /implement
 
-TDD pipeline: test → coder → verifier → reviewer → committer.
+Implementation pipeline: test -> implement -> validate -> review -> optional commit.
 
 ## Usage
 
-```
+```text
 /implement <task description>
 ```
 
 ## Workflow
 
-### Step 0 — Preparation
+### Step 0 - Preparation
 
-1. Read `production/review-mode.txt`
-2. Read `project-config.json` (DI, async, input type)
-3. Calculate complexity (0.0–1.0)
-4. Determine model tier
+1. Read `production/review-mode.txt`.
+2. Read `.claude/project-config.json`.
+3. Estimate complexity and affected files.
+4. Select the required skills before spawning agents.
 
-### ▶ SCOPE_GATE
+### SCOPE_GATE
 
-```
+```text
 Task: [task description]
-Complexity: [0.0–1.0]
+Complexity: [0.0-1.0]
 Files affected: [estimate]
 Review mode: [solo/lean/full]
 
 Type "go" to continue.
 ```
 
-On receiving `go`, create `.claude/state/gate-cleared`.
+### Step 1 - test-validator
 
-### Step 1 — tester (isolated subagent)
+Spawn `test-validator` when tests are expected:
 
-Spawn `tester` agent:
-- Write the test file
-- Tests MUST FAIL (no implementation yet)
-- Test type: EditMode / PlayMode (based on complexity)
+- Write focused failing tests first when the task fits TDD.
+- Choose EditMode, PlayMode programmatic, or PlayMode scene tests.
+- Skip test generation only when the change is documentation-only or explicitly exploratory.
 
-### Step 2 — unity-coder or coder
+### Step 2 - unity-implementer
 
-- Complexity ≥ 0.4 or Unity API required → `unity-coder`
-- Pure C# → `coder`
-- Write minimal implementation to pass the tests
+Spawn `unity-implementer`:
 
-### Step 3 — unity-verifier
+- Implement the smallest coherent change.
+- Use project DI, async, input, serialization, and Unity lifecycle rules.
+- Use Unity MCP for scene/prefab/asset wiring when needed.
 
-Spawn `unity-verifier`:
-- Compile check
-- Run tests
-- Failure → send back to unity-coder (max 2 passes)
+### Step 3 - test-validator
 
-### Step 4 — Reviewer
+Spawn `test-validator`:
 
-- review-mode == `solo` → skip this step
-- review-mode == `lean` or `full` → spawn `unity-reviewer`
+- Compile check.
+- Run relevant tests and hook checks.
+- Send failures back to `unity-implementer` for at most two fix passes.
 
-**▶ QUALITY_GATE** (if CHANGES NEEDED):
-```
+### Step 4 - code-reviewer
+
+- `solo`: skip unless the change is risky.
+- `lean`: run normal review.
+- `full`: run stricter review depth in the same `code-reviewer` agent.
+
+### QUALITY_GATE
+
+```text
 Reviewer returned CHANGES NEEDED.
-fix → continue fixing
-skip → skip review
-stop → halt the process
+fix  -> continue fixing
+skip -> skip review
+stop -> halt the process
 ```
 
-### Step 5 — unity-developer (full mode)
+### Step 5 - Commit
 
-- review-mode == `full` → spawn `unity-developer`
-- Otherwise skip
+Ask for COMMIT_GATE before committing. The main Claude session creates the commit; no separate commit agent is required.
 
-### Step 6 — silent-failure-hunter
-
-Spawn `silent-failure-hunter`:
-- Check for exception swallowing, async void, event leaks
-
-### Step 7 — committer
-
-**▶ COMMIT_GATE**:
-```
+```text
 Staged files:
 - [file list]
 
 About to commit. Do you approve? (go / no)
 ```
 
-`go` → `committer` agent creates the commit.
-
-### Cleanup
-
-Delete `.claude/state/gate-cleared`.
-
 ## Output
 
+```text
+IMPLEMENT COMPLETE
+Tests: [N] passed / not run
+Files: [M] files changed
+Commit: [hash or none]
 ```
-✅ IMPLEMENT COMPLETE
-   Tests: [N] passed
-   Files: [M] files changed
-   Commit: [commit hash]
-```
+

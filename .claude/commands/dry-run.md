@@ -29,14 +29,14 @@ For each phase and task:
 
 ### Phase 1: Foundation (2 tasks, parallel)
   [parallel_group: foundation]
-  ├── Task 1.1 → coder → EventBus.cs
-  └── Task 1.2 → coder → UnityLogger.cs
+  ├── Task 1.1 → unity-implementer → EventBus.cs
+  └── Task 1.2 → unity-implementer → UnityLogger.cs
   Gate: SCOPE_GATE (at phase start)
 
 ### Phase 2: Core Systems (3 tasks)
-  ├── Task 2.1 → unity-coder → AudioService + tests
-  ├── Task 2.2 → unity-coder → PlayerService + tests
-  └── Task 2.3 → unity-coder → EnemyService + tests
+  ├── Task 2.1 → unity-implementer → AudioService + tests
+  ├── Task 2.2 → unity-implementer → PlayerService + tests
+  └── Task 2.3 → unity-implementer → EnemyService + tests
   Gate: SCOPE_GATE + COMMIT_GATE
 
 Total: [N] tasks, [M] agent spawns, [K] Director Gates

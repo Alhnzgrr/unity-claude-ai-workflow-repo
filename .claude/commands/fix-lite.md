@@ -1,44 +1,47 @@
 # /fix-lite
 
-Fast path: NullRef, typo, obvious single-line fix.
+Fast path for obvious low-risk bugs.
 
 ## Usage
 
-```
+```text
 /fix-lite <brief error description>
 ```
 
 ## When to Use
 
-- NullReferenceException (obvious cause)
+- Obvious `NullReferenceException`
 - Typo
-- Off-by-one
-- Wrong operator (= instead of ==)
+- Off-by-one error
+- Wrong operator
+- Small local edit with clear cause
 
 ## When Not to Use
 
-If root cause is unclear → use `/fix` or `/fix-deep`.
+Use `/fix` or `/fix-deep` when the root cause is unclear, multiple files are affected, or architecture may be involved.
 
 ## Workflow
 
-### Step 1 — unity-fixer-lite
+### Step 1 - unity-implementer
 
-Spawn `unity-fixer-lite`:
-- Read the relevant file (for gateguard)
-- Apply single-line fix
+Spawn `unity-implementer`:
 
-### Step 2 — unity-verifier
+- Read the relevant file first.
+- Apply the smallest local fix.
 
-Compile + test check.
+### Step 2 - test-validator
 
-### Step 3 — committer (without COMMIT_GATE)
+Run compile and relevant tests when available.
 
-Automatic commit: `fix([scope]): [brief description]`
+### Step 3 - Commit
+
+For a low-risk fix, the main Claude session may create a semantic commit after reporting the staged files.
 
 ## Output
 
+```text
+FIX-LITE COMPLETE
+[file:line] fixed
+Commit: [hash or none]
 ```
-✅ FIX-LITE COMPLETE
-   [file:line] fixed
-   Commit: [hash]
-```
+

@@ -7,7 +7,7 @@ This repository is not a Unity runtime framework. It is an AI workflow layer: co
 ## What This Provides
 
 - **25 slash commands** for setup, planning, implementation, bug fixing, QA, reviews, documentation, and session management.
-- **22 specialist agents** for coding, testing, reviewing, fixing, scouting, architecture, optimization, setup, and build work.
+- **6 broad agents** for architecture, implementation, review, validation, performance, and documentation work.
 - **14 rule files** covering architecture, dependency injection, async, Unity lifecycle, input, performance, serialization, testing, events, prefabs, scene hierarchy, C# style, ECS, and Addressables.
 - **15 guardrail hooks** that block or warn about risky AI edits before they become project damage.
 - **25 skill documents** for Unity architecture, Unity core safety, systems, and third-party packages such as UniTask, VContainer, Zenject, DOTween, Addressables, UI Toolkit, and VR.
@@ -37,7 +37,7 @@ It can still be adapted to other Unity projects, but some rules may need to be r
   CLAUDE.md                  Main Claude Code entry point
   settings.json              Hook and permission configuration
   project-config.json        Project feature flags
-  agents/                    Specialist agent role definitions
+  agents/                    Compact agent role definitions
   commands/                  Slash command workflows
   docs/                      Internal command/agent/skill indexes
   hooks/                     Guardrail scripts
@@ -142,9 +142,9 @@ The file `production/review-mode.txt` controls how strict the workflow is.
 
 | Mode | Behavior | Use case |
 |---|---|---|
-| `solo` | Coder -> committer | game jams, prototypes, fast experiments |
+| `solo` | implementation and validation only | game jams, prototypes, fast experiments |
 | `lean` | tests, implementation, verification, review | normal development |
-| `full` | lean mode plus extra senior Unity review | teams, learning, critical systems |
+| `full` | lean mode plus stricter review depth | teams, learning, critical systems |
 
 The default is `lean`.
 
@@ -196,14 +196,16 @@ Session and context:
 
 Agents live in `.claude/agents/`.
 
-The main groups are:
+The active agents are:
 
-- **Core pipeline:** `unity-coder`, `coder`, `tester`, `unity-verifier`, `reviewer`, `unity-reviewer`, `committer`
-- **Bug fixing and research:** `unity-fixer`, `unity-fixer-lite`, `unity-scout`, `unity-critic`, `silent-failure-hunter`
-- **Unity setup and migration:** `unity-setup`, `unity-scene-builder`, `unity-migrator`, `package-analyzer`
-- **Quality and architecture:** `unity-optimizer`, `unity-linter`, `unity-architect`, `unity-build-runner`, `unity-developer`
+- `project-architect`: system design, discovery, dependency boundaries, package analysis, and migration planning.
+- `unity-implementer`: Unity and pure C# implementation, bug fixes, migrations, and Unity MCP setup work.
+- `code-reviewer`: code review, Unity lifecycle safety, static checks, silent failure audit, and maintainability review.
+- `test-validator`: test writing, EditMode/PlayMode decisions, compile checks, hook checks, and build validation.
+- `performance-auditor`: runtime performance, memory, mobile/VR, rendering, and hot-path allocation audit.
+- `docs-maintainer`: README, rules, skills, command docs, learned patterns, ADRs, and indexes.
 
-Agents are role definitions for Claude Code. They are intended to reduce context mixing by separating research, implementation, testing, review, and commit responsibilities.
+Agents own broad decision responsibilities. Package-specific and system-specific knowledge belongs in `.claude/skills/`, so the workflow avoids spawning a separate agent for every Unity package or subsystem.
 
 ## Rules
 
@@ -342,7 +344,7 @@ For a hard bug:
 - Add a sample Unity module flow.
 - Add more hook test cases for edge cases and false positives.
 - Add rule exception documentation.
-- Improve lower-priority skills such as animation, Cinemachine, URP, Shader Graph, and TextMeshPro.
+- Add documentation quality hooks for stale agent names, missing frontmatter, and malformed skill structure.
 - Add a real Unity project smoke test for `/setup-project`, `/implement`, and `/qa`.
 
 ## License

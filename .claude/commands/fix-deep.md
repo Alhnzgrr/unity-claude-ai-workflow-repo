@@ -1,62 +1,68 @@
 # /fix-deep
 
-Evidence-first fix. No fix is made until the root cause is proven.
+Evidence-first debugging. No fix is made until the root cause is proven.
 
 ## Usage
 
-```
+```text
 /fix-deep <unclear or intermittent error description>
 ```
 
 ## When to Use
 
-- Root cause unclear
-- Intermittent (happens occasionally)
-- Insufficient stack trace
-- "Sometimes works" issues
+- Root cause is unclear.
+- Bug is intermittent.
+- Stack trace is missing or points to a symptom.
+- The issue sometimes works and sometimes fails.
 
 ## Workflow
 
-### Step 1 — Log Intake
+### Step 1 - Log Intake
 
-Collect existing logs and error messages:
-- Stack trace
-- Unity Console output
-- Reproduction steps
+Collect existing evidence:
 
-### Step 2 — Generate Hypotheses
+- Stack trace.
+- Unity Console output.
+- Reproduction steps.
+- Recent code or asset changes.
 
-With `unity-scout` + `unity-fixer`, produce a minimum of 2 hypotheses:
+### Step 2 - Hypotheses
+
+Use `project-architect` and `unity-implementer` only if both roles are needed:
+
+```text
+Hypothesis 1: [cause]
+Evidence needed: [what would confirm it]
+
+Hypothesis 2: [cause]
+Evidence needed: [what would confirm it]
 ```
-Hypothesis 1: [cause] — Evidence: [what we expect to see]
-Hypothesis 2: [cause] — Evidence: [what we expect to see]
-```
 
-### Step 3 — Debug Injection
+### Step 3 - Debug Instrumentation
 
-Add temporary debug logs to gather evidence:
+Add temporary debug logs only where they can prove or reject a hypothesis.
+
 ```csharp
 Debug.Log($"[DEBUG] {nameof(MyMethod)}: value={value}, state={_state}");
 ```
 
-To the user: "Run the game, test this scenario, paste the log here."
+Ask the user to reproduce the scenario and paste the relevant log.
 
-### Step 4 — Evidence Gate
+### Step 4 - Evidence Gate
 
-Once the log is received, evaluate the hypotheses:
-- Hypothesis confirmed? → Apply fix
-- Not confirmed → New hypothesis
+- Confirmed hypothesis -> apply the fix.
+- Rejected hypothesis -> remove bad assumption and create a new hypothesis.
+- Still unclear -> gather narrower evidence.
 
-**No fix is made until the root cause is proven.**
+### Step 5 - Fix
 
-### Step 5 — Fix (With Proven Root Cause)
+Continue with the `/fix` pipeline:
 
-Continue with the `/fix` pipeline (test → coder → verify → review → commit).
-
-### Step 6 — Clean Up Debug Code
-
-```bash
-git diff -- "*.cs" | grep "DEBUG"
+```text
+investigate -> fix -> regression test -> validate -> review -> optional commit
 ```
 
-Remove debug log lines, create commit.
+### Step 6 - Clean Up
+
+Remove temporary debug logs before the final commit.
+

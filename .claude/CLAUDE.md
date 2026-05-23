@@ -1,36 +1,45 @@
 # Unity Claude AI Workflow
 
-A multi-agent AI workflow system with Claude Code integration for Unity 6 projects.
+A compact multi-agent workflow system with Claude Code integration for Unity 6 projects.
 
 ## Setup
 
 Copy this `.claude/` folder to the root directory of your Unity project.
-Then run `/setup-project` — it detects and configures the DI container, input system, and
-optional features.
+Then run `/setup-project`; it detects and configures the DI container, input system, and optional features.
 
 ## Quick Start
 
-```
-/context-prime    → Introduce the project to Claude
-/setup-project    → DI/Input/async detect + feature selection
-/game-idea        → New project: generate GDD
-/implement <task> → Existing project: start TDD pipeline
+```text
+/context-prime    -> Introduce the project to Claude
+/setup-project    -> DI/Input/async detection and feature selection
+/game-idea        -> New project: generate GDD
+/implement <task> -> Existing project: run the implementation pipeline
 ```
 
 ## Architecture Principles
 
-- **DI required:** VContainer or Zenject (singletons forbidden)
-- **Async:** UniTask (coroutines forbidden)
-- **Input:** New Input System or Legacy (auto-detected)
-- **Scene/Prefab:** Edit via MCP, direct editing forbidden
-- **Module structure:** Interface → Service → Config → Installer → Events
+- **DI required:** VContainer or Zenject; singletons are forbidden.
+- **Async:** UniTask; coroutines are forbidden by default.
+- **Input:** New Input System or Legacy is detected by project config.
+- **Scene/Prefab:** Edit through MCP or manual Unity Editor steps; direct text editing is forbidden.
+- **Module structure:** Interface -> Service -> Config -> Installer -> Events.
 
 ## Review Modes
 
 Edit `production/review-mode.txt`:
-- `solo` — Coder → committer only (jam/prototype)
-- `lean` — Full pipeline, default
-- `full` — unity-developer always active
+
+- `solo` -> implementation and validation only for fast prototypes.
+- `lean` -> implementation, validation, and review; default.
+- `full` -> lean mode plus stricter review depth for risky changes.
+
+## Active Agents
+
+- `project-architect`
+- `unity-implementer`
+- `code-reviewer`
+- `test-validator`
+- `performance-auditor`
+- `docs-maintainer`
 
 ## Documentation
 

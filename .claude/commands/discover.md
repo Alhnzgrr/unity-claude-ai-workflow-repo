@@ -1,59 +1,38 @@
 # /discover
 
-Scans Packages/manifest.json and generates skill drafts for installed packages.
+Scans `Packages/manifest.json` and suggests skills for installed packages.
 
 ## Usage
 
-```
+```text
 /discover [--dry-run | --write]
 ```
 
-- `--dry-run` → Shows what would be generated, does not write files
-- `--write` → Writes skill files
-- No argument → Behaves like `--dry-run`, asks for confirmation
+- `--dry-run`: show what would be generated without writing files.
+- `--write`: write approved skill drafts.
+- No argument: behave like `--dry-run` and ask for confirmation.
 
 ## Workflow
 
-### Step 1 — Read manifest.json
+### Step 1 - Read manifest.json
 
-Read `Packages/manifest.json`. List all packages.
+Read `Packages/manifest.json` and list installed packages.
 
-### Step 2 — Spawn package-analyzer
+### Step 2 - project-architect
 
-`package-analyzer`:
-- Identify known packages (VContainer, UniTask, DOTween...)
-- Detect those that use singletons
-- Flag those that need an adapter
+Spawn `project-architect`:
 
-### Step 3 — Generate Skill Drafts
+- Identify known packages such as VContainer, Zenject, UniTask, DOTween, Addressables, Cinemachine, and TextMeshPro.
+- Flag packages that imply singleton, async, rendering, input, or asset-loading rules.
+- Suggest whether the package needs a new skill or can use an existing one.
 
-For each unknown package, a `skills/third-party/[package-name]/SKILL.md` draft:
+### Step 3 - Generate Skill Drafts
 
-```markdown
----
-name: [package-name]
-description: [package purpose]
-discovered: true
----
+For each approved unknown package, create a draft under `.claude/skills/third-party/[package-name]/SKILL.md`.
 
-# [Package Name]
+### Step 4 - Confirmation
 
-## Installation
-
-[Package ID from manifest.json]
-
-## Basic Usage
-
-[TODO: Fill in basic patterns]
-
-## DI Compatibility
-
-[Singleton? Does it need an adapter?]
-```
-
-### Step 4 — User Confirmation
-
-```
+```text
 Packages found: [N]
 New skill drafts: [M]
 Adapter suggestions: [K packages]
@@ -61,9 +40,7 @@ Adapter suggestions: [K packages]
 Write them? (yes/no)
 ```
 
-### Step 5 — Commit (on --write or confirmation)
+### Step 5 - Commit
 
-```bash
-git add .claude/skills/third-party/
-git commit -m "feat: discover and scaffold [N] package skills"
-```
+Ask for approval before committing generated skills.
+

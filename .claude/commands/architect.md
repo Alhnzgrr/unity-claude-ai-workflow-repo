@@ -1,10 +1,10 @@
 # /architect
 
-Generates a Technical Design Document (TDD) from the GDD. Adversarial review with unity-critic.
+Generates a Technical Design Document from `docs/GDD.md`.
 
 ## Usage
 
-```
+```text
 /architect
 ```
 
@@ -14,32 +14,25 @@ Generates a Technical Design Document (TDD) from the GDD. Adversarial review wit
 
 ## Workflow
 
-### Step 1 — Read GDD
+### Step 1 - Read GDD
 
-Read `docs/GDD.md`. Understand the core loop and mechanics.
+Read `docs/GDD.md` and identify the core loop, major mechanics, target platforms, and constraints.
 
-### Step 2 — Spawn unity-architect
+### Step 2 - project-architect
 
-Do technical design with the `unity-architect` agent:
-- Identify systems (AudioSystem, PlayerSystem, EnemySystem...)
-- Module structure for each system: Interface + Service + Config + Installer + Events
-- Draw the dependency graph
-- Define the data flow
+Spawn `project-architect`:
 
-### Step 3 — Adversarial Review with unity-critic
+- Identify systems and ownership boundaries.
+- Define module structure: Interface, Service, Config, Installer, Events, and Provider when needed.
+- Draw dependency direction and data flow.
+- Challenge the weakest assumption in the design before writing the final TDD.
 
-Spawn the `unity-critic` agent:
-- Find the weakest point in the design
-- Ask one sharp question
-- unity-architect responds, strengthens the design
-- Maximum 3 rounds
-
-### Step 4 — Create TDD
+### Step 3 - Create TDD
 
 Write to `docs/TDD.md`:
 
 ```markdown
-# Technical Design Document — [Game Name]
+# Technical Design Document - [Game Name]
 
 ## Systems
 
@@ -50,7 +43,7 @@ Write to `docs/TDD.md`:
 **Events:** [published and subscribed]
 
 ## Module Structure
-[List of 5 files per module]
+[List of files per module]
 
 ## Dependency Graph
 [Text or diagram]
@@ -62,13 +55,11 @@ Write to `docs/TDD.md`:
 [Identified risks and mitigations]
 ```
 
-### Step 5 — Commit
+### Step 4 - Commit
 
-```bash
-git add docs/TDD.md
-git commit -m "docs: add Technical Design Document"
-```
+Ask for approval before committing `docs/TDD.md`.
 
 ## Next Step
 
-When TDD is ready: create the implementation plan with `/plan-workflow`.
+When TDD is ready, create the implementation plan with `/plan-workflow`.
+

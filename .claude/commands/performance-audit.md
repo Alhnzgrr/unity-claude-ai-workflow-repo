@@ -1,38 +1,38 @@
 # /performance-audit
 
-Hot path allocation and draw call audit.
+Audits hot paths, allocations, memory, rendering cost, and platform performance risk.
 
 ## Usage
 
-```
+```text
 /performance-audit [optional: folder or file]
 ```
 
 ## Workflow
 
-### Step 1 — Scan Scope
+### Step 1 - Scope
 
-If specified, that file/folder; otherwise the entire `Concretes/` folder.
+If a file or folder is provided, audit that scope. Otherwise audit likely runtime code under the project gameplay folders.
 
-### Step 2 — unity-optimizer
+### Step 2 - performance-auditor
 
-Spawn `unity-optimizer`:
-- Scan Update/FixedUpdate methods
-- Find allocation patterns
-- LINQ usage
-- Is GetComponent/Camera.main/Find* in hot path?
+Spawn `performance-auditor`:
 
-### Step 3 — unity-developer (in full mode)
+- Scan Update, FixedUpdate, LateUpdate, async loops, and event-heavy paths.
+- Check allocations, LINQ, string formatting, repeated lookups, and object creation.
+- Check rendering, UI, physics, Addressables, pooling, mobile, and VR risks when relevant.
 
-review-mode == `full` → `unity-developer` provides additional perspective.
+### Step 3 - code-reviewer
 
-### Step 4 — Report
+In `full` review mode, run `code-reviewer` for a second correctness and maintainability pass.
 
-```
+### Step 4 - Report
+
+```text
 ## Performance Audit Report
 
-### Critical (fix immediately)
-- [file:line]: [issue] → [suggestion]
+### Critical
+- [file:line]: [issue] -> [suggestion]
 
 ### Watch
 - [file:line]: [issue]
@@ -40,3 +40,4 @@ review-mode == `full` → `unity-developer` provides additional perspective.
 ### Clean
 - [N] files scanned, no issues
 ```
+
