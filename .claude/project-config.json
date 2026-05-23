@@ -1,0 +1,12 @@
+{
+  "_comment": "Bu dosya /setup-project komutu tarafından doldurulur. Manuel de düzenlenebilir.",
+  "di": "vcontainer",
+  "async": "unitask",
+  "input": "new",
+  "ecs": false,
+  "addressables": false,
+  "xr": false,
+  "platform": "general",
+  "unity_version": "6000",
+  "review_mode": "lean"
+}
