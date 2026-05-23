@@ -12,23 +12,23 @@ if [[ "$HAS_HOTPATH" -eq 0 ]]; then exit 0; fi
 ISSUES=()
 
 if echo "$CONTENT" | grep -qE "GetComponent<|GetComponent\("; then
-    ISSUES+=("GetComponent — Awake'de cache'le")
+    ISSUES+=("GetComponent — cache in Awake")
 fi
 
 if echo "$CONTENT" | grep -q "Camera.main"; then
-    ISSUES+=("Camera.main — field'a cache'le")
+    ISSUES+=("Camera.main — cache in a field")
 fi
 
 if echo "$CONTENT" | grep -qE "FindObjectOfType|FindAnyObjectByType|FindObjectsOfType"; then
-    ISSUES+=("Find* — Inject et veya Awake'de cache'le")
+    ISSUES+=("Find* — inject or cache in Awake")
 fi
 
 if [[ ${#ISSUES[@]} -gt 0 ]]; then
-    echo "HOOK WARN [check-expensive-hotpath]: Hot path'te pahalı çağrılar tespit edildi:" >&2
+    echo "HOOK WARN [check-expensive-hotpath]: Expensive calls detected in hot path:" >&2
     for issue in "${ISSUES[@]}"; do
         echo "  - $issue" >&2
     done
-    echo "Dosya: $FILE_PATH" >&2
+    echo "File: $FILE_PATH" >&2
 fi
 
 exit 0

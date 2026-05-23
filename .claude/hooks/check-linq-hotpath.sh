@@ -6,16 +6,16 @@ CONTENT=$(echo "$INPUT" | jq -r '.tool_input.new_string // .tool_input.content /
 
 if [[ ! "$FILE_PATH" =~ \.cs$ ]]; then exit 0; fi
 
-# LINQ using var mı?
+# Is LINQ being used?
 if ! echo "$CONTENT" | grep -qE "using System\.Linq|\.Where\(|\.Select\(|\.ToList\(|\.FirstOrDefault\("; then
     exit 0
 fi
 
-# Update metotları içinde mi? (basit heuristic: Update bloğu sonrasında LINQ)
+# Is it inside Update methods? (simple heuristic: LINQ after Update block)
 if echo "$CONTENT" | grep -qE "(void Update|void FixedUpdate|void LateUpdate)"; then
-    echo "HOOK WARN [check-linq-hotpath]: Update/FixedUpdate/LateUpdate içinde LINQ kullanımı tespit edildi." >&2
-    echo "Hot path'te GC allocation oluşturur. for/foreach döngüsüyle değiştirin." >&2
-    echo "Dosya: $FILE_PATH" >&2
+    echo "HOOK WARN [check-linq-hotpath]: LINQ usage detected inside Update/FixedUpdate/LateUpdate." >&2
+    echo "Causes GC allocation in hot path. Replace with a for/foreach loop." >&2
+    echo "File: $FILE_PATH" >&2
 fi
 
 exit 0

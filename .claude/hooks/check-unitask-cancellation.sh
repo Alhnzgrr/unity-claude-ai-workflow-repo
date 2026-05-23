@@ -12,19 +12,19 @@ if [[ -f "$CONFIG" ]]; then
     if [[ "$ASYNC_LIB" != "unitask" ]]; then exit 0; fi
 fi
 
-# UniTask metodları bul
+# Find UniTask methods
 UNITASK_METHODS=$(echo "$CONTENT" | grep -nE "async UniTask(<\w+>)?\s+\w+\s*\(")
 
 if [[ -z "$UNITASK_METHODS" ]]; then exit 0; fi
 
-# CancellationToken parametresi olmayan metodları bul
+# Find methods without a CancellationToken parameter
 MISSING=$(echo "$UNITASK_METHODS" | grep -v "CancellationToken")
 
 if [[ -n "$MISSING" ]]; then
-    echo "HOOK WARN [check-unitask-cancellation]: CancellationToken parametresi eksik UniTask metodları:" >&2
+    echo "HOOK WARN [check-unitask-cancellation]: UniTask methods missing CancellationToken parameter:" >&2
     echo "$MISSING" >&2
-    echo "Her public async metoda 'CancellationToken ct' parametresi ekleyin." >&2
-    echo "Dosya: $FILE_PATH" >&2
+    echo "Add a 'CancellationToken ct' parameter to every public async method." >&2
+    echo "File: $FILE_PATH" >&2
 fi
 
 exit 0

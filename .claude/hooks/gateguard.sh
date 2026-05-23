@@ -5,31 +5,31 @@ INPUT=$(cat)
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // ""')
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // ""')
 
-# Sadece .cs dosyalarını kontrol et
+# Only check .cs files
 if [[ ! "$FILE_PATH" =~ \.cs$ ]]; then exit 0; fi
 
-# Yeni dosya oluşturma (Write) her zaman izinli
+# Creating new files (Write) is always allowed
 if [[ "$TOOL_NAME" == "Write" ]]; then
-    # Dosya yoksa yeni oluşturuluyor, izin ver
+    # File doesn't exist, creating new — allow
     if [[ ! -f "$FILE_PATH" ]]; then exit 0; fi
 fi
 
 SESSION_LOG=".claude/state/read-files.log"
 mkdir -p ".claude/state"
 
-# Dosya read-log'da var mı?
+# Is the file in the read-log?
 if [[ -f "$SESSION_LOG" ]]; then
     NORMALIZED=$(echo "$FILE_PATH" | tr '\\' '/')
     if grep -qF "$NORMALIZED" "$SESSION_LOG" 2>/dev/null; then
         exit 0
     fi
-    # Basename ile de kontrol et (path farklılıklarına karşı)
+    # Also check by basename (for path variations)
     BASENAME=$(basename "$FILE_PATH")
     if grep -qF "$BASENAME" "$SESSION_LOG" 2>/dev/null; then
         exit 0
     fi
 fi
 
-echo "HOOK BLOCK [gateguard]: '$FILE_PATH' bu session'da okunmadan edit edilemez." >&2
-echo "Önce dosyayı Read tool ile okuyun, sonra düzenleyin." >&2
+echo "HOOK BLOCK [gateguard]: '$FILE_PATH' cannot be edited without first being read in this session." >&2
+echo "First read the file with the Read tool, then edit it." >&2
 exit 2

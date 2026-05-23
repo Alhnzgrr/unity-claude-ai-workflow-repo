@@ -7,10 +7,10 @@ if [[ "$FILE_PATH" =~ \.(unity|prefab|asset)$ ]]; then
     CONFIG=".claude/project-config.json"
     MCP_HINT=""
     if [[ -f "$CONFIG" ]]; then
-        MCP_HINT=" Unity Editor'da manuel olarak düzenleyin."
+        MCP_HINT=" Please edit manually in the Unity Editor."
     fi
-    echo "HOOK BLOCK [block-scene-edit]: .unity/.prefab/.asset dosyaları direkt edit edilemez.${MCP_HINT}" >&2
-    echo "Dosya: $FILE_PATH" >&2
+    echo "HOOK BLOCK [block-scene-edit]: .unity/.prefab/.asset files cannot be directly edited.${MCP_HINT}" >&2
+    echo "File: $FILE_PATH" >&2
     exit 2
 fi
 

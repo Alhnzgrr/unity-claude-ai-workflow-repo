@@ -6,14 +6,14 @@ CONTENT=$(echo "$INPUT" | jq -r '.tool_input.new_string // .tool_input.content /
 
 if [[ ! "$FILE_PATH" =~ \.cs$ ]]; then exit 0; fi
 
-# Test dosyalarını atla
+# Skip Test files
 if [[ "$FILE_PATH" =~ [Tt]est || "$FILE_PATH" =~ [Ee]ditor ]]; then exit 0; fi
 
-# Static Instance property veya field
+# Static Instance property or field
 if echo "$CONTENT" | grep -qE "static\s+\w+\s+Instance|private\s+static\s+\w+\s+_instance|public\s+static\s+\w+\s+Instance"; then
-    echo "HOOK BLOCK [check-singleton]: Static singleton pattern tespit edildi." >&2
-    echo "VContainer veya Zenject kullanarak dependency injection ile inject edin." >&2
-    echo "Dosya: $FILE_PATH" >&2
+    echo "HOOK BLOCK [check-singleton]: Static singleton pattern detected." >&2
+    echo "Inject it using dependency injection with VContainer or Zenject." >&2
+    echo "File: $FILE_PATH" >&2
     exit 2
 fi
 
