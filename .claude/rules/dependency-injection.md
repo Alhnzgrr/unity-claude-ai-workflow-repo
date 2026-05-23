@@ -1,16 +1,16 @@
 # Dependency Injection Rules
 
-## Zorunlu Container
+## Required Container
 
-`project-config.json`'daki `di` değerine göre:
-- `"vcontainer"` → VContainer kullan
-- `"zenject"` → Zenject kullan
-- İkisi aynı projede birlikte kullanılamaz
+Based on the `di` value in `project-config.json`:
+- `"vcontainer"` → use VContainer
+- `"zenject"` → use Zenject
+- Both cannot be used together in the same project
 
-## Scope Yapısı (VContainer)
+## Scope Structure (VContainer)
 
 ```csharp
-// AppScope.cs — DontDestroyOnLoad, global servisler
+// AppScope.cs — DontDestroyOnLoad, global services
 public class AppScope : LifetimeScope
 {
     protected override void Configure(IContainerBuilder builder)
@@ -20,11 +20,11 @@ public class AppScope : LifetimeScope
     }
 }
 
-// GameScope.cs — Sahneye özel servisler
+// GameScope.cs — Scene-specific services
 public class GameScope : LifetimeScope { ... }
 ```
 
-## Scope Yapısı (Zenject)
+## Scope Structure (Zenject)
 
 ```csharp
 public class AppInstaller : MonoInstaller
@@ -36,7 +36,7 @@ public class AppInstaller : MonoInstaller
 }
 ```
 
-## Inject Etme
+## Injecting
 
 ```csharp
 // Constructor injection (pure C#)
@@ -54,28 +54,28 @@ public class AudioProvider : MonoBehaviour
 }
 ```
 
-## Yasak Patternler
+## Forbidden Patterns
 
 ```csharp
-// YASAK — Singleton
+// FORBIDDEN — Singleton
 public static AudioService Instance { get; private set; }
 
-// YASAK — FindObjectOfType
+// FORBIDDEN — FindObjectOfType
 var svc = FindObjectOfType<AudioService>();
 
-// YASAK — GetComponent fallback
+// FORBIDDEN — GetComponent fallback
 void Start() { _service = GetComponent<AudioService>(); }
 
-// YASAK — ServiceLocator
+// FORBIDDEN — ServiceLocator
 ServiceLocator.Get<IAudioService>();
 ```
 
-## Fail-Fast Prensibi
+## Fail-Fast Principle
 
-Eksik dependency → hemen exception fırlat, sessizce arama yapma.
+Missing dependency → throw exception immediately, do not search silently.
 
 ```csharp
-// DOĞRU
+// CORRECT
 public AudioService(IEventBus eventBus)
 {
     _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));

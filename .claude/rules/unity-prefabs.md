@@ -1,49 +1,49 @@
 # Unity Prefab Rules
 
-## Her Scene Object Prefab Olmalı
+## Every Scene Object Must Be a Prefab
 
-Sahnedeki her GameObject bir prefab instance'ı olmalı.
-Doğrudan sahne objesi oluşturma yasak:
+Every GameObject in the scene must be a prefab instance.
+Creating scene objects directly is forbidden:
 
 ```csharp
-// YANLIŞ
+// WRONG
 var go = new GameObject("Enemy");
 var enemy = go.AddComponent<EnemyView>();
 
-// DOĞRU — prefab'dan instantiate
+// CORRECT — instantiate from prefab
 var enemy = Instantiate(_enemyPrefab, position, rotation);
 ```
 
-`check-pure-csharp.sh` ve hook'lar `new GameObject()` pattern'ini yakalar.
+`check-pure-csharp.sh` and hooks catch the `new GameObject()` pattern.
 
-## Prefab Yapısı
+## Prefab Structure
 
 ```
 EnemyPrefab (root)
-├── EnemyView.cs         ← logic component burada
+├── EnemyView.cs         ← logic component here
 └── Body (child)
-    └── MeshRenderer     ← görseller child'da
+    └── MeshRenderer     ← visuals on child
 ```
 
-Root → logic bileşenleri
-Body child → görsel bileşenler (MeshRenderer, Animator)
+Root → logic components
+Body child → visual components (MeshRenderer, Animator)
 
-## Destroy Kuralları
+## Destroy Rules
 
 ```csharp
-// Pooled objeler — Destroy çağırmak yasak, pool'a iade et
+// Pooled objects — calling Destroy is forbidden, return to pool
 _pool.Release(bulletView);
 
-// Non-pooled, sahneden kaldırılacak
+// Non-pooled, to be removed from scene
 Destroy(gameObject);
 
-// Editor'da (test)
+// In Editor (testing)
 DestroyImmediate(gameObject);
 ```
 
 ## BaseCanvas Pattern
 
-Her Canvas → ayrı prefab, `BaseCanvas` base class'tan türer:
+Every Canvas → separate prefab, derived from `BaseCanvas` base class:
 
 ```csharp
 public abstract class BaseCanvas : MonoBehaviour
@@ -56,5 +56,5 @@ public abstract class BaseCanvas : MonoBehaviour
 
 ## Prefab Variant
 
-Benzer prefablar için base prefab + Prefab Variant kullan:
+Use base prefab + Prefab Variant for similar prefabs:
 `EnemyBase.prefab` → `EnemyFast.prefab (variant)`, `EnemyTank.prefab (variant)`

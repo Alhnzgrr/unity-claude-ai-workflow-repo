@@ -1,8 +1,8 @@
 # ECS / DOTS Rules
 
-> Aktif koşul: `project-config.json` → `"ecs": true`
+> Active condition: `project-config.json` → `"ecs": true`
 
-## Temel Yapı
+## Basic Structure
 
 ```csharp
 // Component — pure data
@@ -49,7 +49,7 @@ public class HealthAuthoring : MonoBehaviour
 }
 ```
 
-## IJobEntity — Paralel İşlem
+## IJobEntity — Parallel Processing
 
 ```csharp
 [BurstCompile]
@@ -66,7 +66,7 @@ public partial struct MoveJob : IJobEntity
 
 ## EntityCommandBuffer
 
-Structural change'ler (add/remove component, destroy) ECB ile yapılır:
+Structural changes (add/remove component, destroy) are done via ECB:
 
 ```csharp
 var ecb = new EntityCommandBuffer(Allocator.TempJob);
@@ -77,12 +77,12 @@ ecb.Dispose();
 
 ## Hybrid Linking
 
-MonoBehaviour ↔ Entity iletişimi için `EntityReference` component veya
-`CompanionComponentSystemGroup` kullan.
+Use `EntityReference` component or `CompanionComponentSystemGroup`
+for MonoBehaviour ↔ Entity communication.
 
-## IEvent'lerde byte Base
+## byte Base in IEvents
 
 ```csharp
-// ECS event enum'ları byte base kullanır (cache line optimizasyonu)
+// ECS event enums use byte base (cache line optimization)
 public enum EnemyState : byte { Idle, Moving, Attacking, Dead }
 ```

@@ -1,8 +1,8 @@
 # C# & Unity Coding Rules
 
-## İsimlendirme
+## Naming
 
-| Tür | Format | Örnek |
+| Type | Format | Example |
 |---|---|---|
 | Class, Interface, Enum | PascalCase | `AudioService`, `IAudioService` |
 | Method, Property | PascalCase | `PlayClip()`, `IsPlaying` |
@@ -10,9 +10,9 @@
 | Const | UPPER_SNAKE | `MAX_POOL_SIZE` |
 | Local variable | camelCase | `clipName` |
 
-## Namespace Zorunlu
+## Namespace Required
 
-Her dosya namespace içinde:
+Every file must be inside a namespace:
 
 ```csharp
 namespace MyGame.Audio
@@ -21,7 +21,7 @@ namespace MyGame.Audio
 }
 ```
 
-## #region Yapısı
+## #region Structure
 
 ```csharp
 public class PlayerView : MonoBehaviour
@@ -51,24 +51,24 @@ public class PlayerView : MonoBehaviour
 }
 ```
 
-## sealed Kullanımı
+## sealed Usage
 
-Inheritance amaçlanmıyorsa `sealed` ekle:
+Add `sealed` if inheritance is not intended:
 
 ```csharp
 public sealed class AudioService : IAudioService { }
 ```
 
-## Interface İsimlendirme
+## Interface Naming
 
-Her interface `I` prefix'iyle başlar:
+Every interface starts with the `I` prefix:
 
 ```csharp
 public interface IAudioService { }
 public interface IEventBus { }
 ```
 
-## Dosya = Sınıf
+## File = Class
 
-Her `.cs` dosyası tek bir public tip içerir.
-Dosya adı = sınıf adı: `AudioService.cs` → `AudioService`.
+Each `.cs` file contains a single public type.
+File name = class name: `AudioService.cs` → `AudioService`.

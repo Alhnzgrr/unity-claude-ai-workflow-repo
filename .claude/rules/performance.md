@@ -1,36 +1,36 @@
 # Performance Rules
 
-## Hot Path Tanımı
+## Hot Path Definition
 
-`Update()`, `FixedUpdate()`, `LateUpdate()` ve bunlardan çağrılan her metot hot path'tir.
+`Update()`, `FixedUpdate()`, `LateUpdate()` and every method called from them is a hot path.
 
-## Allocation Yasağı
+## Allocation Ban
 
-Hot path'te GC allocation sıfır olmalı:
+GC allocation must be zero in hot paths:
 
 ```csharp
-// YANLIŞ — her frame allocation
+// WRONG — allocation every frame
 void Update()
 {
     var enemies = new List<Enemy>(); // allocation!
     var name = $"Enemy_{id}";       // string allocation!
 }
 
-// DOĞRU — önceden alloc edilmiş
+// CORRECT — pre-allocated
 private readonly List<Enemy> _enemies = new(32);
 private readonly StringBuilder _sb = new();
 ```
 
-## LINQ Yasağı (Hot Path)
+## LINQ Ban (Hot Path)
 
 ```csharp
-// YANLIŞ — Update içinde
+// WRONG — inside Update
 void Update()
 {
     var alive = _enemies.Where(e => e.IsAlive).ToList();
 }
 
-// DOĞRU — for loop
+// CORRECT — for loop
 void Update()
 {
     for (int i = 0; i < _enemies.Count; i++)
@@ -38,25 +38,25 @@ void Update()
 }
 ```
 
-## GetComponent Cache Zorunlu
+## GetComponent Cache Required
 
 ```csharp
-// YANLIŞ
+// WRONG
 void Update() { GetComponent<Rigidbody>().AddForce(Vector3.up); }
 
-// DOĞRU
+// CORRECT
 private Rigidbody _rb;
 void Awake() => _rb = GetComponent<Rigidbody>();
 void Update() => _rb.AddForce(Vector3.up);
 ```
 
-## Find* Yasağı (Hot Path)
+## Find* Ban (Hot Path)
 
-`Camera.main`, `FindObjectOfType`, `FindAnyObjectByType` → inject et veya cache'le.
+`Camera.main`, `FindObjectOfType`, `FindAnyObjectByType` → inject or cache.
 
 ## Object Pooling
 
-Sık oluşturulan/yok edilen objeler için `ObjectPool<T>` kullan:
+Use `ObjectPool<T>` for frequently created/destroyed objects:
 
 ```csharp
 private IObjectPool<BulletView> _pool;
@@ -74,8 +74,8 @@ void Awake()
 }
 ```
 
-## Draw Call Disiplini
+## Draw Call Discipline
 
-- Static objeler → Static Batching işaretle
-- Aynı material kullanan dinamik objeler → GPU Instancing
-- UI Canvas'ları ayrı tut (World Space / Screen Space)
+- Static objects → mark Static Batching
+- Dynamic objects sharing the same material → GPU Instancing
+- Keep UI Canvases separate (World Space / Screen Space)

@@ -1,49 +1,49 @@
 # Async Rules
 
-## Zorunlu: UniTask
+## Required: UniTask
 
-Tüm async işlemler UniTask kullanır. `System.Threading.Tasks.Task` ve coroutine yasak.
+All async operations use UniTask. `System.Threading.Tasks.Task` and coroutines are forbidden.
 
 ```csharp
-// DOĞRU
+// CORRECT
 public async UniTask LoadAsync(CancellationToken ct)
 {
     await UniTask.Delay(1000, cancellationToken: ct);
 }
 
-// YANLIŞ — coroutine
+// WRONG — coroutine
 IEnumerator LoadCoroutine() { yield return new WaitForSeconds(1f); }
 
-// YANLIŞ — Task
+// WRONG — Task
 async Task LoadAsync() { await Task.Delay(1000); }
 ```
 
-## CancellationToken Zorunluluğu
+## CancellationToken Requirement
 
-Her public async metot `CancellationToken` parametresi alır:
+Every public async method takes a `CancellationToken` parameter:
 
 ```csharp
-// DOĞRU
+// CORRECT
 public async UniTask PlayAsync(string clipName, CancellationToken ct)
 
-// YANLIŞ — token yok
+// WRONG — no token
 public async UniTask PlayAsync(string clipName)
 ```
 
-## async void Yasak
+## async void Forbidden
 
 ```csharp
-// YASAK
+// FORBIDDEN
 async void OnButtonClick() { await DoSomethingAsync(); }
 
-// DOĞRU — UniTask döndür veya .Forget() kullan
+// CORRECT — return UniTask or use .Forget()
 void OnButtonClick() { DoSomethingAsync(destroyCancellationToken).Forget(); }
 ```
 
-## Ownership Modeli
+## Ownership Model
 
-- View'lar `destroyCancellationToken` kullanır (MonoBehaviour yok olunca iptal)
-- Servisler kendi `CancellationTokenSource`'larını oluşturur ve dispose eder
+- Views use `destroyCancellationToken` (cancelled when MonoBehaviour is destroyed)
+- Services create and dispose their own `CancellationTokenSource`
 
 ```csharp
 public class AudioService : IAudioService, IDisposable
@@ -60,10 +60,10 @@ public class AudioService : IAudioService, IDisposable
 }
 ```
 
-## UniTask.WhenAll Kullanımı
+## UniTask.WhenAll Usage
 
 ```csharp
-// Paralel async işlemler
+// Parallel async operations
 await UniTask.WhenAll(
     LoadAudioAsync(ct),
     LoadTextureAsync(ct)

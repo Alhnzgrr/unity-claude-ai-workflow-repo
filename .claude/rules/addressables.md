@@ -1,19 +1,19 @@
 # Addressables Rules
 
-> Aktif koşul: `project-config.json` → `"addressables": true`
+> Active condition: `project-config.json` → `"addressables": true`
 
-## Resources.Load Yasak
+## Resources.Load Forbidden
 
 ```csharp
-// YANLIŞ
+// WRONG
 var clip = Resources.Load<AudioClip>("Sounds/explosion");
 
-// DOĞRU
+// CORRECT
 var handle = Addressables.LoadAssetAsync<AudioClip>("Sounds/explosion");
 var clip = await handle.Task;
 ```
 
-## Async Yükleme
+## Async Loading
 
 ```csharp
 public async UniTask<AudioClip> LoadClipAsync(string key, CancellationToken ct)
@@ -30,7 +30,7 @@ public async UniTask<AudioClip> LoadClipAsync(string key, CancellationToken ct)
 
 ## Handle Lifecycle
 
-Yüklenen her asset'in handle'ı takip edilir ve Release edilir:
+Every loaded asset's handle is tracked and Released:
 
 ```csharp
 private readonly List<AsyncOperationHandle> _handles = new();
@@ -50,7 +50,7 @@ public void Dispose()
 }
 ```
 
-## Label ile Batch Yükleme
+## Batch Loading with Label
 
 ```csharp
 var handle = Addressables.LoadAssetsAsync<Sprite>("ui-icons", null);

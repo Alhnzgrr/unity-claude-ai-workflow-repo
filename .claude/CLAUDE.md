@@ -1,38 +1,38 @@
 # Unity Claude AI Workflow
 
-Unity 6 projeleri için Claude Code entegreli multi-agent AI workflow sistemi.
+A multi-agent AI workflow system with Claude Code integration for Unity 6 projects.
 
-## Kurulum
+## Setup
 
-Bu `.claude/` klasörünü Unity projenizin root dizinine kopyalayın.
-Ardından `/setup-project` çalıştırın — DI container, input sistemi ve
-opsiyonel feature'ları detect edip yapılandırır.
+Copy this `.claude/` folder to the root directory of your Unity project.
+Then run `/setup-project` — it detects and configures the DI container, input system, and
+optional features.
 
-## Hızlı Başlangıç
+## Quick Start
 
 ```
-/context-prime    → Projeyi Claude'a tanıt
-/setup-project    → DI/Input/async detect + feature seçimi
-/game-idea        → Yeni proje: GDD oluştur
-/implement <task> → Mevcut proje: TDD pipeline başlat
+/context-prime    → Introduce the project to Claude
+/setup-project    → DI/Input/async detect + feature selection
+/game-idea        → New project: generate GDD
+/implement <task> → Existing project: start TDD pipeline
 ```
 
-## Mimari Prensipler
+## Architecture Principles
 
-- **DI zorunlu:** VContainer veya Zenject (singleton yasak)
-- **Async:** UniTask (coroutine yasak)
-- **Input:** New Input System veya Legacy (detect edilir)
-- **Scene/Prefab:** MCP ile düzenle, direkt edit yasak
-- **Modül yapısı:** Interface → Service → Config → Installer → Events
+- **DI required:** VContainer or Zenject (singletons forbidden)
+- **Async:** UniTask (coroutines forbidden)
+- **Input:** New Input System or Legacy (auto-detected)
+- **Scene/Prefab:** Edit via MCP, direct editing forbidden
+- **Module structure:** Interface → Service → Config → Installer → Events
 
-## Review Modları
+## Review Modes
 
-`production/review-mode.txt` dosyasını düzenle:
-- `solo` — Sadece coder → committer (jam/prototip)
-- `lean` — Tam pipeline, default
-- `full` — unity-developer her zaman aktif
+Edit `production/review-mode.txt`:
+- `solo` — Coder → committer only (jam/prototype)
+- `lean` — Full pipeline, default
+- `full` — unity-developer always active
 
-## Belgeler
+## Documentation
 
 @.claude/docs/hooks-blocking.md
 @.claude/docs/agents-index.md
@@ -40,8 +40,8 @@ opsiyonel feature'ları detect edip yapılandırır.
 @.claude/docs/commands.md
 @.claude/docs/auto-loaded-skills.md
 
-## Proje Konfigürasyonu
+## Project Configuration
 
-Mevcut ayarlar: `.claude/project-config.json`
-Hook'lar ve izinler: `.claude/settings.json` (Claude tarafından edit edilemez)
-Session state: `.claude/state/` (.gitignore'da)
+Current settings: `.claude/project-config.json`
+Hooks and permissions: `.claude/settings.json` (cannot be edited by Claude)
+Session state: `.claude/state/` (in .gitignore)

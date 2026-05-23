@@ -1,58 +1,58 @@
 # Serialization Rules
 
-## FormerlySerializedAs Zorunlu
+## FormerlySerializedAs Required
 
-[SerializeField] alan adı değişince veri kaybı olur. Her rename'de zorunlu:
+Renaming a [SerializeField] field causes data loss. Required on every rename:
 
 ```csharp
-// Alan adı _speed → _moveSpeed olarak değişti
+// Field name changed from _speed to _moveSpeed
 [SerializeField]
 [FormerlySerializedAs("_speed")]
 private float _moveSpeed = 5f;
 ```
 
-## [SerializeField] Tercihi
+## [SerializeField] Preference
 
 ```csharp
-// DOĞRU — private, inspector'da görünür
+// CORRECT — private, visible in inspector
 [SerializeField] private float _speed = 5f;
 
-// YANLIŞ — gereksiz public
+// WRONG — unnecessarily public
 public float speed = 5f;
 ```
 
-## Runtime State Serialize Edilmez
+## Runtime State Is Not Serialized
 
-ScriptableObject veya serialized field'lar sadece konfigürasyon için.
-Runtime'da değişen state → plain C# field.
+ScriptableObject or serialized fields are for configuration only.
+State that changes at runtime → plain C# field.
 
 ```csharp
-// YANLIŞ — runtime state serialize
+// WRONG — serializing runtime state
 [SerializeField] private int _currentHealth;
 
-// DOĞRU — config serialize, state ayrı
+// CORRECT — serialize config, keep state separate
 [SerializeField] private int _maxHealth = 100;
-private int _currentHealth; // runtime, serialize etme
+private int _currentHealth; // runtime, do not serialize
 ```
 
 ## Unity Null Check
 
-Unity object'lerde `?.` ve `is null` operator'leri gerçek null değil
-Unity'nin override ettiği == karşılaştırmasını atlatır:
+On Unity objects, `?.` and `is null` operators bypass Unity's overridden == comparison
+rather than checking real null:
 
 ```csharp
-// YANLIŞ — Unity'nin destroyed check'ini atlatır
+// WRONG — bypasses Unity's destroyed check
 if (_component?.DoSomething() != null) { }
 if (_go is null) { }
 
-// DOĞRU
+// CORRECT
 if (_component != null) _component.DoSomething();
 if (_go == null) { }
 ```
 
 ## SerializeReference
 
-Polymorphic serialization için:
+For polymorphic serialization:
 
 ```csharp
 [SerializeReference] private IAbility _ability;
