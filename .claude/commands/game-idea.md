@@ -1,72 +1,72 @@
 # /game-idea
 
-Ham oyun fikrini yapılandırılmış Game Design Document'a (GDD) dönüştürür.
+Converts a raw game idea into a structured Game Design Document (GDD).
 
-## Kullanım
+## Usage
 
 ```
-/game-idea [opsiyonel: kısa fikir açıklaması]
+/game-idea [optional: brief idea description]
 ```
 
 ## Workflow
 
-### Adım 1 — Fikri Anla
+### Step 1 — Understand the Idea
 
-Kullanıcıdan şunları öğren (birer birer sor):
-1. Temel oyun mekaniği nedir? (Core loop)
-2. Hedef platform? (PC, Mobile, VR, Console)
-3. Hedef kitle? (Hyper-casual, Core, Hardcore)
-4. Referans oyunlar? (Varsa)
-5. Öne çıkan özellik nedir? (USP — Unique Selling Point)
+Ask the user the following (one at a time):
+1. What is the core game mechanic? (Core loop)
+2. Target platform? (PC, Mobile, VR, Console)
+3. Target audience? (Hyper-casual, Core, Hardcore)
+4. Reference games? (If any)
+5. What is the standout feature? (USP — Unique Selling Point)
 
-### Adım 2 — Varsayımları Yüzey Alt Etme
+### Step 2 — Surface Assumptions
 
-Belirsiz olan her şeyi somutlaştır:
-- "Multiplayer" → kaç oyuncu, online mi local mi?
-- "RPG sistemi" → hangi sistemler? inventory, skill tree, leveling?
-- "Mobil" → iOS mu Android mu ikisi de mi?
+Make everything ambiguous concrete:
+- "Multiplayer" → how many players, online or local?
+- "RPG system" → which systems? inventory, skill tree, leveling?
+- "Mobile" → iOS, Android, or both?
 
-### Adım 3 — "Yapmıyoruz" Listesi
+### Step 3 — "We're Not Doing" List
 
-YAGNI prensibine göre kapsam dışına alınacakları belirle.
-Kullanıcıya sor: "Bu versiyonda şunları yapmayacağız, doğru mu?"
+Determine what is out of scope according to the YAGNI principle.
+Ask the user: "We won't be doing the following in this version, correct?"
 
-### Adım 4 — GDD Oluştur
+### Step 4 — Create GDD
 
-`docs/GDD.md` dosyasına yaz:
+Write to `docs/GDD.md`:
 
 ```markdown
-# Game Design Document — [Oyun Adı]
+# Game Design Document — [Game Name]
 
-## Özet
-[2-3 cümle elevator pitch]
+## Summary
+[2-3 sentence elevator pitch]
 
 ## Core Loop
-[Temel oyun döngüsü adım adım]
+[Core game loop step by step]
 
-## Mekanikler
-[Her mekanik için: ne, neden, nasıl]
+## Mechanics
+[For each mechanic: what, why, how]
 
-## Hedef Kitle
-[Kim için, neden onlar]
+## Target Audience
+[Who it's for, why them]
 
 ## Platform
-[Hedef platform ve kısıtları]
+[Target platform and constraints]
 
-## Kapsam Dışı (Bu Versiyon)
-[Yapılmayacaklar listesi]
+## Out of Scope (This Version)
+[List of things that won't be built]
 
-## Başarı Kriterleri
-[Nasıl anlarsın oyun çalışıyor?]
+## Success Criteria
+[How will you know the game is working?]
 ```
 
-### Adım 5 — Commit
+### Step 5 — Commit
 
 ```bash
 git add docs/GDD.md
-git commit -m "docs: add Game Design Document for [oyun adı]"
+git commit -m "docs: add Game Design Document for [game name]"
 ```
 
-## Sonraki Adım
+## Next Step
 
-GDD hazırsa: `/architect` ile teknik tasarıma geç.
+When GDD is ready: proceed to technical design with `/architect`.

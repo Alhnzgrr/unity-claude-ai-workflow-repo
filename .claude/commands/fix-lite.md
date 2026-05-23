@@ -1,44 +1,44 @@
 # /fix-lite
 
-Hızlı yol: NullRef, typo, obvious tek satır fix.
+Fast path: NullRef, typo, obvious single-line fix.
 
-## Kullanım
+## Usage
 
 ```
-/fix-lite <kısa hata açıklaması>
+/fix-lite <brief error description>
 ```
 
-## Uygun Durumlar
+## When to Use
 
-- NullReferenceException (bariz sebep)
-- Yazım hatası (typo)
+- NullReferenceException (obvious cause)
+- Typo
 - Off-by-one
-- Yanlış operator (= yerine ==)
+- Wrong operator (= instead of ==)
 
-## Uygun Olmayan Durumlar
+## When Not to Use
 
-Root cause belirsizse → `/fix` veya `/fix-deep` kullan.
+If root cause is unclear → use `/fix` or `/fix-deep`.
 
 ## Workflow
 
-### Adım 1 — unity-fixer-lite
+### Step 1 — unity-fixer-lite
 
-`unity-fixer-lite` spawn et:
-- İlgili dosyayı oku (gateguard için)
-- Tek satır fix uygula
+Spawn `unity-fixer-lite`:
+- Read the relevant file (for gateguard)
+- Apply single-line fix
 
-### Adım 2 — unity-verifier
+### Step 2 — unity-verifier
 
-Compile + test kontrolü.
+Compile + test check.
 
-### Adım 3 — committer (COMMIT_GATE olmadan)
+### Step 3 — committer (without COMMIT_GATE)
 
-Otomatik commit: `fix([scope]): [kısa açıklama]`
+Automatic commit: `fix([scope]): [brief description]`
 
 ## Output
 
 ```
 ✅ FIX-LITE COMPLETE
-   [dosya:satır] düzeltildi
+   [file:line] fixed
    Commit: [hash]
 ```

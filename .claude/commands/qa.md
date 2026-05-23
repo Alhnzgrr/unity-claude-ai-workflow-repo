@@ -1,8 +1,8 @@
 # /qa
 
-Tam kalite pipeline: ralph → silent-failure-hunt → validate.
+Full quality pipeline: ralph → silent-failure-hunt → validate.
 
-## Kullanım
+## Usage
 
 ```
 /qa
@@ -10,26 +10,26 @@ Tam kalite pipeline: ralph → silent-failure-hunt → validate.
 
 ## Workflow
 
-### Adım 1 — /ralph
+### Step 1 — /ralph
 
-Verify-fix loop çalıştır (max 10 iterasyon). Yeşil olana kadar dur.
+Run the verify-fix loop (max 10 iterations). Stop when green.
 
-### Adım 2 — silent-failure-hunter
+### Step 2 — silent-failure-hunter
 
-`silent-failure-hunter` spawn et. Exception yutma, async void, event leak tara.
+Spawn `silent-failure-hunter`. Scan for exception swallowing, async void, event leaks.
 
-### Adım 3 — /validate
+### Step 3 — /validate
 
-Faz exit criteria kontrolü yap.
+Run phase exit criteria check.
 
 ## Output
 
 ```
 ✅ QA PASSED
-   Ralph: [N] iterasyon, yeşil
-   Silent Failures: temiz
-   Validation: geçti
+   Ralph: [N] iterations, green
+   Silent Failures: clean
+   Validation: passed
 
 ❌ QA FAILED
-   [Nerede takıldı ve neden]
+   [Where it got stuck and why]
 ```

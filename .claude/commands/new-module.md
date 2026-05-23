@@ -1,66 +1,66 @@
 # /new-module
 
-Standart 5 dosya modül yapısını scaffold eder.
+Scaffolds the standard 5-file module structure.
 
-## Kullanım
+## Usage
 
 ```
-/new-module <ModulAdı>
+/new-module <ModuleName>
 ```
 
-Örnek: `/new-module Audio`
+Example: `/new-module Audio`
 
 ## Workflow
 
-### Adım 1 — ARCHITECTURE_GATE
+### Step 1 — ARCHITECTURE_GATE
 
-Kullanıcıya önerilen modül yapısını göster:
+Show the user the proposed module structure:
 
 ```
-Oluşturulacak dosyalar:
+Files to be created:
 
-Abstracts/[ModulAdı]/
-└── I[ModulAdı]Service.cs
+Abstracts/[ModuleName]/
+└── I[ModuleName]Service.cs
 
-Concretes/[ModulAdı]/
-├── [ModulAdı]Service.cs
-├── [ModulAdı]Configuration.cs
-├── [ModulAdı]Installer.cs
-├── [ModulAdı]Events.cs
-└── [ModulAdı]Provider.cs   (MonoBehaviour gerekiyorsa)
+Concretes/[ModuleName]/
+├── [ModuleName]Service.cs
+├── [ModuleName]Configuration.cs
+├── [ModuleName]Installer.cs
+├── [ModuleName]Events.cs
+└── [ModuleName]Provider.cs   (if MonoBehaviour is needed)
 
-Onaylıyor musun? (go / hayır)
+Do you approve? (go / no)
 ```
 
-### Adım 2 — Interface Oluştur
+### Step 2 — Create Interface
 
-`Assets/_GameFolders/Scripts/Games/Abstracts/[ModulAdı]/I[ModulAdı]Service.cs`:
+`Assets/_GameFolders/Scripts/Games/Abstracts/[ModuleName]/I[ModuleName]Service.cs`:
 
 ```csharp
-namespace [Proje].[ModulAdı]
+namespace [Project].[ModuleName]
 {
-    public interface I[ModulAdı]Service
+    public interface I[ModuleName]Service
     {
-        // TODO: Public API metodlarını buraya ekle
+        // TODO: Add public API methods here
     }
 }
 ```
 
-### Adım 3 — Service Oluştur
+### Step 3 — Create Service
 
-`Assets/_GameFolders/Scripts/Games/Concretes/[ModulAdı]/[ModulAdı]Service.cs`:
+`Assets/_GameFolders/Scripts/Games/Concretes/[ModuleName]/[ModuleName]Service.cs`:
 
 ```csharp
 using Cysharp.Threading.Tasks;
 using System.Threading;
 
-namespace [Proje].[ModulAdı]
+namespace [Project].[ModuleName]
 {
-    public sealed class [ModulAdı]Service : I[ModulAdı]Service
+    public sealed class [ModuleName]Service : I[ModuleName]Service
     {
         private readonly IEventBus _eventBus;
 
-        public [ModulAdı]Service(IEventBus eventBus)
+        public [ModuleName]Service(IEventBus eventBus)
         {
             _eventBus = eventBus;
         }
@@ -68,40 +68,40 @@ namespace [Proje].[ModulAdı]
 }
 ```
 
-### Adım 4 — Configuration Oluştur
+### Step 4 — Create Configuration
 
-`Assets/_GameFolders/Scripts/Games/Concretes/[ModulAdı]/[ModulAdı]Configuration.cs`:
+`Assets/_GameFolders/Scripts/Games/Concretes/[ModuleName]/[ModuleName]Configuration.cs`:
 
 ```csharp
 using UnityEngine;
 
-namespace [Proje].[ModulAdı]
+namespace [Project].[ModuleName]
 {
-    [CreateAssetMenu(menuName = "Config/[ModulAdı]")]
-    public sealed class [ModulAdı]Configuration : ScriptableObject
+    [CreateAssetMenu(menuName = "Config/[ModuleName]")]
+    public sealed class [ModuleName]Configuration : ScriptableObject
     {
-        // TODO: Konfigürasyon alanlarını ekle
+        // TODO: Add configuration fields
     }
 }
 ```
 
-### Adım 5 — Installer Oluştur (DI'a göre)
+### Step 5 — Create Installer (based on DI)
 
 **VContainer:**
 ```csharp
 using VContainer;
 using VContainer.Unity;
 
-namespace [Proje].[ModulAdı]
+namespace [Project].[ModuleName]
 {
-    public static class [ModulAdı]Installer
+    public static class [ModuleName]Installer
     {
         public static void Install(IContainerBuilder builder,
-            [ModulAdı]Configuration config)
+            [ModuleName]Configuration config)
         {
             builder.RegisterInstance(config);
-            builder.Register<[ModulAdı]Service>(Lifetime.Singleton)
-                   .As<I[ModulAdı]Service>();
+            builder.Register<[ModuleName]Service>(Lifetime.Singleton)
+                   .As<I[ModuleName]Service>();
         }
     }
 }
@@ -111,39 +111,39 @@ namespace [Proje].[ModulAdı]
 ```csharp
 using Zenject;
 
-namespace [Proje].[ModulAdı]
+namespace [Project].[ModuleName]
 {
-    public class [ModulAdı]Installer : MonoInstaller
+    public class [ModuleName]Installer : MonoInstaller
     {
-        [SerializeField] private [ModulAdı]Configuration _config;
+        [SerializeField] private [ModuleName]Configuration _config;
 
         public override void InstallBindings()
         {
             Container.BindInstance(_config);
-            Container.Bind<I[ModulAdı]Service>()
-                     .To<[ModulAdı]Service>().AsSingle();
+            Container.Bind<I[ModuleName]Service>()
+                     .To<[ModuleName]Service>().AsSingle();
         }
     }
 }
 ```
 
-### Adım 6 — Events Oluştur
+### Step 6 — Create Events
 
-`Assets/_GameFolders/Scripts/Games/Concretes/[ModulAdı]/[ModulAdı]Events.cs`:
+`Assets/_GameFolders/Scripts/Games/Concretes/[ModuleName]/[ModuleName]Events.cs`:
 
 ```csharp
-namespace [Proje].[ModulAdı]
+namespace [Project].[ModuleName]
 {
-    public readonly struct [ModulAdı]StartedEvent : IEvent
+    public readonly struct [ModuleName]StartedEvent : IEvent
     {
-        // TODO: Event alanlarını ekle
+        // TODO: Add event fields
     }
 }
 ```
 
-### Adım 7 — Commit
+### Step 7 — Commit
 
 ```bash
 git add Assets/_GameFolders/Scripts/Games/
-git commit -m "feat([moduladı]): scaffold [ModulAdı] module (5 files)"
+git commit -m "feat([modulename]): scaffold [ModuleName] module (5 files)"
 ```

@@ -1,72 +1,72 @@
 # /plan-workflow
 
-TDD'yi implementasyon fazlarına ve task'lara böler. WORKFLOW.md üretir.
+Breaks the TDD into implementation phases and tasks. Produces WORKFLOW.md.
 
-## Kullanım
+## Usage
 
 ```
 /plan-workflow
 ```
 
-## Ön Koşul
+## Prerequisite
 
-`docs/TDD.md` mevcut olmalı.
+`docs/TDD.md` must exist.
 
 ## Workflow
 
-### Adım 1 — TDD Oku
+### Step 1 — Read TDD
 
-`docs/TDD.md` oku. Tüm sistemleri ve bağımlılıkları anla.
+Read `docs/TDD.md`. Understand all systems and dependencies.
 
-### Adım 2 — Fazları Belirle
+### Step 2 — Determine Phases
 
-Bağımlılık sırasına göre fazları belirle:
-- Faz 1: Foundation (Framework, EventBus, DI scaffold)
-- Faz 2: Core sistemler (bağımlılığı az olanlar önce)
-- Faz 3: Feature sistemler
-- Faz 4: UI & polish
-- Faz 5: Entegrasyon & QA
+Determine phases according to dependency order:
+- Phase 1: Foundation (Framework, EventBus, DI scaffold)
+- Phase 2: Core systems (those with fewer dependencies first)
+- Phase 3: Feature systems
+- Phase 4: UI & polish
+- Phase 5: Integration & QA
 
-### Adım 3 — Task'ları Yaz
+### Step 3 — Write Tasks
 
-Her faz için task'lar:
-- Bağımsız task'lar → `parallel_group` ile işaretle
-- Her task için: açıklama, agent tipi, input/output, acceptance criteria
+Tasks for each phase:
+- Independent tasks → mark with `parallel_group`
+- For each task: description, agent type, input/output, acceptance criteria
 
-### Adım 4 — WORKFLOW.md Oluştur
+### Step 4 — Create WORKFLOW.md
 
-`docs/WORKFLOW.md` dosyasına yaz:
+Write to `docs/WORKFLOW.md`:
 
 ```markdown
-# WORKFLOW — [Proje Adı]
+# WORKFLOW — [Project Name]
 
-## Faz 1: Foundation
+## Phase 1: Foundation
 
-### Task 1.1: EventBus Implementasyonu
+### Task 1.1: EventBus Implementation
 - **Agent:** coder
-- **Input:** IEventBus interface tanımı
+- **Input:** IEventBus interface definition
 - **Output:** EventBus.cs (Assets/_Framework/Events/)
-- **Acceptance:** EditMode testleri geçiyor
+- **Acceptance:** EditMode tests passing
 - **parallel_group:** foundation
 
-### Task 1.2: Logger Implementasyonu
+### Task 1.2: Logger Implementation
 - **Agent:** coder
-- **Input:** ILogger interface tanımı
+- **Input:** ILogger interface definition
 - **Output:** UnityLogger.cs (Assets/_Framework/Logging/)
-- **Acceptance:** EditMode testleri geçiyor
+- **Acceptance:** EditMode tests passing
 - **parallel_group:** foundation
 
-## Faz 2: Core Sistemler
+## Phase 2: Core Systems
 ...
 ```
 
-### Adım 5 — Commit
+### Step 5 — Commit
 
 ```bash
 git add docs/WORKFLOW.md
 git commit -m "docs: add WORKFLOW.md with phased implementation plan"
 ```
 
-## Sonraki Adım
+## Next Step
 
-`/dry-run` ile önizle veya `/orchestrate` ile execute et.
+Preview with `/dry-run` or execute with `/orchestrate`.

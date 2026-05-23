@@ -2,60 +2,60 @@
 
 Bug fix pipeline: scout → fixer → test → reviewer → committer.
 
-## Kullanım
+## Usage
 
 ```
-/fix <hata açıklaması veya stack trace>
+/fix <error description or stack trace>
 ```
 
 ## Workflow
 
-### Adım 0 — Complexity Hesapla
+### Step 0 — Calculate Complexity
 
-- Stack trace var mı? → root cause açık mı?
-- Kaç dosya etkileniyor?
-- Complexity < 0.2 → `/fix-lite` öneri
-- Complexity belirsiz → `/fix-deep` öneri
+- Is there a stack trace? → is the root cause clear?
+- How many files are affected?
+- Complexity < 0.2 → suggest `/fix-lite`
+- Complexity unclear → suggest `/fix-deep`
 
 ### ▶ SCOPE_GATE
 
 ```
-Bug: [açıklama]
-Tahmini etkilenen dosyalar: [liste]
+Bug: [description]
+Estimated affected files: [list]
 Complexity: [0.0–1.0]
 
-Devam için "go" yaz.
+Type "go" to continue.
 ```
 
-### Adım 1 — unity-scout + unity-fixer (paralel, complexity ≥ 0.4)
+### Step 1 — unity-scout + unity-fixer (parallel, complexity ≥ 0.4)
 
-- `unity-scout`: bağımlılık haritası, etkilenen dosyalar
-- `unity-fixer`: root cause analizi
+- `unity-scout`: dependency map, affected files
+- `unity-fixer`: root cause analysis
 
-**▶ BREAKING_GATE** (3+ dosya etkileniyorsa):
+**▶ BREAKING_GATE** (if 3+ files affected):
 ```
-Bu fix [N] dosyayı etkiliyor. Geniş kapsamlı değişiklik.
-Devam için "go" yaz.
+This fix affects [N] files. Wide-scope change.
+Type "go" to continue.
 ```
 
-### Adım 2 — tester
+### Step 2 — tester
 
-`tester` agent: regression test yaz (bug'ı reproduce eden test).
+`tester` agent: write a regression test (a test that reproduces the bug).
 
-### Adım 3 — unity-coder veya unity-fixer
+### Step 3 — unity-coder or unity-fixer
 
-Fix uygula. Regression test geçmeli.
+Apply the fix. Regression test must pass.
 
-### Adım 4 — unity-verifier
+### Step 4 — unity-verifier
 
-Compile + tüm testler çalıştır.
+Compile + run all tests.
 
-### Adım 5 — Reviewer (lean/full modda)
+### Step 5 — Reviewer (lean/full mode)
 
-`unity-reviewer` spawn et.
+Spawn `unity-reviewer`.
 
-**▶ QUALITY_GATE** (CHANGES NEEDED ise).
+**▶ QUALITY_GATE** (if CHANGES NEEDED).
 
-### Adım 6 — committer
+### Step 6 — committer
 
-**▶ COMMIT_GATE** → `committer` commit atar.
+**▶ COMMIT_GATE** → `committer` creates the commit.

@@ -1,74 +1,74 @@
 # /architect
 
-GDD'den Technical Design Document (TDD) üretir. unity-critic ile adversarial review.
+Generates a Technical Design Document (TDD) from the GDD. Adversarial review with unity-critic.
 
-## Kullanım
+## Usage
 
 ```
 /architect
 ```
 
-## Ön Koşul
+## Prerequisite
 
-`docs/GDD.md` mevcut olmalı. Yoksa önce `/game-idea` çalıştır.
+`docs/GDD.md` must exist. If not, run `/game-idea` first.
 
 ## Workflow
 
-### Adım 1 — GDD Oku
+### Step 1 — Read GDD
 
-`docs/GDD.md` oku. Core loop ve mekanikleri anla.
+Read `docs/GDD.md`. Understand the core loop and mechanics.
 
-### Adım 2 — unity-architect Spawn Et
+### Step 2 — Spawn unity-architect
 
-`unity-architect` agent ile teknik tasarım yap:
-- Sistemleri belirle (AudioSystem, PlayerSystem, EnemySystem...)
-- Her sistem için modül yapısı: Interface + Service + Config + Installer + Events
-- Bağımlılık grafiği çiz
-- Veri akışını tanımla
+Do technical design with the `unity-architect` agent:
+- Identify systems (AudioSystem, PlayerSystem, EnemySystem...)
+- Module structure for each system: Interface + Service + Config + Installer + Events
+- Draw the dependency graph
+- Define the data flow
 
-### Adım 3 — unity-critic ile Adversarial Review
+### Step 3 — Adversarial Review with unity-critic
 
-`unity-critic` agent'ı spawn et:
-- Tasarımın en zayıf noktasını bul
-- Tek keskin soru sor
-- unity-architect cevap ver, tasarımı güçlendir
-- En fazla 3 round
+Spawn the `unity-critic` agent:
+- Find the weakest point in the design
+- Ask one sharp question
+- unity-architect responds, strengthens the design
+- Maximum 3 rounds
 
-### Adım 4 — TDD Oluştur
+### Step 4 — Create TDD
 
-`docs/TDD.md` dosyasına yaz:
+Write to `docs/TDD.md`:
 
 ```markdown
-# Technical Design Document — [Oyun Adı]
+# Technical Design Document — [Game Name]
 
-## Sistemler
+## Systems
 
-### [SystemAdı]
-**Sorumluluk:** [tek cümle]
-**Interface:** I[SystemAdı]Service
-**Bağımlılıklar:** [diğer interface'ler]
-**Events:** [yayınladığı ve dinlediği]
+### [SystemName]
+**Responsibility:** [single sentence]
+**Interface:** I[SystemName]Service
+**Dependencies:** [other interfaces]
+**Events:** [published and subscribed]
 
-## Modül Yapısı
-[Her modül için 5 dosya listesi]
+## Module Structure
+[List of 5 files per module]
 
-## Bağımlılık Grafiği
-[Metin veya diagram]
+## Dependency Graph
+[Text or diagram]
 
-## Veri Akışı
-[Önemli senaryolar için sequence]
+## Data Flow
+[Sequence for important scenarios]
 
-## Riskler
-[Tespit edilen riskler ve önlemler]
+## Risks
+[Identified risks and mitigations]
 ```
 
-### Adım 5 — Commit
+### Step 5 — Commit
 
 ```bash
 git add docs/TDD.md
 git commit -m "docs: add Technical Design Document"
 ```
 
-## Sonraki Adım
+## Next Step
 
-TDD hazırsa: `/plan-workflow` ile implementasyon planını oluştur.
+When TDD is ready: create the implementation plan with `/plan-workflow`.
