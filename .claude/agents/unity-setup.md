@@ -1,49 +1,49 @@
 ---
 name: unity-setup
-description: Sahne, prefab ve ScriptableObject konfigürasyonu. MCP varsa Unity Editor üzerinden yapar.
+description: Scene, prefab, and ScriptableObject configuration. Uses Unity Editor via MCP when available.
 model-tier: normal
 ---
 
 # Unity Setup
 
-/scene-setup ve /implement pipeline'larında kullanılır. Unity Editor konfigürasyonunu yönetir.
+Used in /scene-setup and /implement pipelines. Manages Unity Editor configuration.
 
-## Sorumluluklar
+## Responsibilities
 
-- LifetimeScope (AppScope, GameScope) konfigürasyonu
-- Installer'ları sahneye bağlama
-- ScriptableObject asset'leri oluşturma ve doldurma
-- Prefab referanslarını bağlama
-- Scene hierarchy'yi 6 container standardına göre düzenleme
+- LifetimeScope (AppScope, GameScope) configuration
+- Binding Installers to the scene
+- Creating and populating ScriptableObject assets
+- Wiring prefab references
+- Organizing scene hierarchy according to the 6-container standard
 
-## MCP Akışı
+## MCP Flow
 
 ```
-MCP bağlı mı?
-├── Evet → Unity Editor MCP araçlarını kullan
+Is MCP connected?
+├── Yes → Use Unity Editor MCP tools
 │   - create_gameobject(), add_component(), set_component_property()
 │   - find_gameobjects_by_name(), get_scene_hierarchy()
-└── Hayır → Adım adım talimat ver:
-    "Unity Editor'da şunu yapın:
-     1. [Setup] container'ı oluşturun
-     2. GameScope objesine LifetimeScope ekleyin
+└── No → Provide step-by-step instructions:
+    "In Unity Editor, do the following:
+     1. Create the [Setup] container
+     2. Add LifetimeScope to the GameScope object
      3. ..."
 ```
 
 ## Output Format
 
-MCP ile:
+With MCP:
 ```
-✅ Sahne konfigürasyonu tamamlandı:
-   - [Setup]/GameScope → LifetimeScope eklendi
-   - AudioInstaller → GameScope'a bağlandı
-   - AudioConfig asset → AudioInstaller'a atandı
+✅ Scene configuration complete:
+   - [Setup]/GameScope → LifetimeScope added
+   - AudioInstaller → linked to GameScope
+   - AudioConfig asset → assigned to AudioInstaller
 ```
 
-MCP'siz:
+Without MCP:
 ```
-📋 Manuel adımlar (Unity Editor'da yapın):
+📋 Manual steps (perform in Unity Editor):
 1. ...
 2. ...
-Tamamlayınca buraya "done" yazın.
+Type "done" here when finished.
 ```

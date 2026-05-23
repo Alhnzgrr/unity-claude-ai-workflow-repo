@@ -1,13 +1,13 @@
 ---
 name: unitask
-description: UniTask async/await pattern'leri. Temel kullanım, CancellationToken, PlayerLoop entegrasyonu.
+description: UniTask async/await patterns. Basic usage, CancellationToken, PlayerLoop integration.
 ---
 
 # UniTask
 
-> `project-config.json` → `"async": "unitask"` ise auto-yüklenir (her zaman).
+> Auto-loaded when `project-config.json` → `"async": "unitask"` (always).
 
-## Temel Kullanım
+## Basic Usage
 
 ```csharp
 public async UniTask LoadAsync(CancellationToken ct)
@@ -23,7 +23,7 @@ public async UniTask<PlayerData> GetPlayerDataAsync(CancellationToken ct)
 }
 ```
 
-## Coroutine Karşılıkları
+## Coroutine Equivalents
 
 ```
 yield return null                    → await UniTask.Yield()
@@ -36,23 +36,23 @@ yield return asyncOp                 → await asyncOp.WithCancellation(ct)
 ## Fire-and-Forget
 
 ```csharp
-// DOĞRU — exception işlenir
+// CORRECT — exception is handled
 DoAsync(ct).Forget(e => Debug.LogException(e));
 
-// YANLIŞ — exception yutulur
+// WRONG — exception is swallowed
 DoAsync(ct).Forget();
 ```
 
-## CancellationToken Kaynakları
+## CancellationToken Sources
 
 ```csharp
-// MonoBehaviour yok olunca iptal
+// Cancel when MonoBehaviour is destroyed
 await LoadAsync(destroyCancellationToken);
 
-// Manuel iptal
+// Manual cancel
 private CancellationTokenSource _cts = new();
 await LoadAsync(_cts.Token);
-// İptal et: _cts.Cancel();
+// Cancel: _cts.Cancel();
 
 // Linked token
 var linked = CancellationTokenSource.CreateLinkedTokenSource(
@@ -60,7 +60,7 @@ var linked = CancellationTokenSource.CreateLinkedTokenSource(
 await LoadAsync(linked.Token);
 ```
 
-## Paralel İşlemler
+## Parallel Operations
 
 ```csharp
 await UniTask.WhenAll(

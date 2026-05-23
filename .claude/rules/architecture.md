@@ -1,62 +1,62 @@
 # Architecture Rules
 
-## Klasör Yapısı (Zorunlu)
+## Folder Structure (Required)
 
 ```
 Assets/
-├── _Framework/          ← Pure C# altyapı, SIFIR oyun bağımlılığı
+├── _Framework/          ← Pure C# infrastructure, ZERO game dependencies
 │   ├── Events/
 │   ├── Logging/
 │   └── SaveLoad/
 └── _GameFolders/
     └── Scripts/
         ├── Games/
-        │   ├── Abstracts/   ← SADECE interface'ler, domain bazlı klasörler
-        │   └── Concretes/   ← Tüm concrete sınıflar
+        │   ├── Abstracts/   ← ONLY interfaces, domain-based folders
+        │   └── Concretes/   ← All concrete classes
         ├── Tests/
         │   ├── EditMode/
         │   └── PlayMode/
-        └── Editors/         ← Editor-only araçlar
+        └── Editors/         ← Editor-only tools
 ```
 
-## Katman Kuralları
+## Layer Rules
 
-- `_Framework/` hiçbir zaman `_GameFolders/` veya oyun koduna referans vermez
-- `Games/Abstracts/` → sadece interface dosyaları
-- `Games/Concretes/` alt klasör adları domain/feature adı olur: `Audio/`, `Players/`, `Enemies/`
-- `Services/`, `Views/`, `Providers/` gibi teknik katman adları yasak alt klasör adı olarak
+- `_Framework/` never references `_GameFolders/` or game code
+- `Games/Abstracts/` → interface files only
+- `Games/Concretes/` subfolder names become domain/feature names: `Audio/`, `Players/`, `Enemies/`
+- Technical layer names such as `Services/`, `Views/`, `Providers/` are forbidden as subfolder names
 
-## Modül Yapısı (Her modül 5 dosya)
+## Module Structure (5 files per module)
 
 ```
 Games/Abstracts/[Domain]/
-└── I[Domain]Service.cs        ← Tek public API
+└── I[Domain]Service.cs        ← Single public API
 
 Games/Concretes/[Domain]/
-├── [Domain]Service.cs          ← sealed implementasyon
+├── [Domain]Service.cs          ← sealed implementation
 ├── [Domain]Configuration.cs    ← ScriptableObject config
 ├── [Domain]Installer.cs        ← VContainer/Zenject registration
-├── [Domain]Events.cs           ← IEvent struct'ları
-└── [Domain]Provider.cs         ← MonoBehaviour (Unity API buraya)
+├── [Domain]Events.cs           ← IEvent structs
+└── [Domain]Provider.cs         ← MonoBehaviour (Unity API goes here)
 ```
 
-## Yasak Patternler
+## Forbidden Patterns
 
-- `FindObjectOfType`, `FindAnyObjectByType` — DI kullan
-- `GetComponentInChildren` fallback olarak — inject et
-- God object / ServiceLocator — yasak
-- Static erişim noktaları — yasak
-- `_Framework/` içinde `using UnityEngine` — hook engeller
+- `FindObjectOfType`, `FindAnyObjectByType` — use DI
+- `GetComponentInChildren` as fallback — inject it
+- God object / ServiceLocator — forbidden
+- Static access points — forbidden
+- `using UnityEngine` inside `_Framework/` — hook blocks it
 
-## IEventBus Kuralı
+## IEventBus Rule
 
-Sistemler arası iletişim için `IEventBus` kullan.
-Doğrudan servis referansı yerine event yayınla:
+Use `IEventBus` for cross-system communication.
+Publish events instead of holding direct service references:
 
 ```csharp
-// DOĞRU
+// CORRECT
 _eventBus.Publish(new PlayerDiedEvent(playerId));
 
-// YANLIŞ
+// WRONG
 _enemyService.OnPlayerDied(playerId);
 ```

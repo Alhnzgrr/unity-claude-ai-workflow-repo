@@ -6,13 +6,13 @@ CONTENT=$(echo "$INPUT" | jq -r '.tool_input.new_string // .tool_input.content /
 
 if [[ ! "$FILE_PATH" =~ \.cs$ ]]; then exit 0; fi
 
-# Test ve Editor dosyalarını atla
+# Skip Test and Editor files
 if [[ "$FILE_PATH" =~ [Tt]est || "$FILE_PATH" =~ [Ee]ditor ]]; then exit 0; fi
 
 if echo "$CONTENT" | grep -qE "UnityEvent(<|;|\s)"; then
-    echo "HOOK BLOCK [check-unity-event]: UnityEvent kullanımı yasak." >&2
-    echo "Sistemler arası: IEventBus kullanın. Aynı modül içi: C# event kullanın." >&2
-    echo "Dosya: $FILE_PATH" >&2
+    echo "HOOK BLOCK [check-unity-event]: UnityEvent usage is forbidden." >&2
+    echo "Cross-system: use IEventBus. Within the same module: use C# events." >&2
+    echo "File: $FILE_PATH" >&2
     exit 2
 fi
 

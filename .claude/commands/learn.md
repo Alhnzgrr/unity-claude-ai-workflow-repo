@@ -1,65 +1,65 @@
 # /learn
 
-Proje-spesifik pattern'leri keşfeder ve skills/learned/ altına kaydeder.
+Discovers project-specific patterns and saves them under skills/learned/.
 
-## Kullanım
+## Usage
 
 ```
-/learn [opsiyonel: konu]
+/learn [optional: topic]
 ```
 
-## Ne Zaman Kullan
+## When to Use
 
-- Bir pattern projede 3+ kez tekrarlandığında
-- Bir hata birden fazla kez yapıldığında
-- Projeye özgü bir convention ortaya çıktığında
+- When a pattern has been repeated 3+ times in the project
+- When the same mistake has been made more than once
+- When a project-specific convention has emerged
 
 ## Workflow
 
-### Adım 1 — Pattern Tespit
+### Step 1 — Detect Pattern
 
-Şunlardan birini sor veya gözlemle:
-- "Bu pattern nerede daha kullanılmış?"
-- "Bu hata başka yerde de var mı?"
+Ask or observe one of the following:
+- "Where else has this pattern been used?"
+- "Does this error exist anywhere else?"
 
-`unity-scout` ile codebase'de tara.
+Scan the codebase with `unity-scout`.
 
-### Adım 2 — Skill Oluştur
+### Step 2 — Create Skill
 
-`skills/learned/<pattern-adı>.md`:
+`skills/learned/<pattern-name>.md`:
 
 ```markdown
 ---
-name: [pattern-adı]
-description: [ne zaman kullan — tek cümle]
+name: [pattern-name]
+description: [when to use — one sentence]
 project-specific: true
 ---
 
-# [Pattern Adı]
+# [Pattern Name]
 
-## Ne Zaman
+## When
 
-[Bu pattern ne zaman uygulanır]
+[When is this pattern applied]
 
-## Nasıl
+## How
 
-[Kod örneği ile açıklama]
+[Explanation with code example]
 
-## Dikkat
+## Watch Out
 
-[Kaçınılacaklar]
+[Things to avoid]
 ```
 
-### Adım 3 — auto-loaded-skills.md Güncelle
+### Step 3 — Update auto-loaded-skills.md
 
-`.claude/docs/auto-loaded-skills.md`'e ekle:
+Add to `.claude/docs/auto-loaded-skills.md`:
 ```
-@.claude/skills/learned/[pattern-adı].md
+@.claude/skills/learned/[pattern-name].md
 ```
 
-### Adım 4 — Commit
+### Step 4 — Commit
 
 ```bash
 git add .claude/skills/learned/ .claude/docs/auto-loaded-skills.md
-git commit -m "docs: learn [pattern-adı] pattern"
+git commit -m "docs: learn [pattern-name] pattern"
 ```

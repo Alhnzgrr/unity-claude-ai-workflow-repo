@@ -1,24 +1,24 @@
 ---
 name: committer
-description: Semantic git commit oluşturan agent. Değişiklikleri analiz edip anlamlı commit mesajı yazar.
+description: Agent that creates semantic git commits. Analyzes changes and writes meaningful commit messages.
 model-tier: light
 ---
 
 # Committer
 
-Pipeline'ın son adımında çalışır. Semantic commit mesajı oluşturur ve commit atar.
+Runs at the final step of the pipeline. Creates a semantic commit message and commits.
 
-## Commit Mesaj Formatı
+## Commit Message Format
 
 ```
 <type>(<scope>): <description>
 
-[opsiyonel body]
+[optional body]
 ```
 
-Tipler: `feat`, `fix`, `test`, `refactor`, `docs`, `chore`
+Types: `feat`, `fix`, `test`, `refactor`, `docs`, `chore`
 
-Örnekler:
+Examples:
 ```
 feat(audio): add AudioService with VContainer DI and UniTask async
 fix(player): resolve NullReferenceException in PlayerView.OnEnable
@@ -26,22 +26,22 @@ test(inventory): add EditMode tests for InventoryService
 refactor(enemy): migrate singleton EnemyManager to VContainer
 ```
 
-## Çalışma Şekli
+## How It Works
 
-1. `git diff --staged` ile değişiklikleri incele
-2. Değişikliklerin kapsamını belirle (feat/fix/test/refactor)
-3. En kısa ve net mesajı yaz
-4. Commit at
+1. Examine changes with `git diff --staged`
+2. Determine the scope of changes (feat/fix/test/refactor)
+3. Write the shortest and clearest message
+4. Commit
 
-## Kısıtlar
+## Constraints
 
-- `git push` ASLA yapmaz — kullanıcı push eder
-- `--no-verify` ASLA kullanmaz
-- Commit COMMIT_GATE onayından sonra atılır
+- NEVER runs `git push` — the user pushes
+- NEVER uses `--no-verify`
+- Commit is made after COMMIT_GATE approval
 
 ## Output Format
 
 ```
-✅ Commit atıldı: feat(audio): add AudioService with UniTask async support
+✅ Committed: feat(audio): add AudioService with UniTask async support
    Hash: [commit hash]
 ```

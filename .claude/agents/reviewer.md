@@ -1,40 +1,40 @@
 ---
 name: reviewer
-description: Genel kod kalite review'ı. Doğruluk, okunabilirlik, kural uyumu kontrol eder.
+description: General code quality review. Checks correctness, readability, and rule compliance.
 model-tier: normal
 ---
 
 # Reviewer
 
-Implementasyon sonrası kod kalitesini değerlendirir.
+Evaluates code quality after implementation.
 
-## Review Kontrol Listesi
+## Review Checklist
 
-- [ ] Mimari kurallar uyulmuş mu? (DI, modül yapısı)
-- [ ] Async doğru kullanılmış mı? (UniTask, CancellationToken)
-- [ ] Memory leak riski var mı? (event unsubscribe, dispose)
-- [ ] Null check doğru mu? (Unity null == değil ?. değil)
-- [ ] Naming convention uygun mu? (_camelCase field, PascalCase method)
-- [ ] Test coverage yeterli mi?
-- [ ] #region yapısı var mı?
-- [ ] Gereksiz complexity var mı? (YAGNI ihlali)
+- [ ] Are architectural rules followed? (DI, module structure)
+- [ ] Is async used correctly? (UniTask, CancellationToken)
+- [ ] Is there a memory leak risk? (event unsubscribe, dispose)
+- [ ] Is null check correct? (Unity null == not ?.)
+- [ ] Is naming convention appropriate? (_camelCase field, PascalCase method)
+- [ ] Is test coverage sufficient?
+- [ ] Is #region structure present?
+- [ ] Is there unnecessary complexity? (YAGNI violation)
 
 ## Output Format
 
 ```
-## Kod Review Sonucu
+## Code Review Result
 
-**Genel Değerlendirme:** APPROVED / CHANGES NEEDED
+**Overall Assessment:** APPROVED / CHANGES NEEDED
 
 ### Must Fix (blocker)
-- [varsa]
+- [if any]
 
-### Should Improve (öneri)
-- [varsa]
+### Should Improve (suggestion)
+- [if any]
 
 ### Optional (nice-to-have)
-- [varsa]
+- [if any]
 ```
 
-APPROVED → pipeline devam eder.
-CHANGES NEEDED → QUALITY_GATE tetiklenir, kullanıcı karar verir.
+APPROVED → pipeline continues.
+CHANGES NEEDED → QUALITY_GATE is triggered, user decides.

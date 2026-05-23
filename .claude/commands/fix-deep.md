@@ -1,62 +1,62 @@
 # /fix-deep
 
-Evidence-first fix. Root cause kanıtlanmadan fix yapılmaz.
+Evidence-first fix. No fix is made until the root cause is proven.
 
-## Kullanım
+## Usage
 
 ```
-/fix-deep <belirsiz veya intermittent hata açıklaması>
+/fix-deep <unclear or intermittent error description>
 ```
 
-## Ne Zaman Kullan
+## When to Use
 
-- Root cause belirsiz
-- Intermittent (arada bir oluyor)
-- Stack trace yetersiz
-- "Bazen çalışıyor" sorunları
+- Root cause unclear
+- Intermittent (happens occasionally)
+- Insufficient stack trace
+- "Sometimes works" issues
 
 ## Workflow
 
-### Adım 1 — Log Intake
+### Step 1 — Log Intake
 
-Mevcut log'ları ve hata mesajlarını topla:
+Collect existing logs and error messages:
 - Stack trace
-- Unity Console çıktısı
-- Reproduce adımları
+- Unity Console output
+- Reproduction steps
 
-### Adım 2 — Hipotez Üret
+### Step 2 — Generate Hypotheses
 
-`unity-scout` + `unity-fixer` ile minimum 2 hipotez:
+With `unity-scout` + `unity-fixer`, produce a minimum of 2 hypotheses:
 ```
-Hipotez 1: [sebep] — Kanıt: [ne görmek bekliyoruz]
-Hipotez 2: [sebep] — Kanıt: [ne görmek bekliyoruz]
+Hypothesis 1: [cause] — Evidence: [what we expect to see]
+Hypothesis 2: [cause] — Evidence: [what we expect to see]
 ```
 
-### Adım 3 — Debug Injection
+### Step 3 — Debug Injection
 
-Kanıt toplamak için geçici debug log ekle:
+Add temporary debug logs to gather evidence:
 ```csharp
 Debug.Log($"[DEBUG] {nameof(MyMethod)}: value={value}, state={_state}");
 ```
 
-Kullanıcıya: "Oyunu çalıştır, şu senaryoyu test et, logu buraya yapıştır."
+To the user: "Run the game, test this scenario, paste the log here."
 
-### Adım 4 — Evidence Gate
+### Step 4 — Evidence Gate
 
-Log alınınca hipotezleri değerlendir:
-- Hipotez doğrulandı mı? → Fix yap
-- Doğrulanamadı → Yeni hipotez
+Once the log is received, evaluate the hypotheses:
+- Hypothesis confirmed? → Apply fix
+- Not confirmed → New hypothesis
 
-**Root cause kanıtlanmadan fix yapılmaz.**
+**No fix is made until the root cause is proven.**
 
-### Adım 5 — Fix (Kanıtlanmış Root Cause ile)
+### Step 5 — Fix (With Proven Root Cause)
 
-`/fix` pipeline ile devam et (test → coder → verify → review → commit).
+Continue with the `/fix` pipeline (test → coder → verify → review → commit).
 
-### Adım 6 — Debug Kodunu Temizle
+### Step 6 — Clean Up Debug Code
 
 ```bash
 git diff -- "*.cs" | grep "DEBUG"
 ```
 
-Debug log satırlarını kaldır, commit at.
+Remove debug log lines, create commit.

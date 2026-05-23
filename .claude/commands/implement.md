@@ -2,92 +2,92 @@
 
 TDD pipeline: test → coder → verifier → reviewer → committer.
 
-## Kullanım
+## Usage
 
 ```
-/implement <görev açıklaması>
+/implement <task description>
 ```
 
 ## Workflow
 
-### Adım 0 — Hazırlık
+### Step 0 — Preparation
 
-1. `production/review-mode.txt` oku
-2. `project-config.json` oku (DI, async, input tipi)
-3. Complexity hesapla (0.0–1.0)
-4. Model tier belirle
+1. Read `production/review-mode.txt`
+2. Read `project-config.json` (DI, async, input type)
+3. Calculate complexity (0.0–1.0)
+4. Determine model tier
 
 ### ▶ SCOPE_GATE
 
 ```
-Görev: [görev açıklaması]
+Task: [task description]
 Complexity: [0.0–1.0]
-Etkilenecek dosyalar: [tahmin]
+Files affected: [estimate]
 Review mode: [solo/lean/full]
 
-Devam etmek için "go" yaz.
+Type "go" to continue.
 ```
 
-`go` alınınca `.claude/state/gate-cleared` oluştur.
+On receiving `go`, create `.claude/state/gate-cleared`.
 
-### Adım 1 — tester (izole subagent)
+### Step 1 — tester (isolated subagent)
 
-`tester` agent spawn et:
-- Test dosyasını yaz
-- Testler BAŞARISIZ olmalı (implementasyon yok)
-- Test tipi: EditMode / PlayMode (complexity'e göre)
+Spawn `tester` agent:
+- Write the test file
+- Tests MUST FAIL (no implementation yet)
+- Test type: EditMode / PlayMode (based on complexity)
 
-### Adım 2 — unity-coder veya coder
+### Step 2 — unity-coder or coder
 
-- Complexity ≥ 0.4 veya Unity API gerekiyorsa → `unity-coder`
+- Complexity ≥ 0.4 or Unity API required → `unity-coder`
 - Pure C# → `coder`
-- Testleri geçirecek minimal implementasyon yaz
+- Write minimal implementation to pass the tests
 
-### Adım 3 — unity-verifier
+### Step 3 — unity-verifier
 
-`unity-verifier` spawn et:
-- Compile kontrolü
-- Test çalıştır
-- Başarısız → unity-coder'a gönder (max 2 pass)
+Spawn `unity-verifier`:
+- Compile check
+- Run tests
+- Failure → send back to unity-coder (max 2 passes)
 
-### Adım 4 — Reviewer
+### Step 4 — Reviewer
 
-- review-mode == `solo` → bu adımı atla
-- review-mode == `lean` veya `full` → `unity-reviewer` spawn et
+- review-mode == `solo` → skip this step
+- review-mode == `lean` or `full` → spawn `unity-reviewer`
 
-**▶ QUALITY_GATE** (CHANGES NEEDED ise):
+**▶ QUALITY_GATE** (if CHANGES NEEDED):
 ```
-Reviewer CHANGES NEEDED döndü.
-fix → düzeltmeye devam et
-skip → review'u geç
-stop → işlemi durdur
+Reviewer returned CHANGES NEEDED.
+fix → continue fixing
+skip → skip review
+stop → halt the process
 ```
 
-### Adım 5 — unity-developer (full mode)
+### Step 5 — unity-developer (full mode)
 
-- review-mode == `full` → `unity-developer` spawn et
-- Aksi halde atla
+- review-mode == `full` → spawn `unity-developer`
+- Otherwise skip
 
-### Adım 6 — silent-failure-hunter
+### Step 6 — silent-failure-hunter
 
-`silent-failure-hunter` spawn et:
-- Exception yutma, async void, event leak kontrol
+Spawn `silent-failure-hunter`:
+- Check for exception swallowing, async void, event leaks
 
-### Adım 7 — committer
+### Step 7 — committer
 
 **▶ COMMIT_GATE**:
 ```
-Staged dosyalar:
-- [dosya listesi]
+Staged files:
+- [file list]
 
-Commit atılacak. Onaylıyor musun? (go / hayır)
+About to commit. Do you approve? (go / no)
 ```
 
-`go` → `committer` agent commit atar.
+`go` → `committer` agent creates the commit.
 
-### Temizlik
+### Cleanup
 
-`.claude/state/gate-cleared` sil.
+Delete `.claude/state/gate-cleared`.
 
 ## Output
 

@@ -1,39 +1,39 @@
 # Agent Roster
 
 ## Core Pipeline
-| Agent | Rol | Model |
+| Agent | Role | Model |
 |---|---|---|
-| `unity-coder` | Ana Unity kodlayıcı | Sonnet |
+| `unity-coder` | Primary Unity coder | Sonnet |
 | `coder` | Pure C# / _Framework/ | Sonnet |
-| `unity-coder-lite` | Küçük değişiklikler | Sonnet |
-| `tester` | NUnit + NSubstitute test yazarı | Sonnet |
+| `unity-coder-lite` | Small changes | Sonnet |
+| `tester` | NUnit + NSubstitute test writer | Sonnet |
 | `unity-verifier` | Compile + test (MCP-aware) | Haiku |
-| `reviewer` | Genel kod review | Sonnet |
-| `unity-reviewer` | Unity-spesifik review | Sonnet |
+| `reviewer` | General code review | Sonnet |
+| `unity-reviewer` | Unity-specific review | Sonnet |
 | `committer` | Semantic git commit | Haiku |
 
-## Uzman
-| Agent | Rol | Model |
+## Specialists
+| Agent | Role | Model |
 |---|---|---|
-| `unity-fixer` | Tam context'li bug düzeltici | Sonnet |
-| `unity-fixer-lite` | NullRef, typo, hızlı fix | Haiku |
-| `unity-scout` | Read-only codebase araştırmacısı | Haiku |
-| `unity-critic` | Adversarial plan sorgulayıcı | Opus |
-| `silent-failure-hunter` | Exception/async void/event leak denetimi | Sonnet |
-| `unity-developer` | İkinci reviewer (full mode) | Sonnet |
+| `unity-fixer` | Full-context bug fixer | Sonnet |
+| `unity-fixer-lite` | NullRef, typo, quick fix | Haiku |
+| `unity-scout` | Read-only codebase researcher | Haiku |
+| `unity-critic` | Adversarial plan challenger | Opus |
+| `silent-failure-hunter` | Exception/async void/event leak inspector | Sonnet |
+| `unity-developer` | Second reviewer (full mode) | Sonnet |
 
-## Setup & Yapılandırma
-| Agent | Rol | Model |
+## Setup & Configuration
+| Agent | Role | Model |
 |---|---|---|
-| `unity-setup` | Sahne/prefab/ScriptableObject (MCP-aware) | Sonnet |
-| `unity-scene-builder` | Sahne kompozisyonu (MCP-aware) | Sonnet |
-| `unity-migrator` | Legacy pattern geçişi | Sonnet |
-| `package-analyzer` | manifest.json tarama, singleton tespiti | Haiku |
+| `unity-setup` | Scene/prefab/ScriptableObject (MCP-aware) | Sonnet |
+| `unity-scene-builder` | Scene composition (MCP-aware) | Sonnet |
+| `unity-migrator` | Legacy pattern migration | Sonnet |
+| `package-analyzer` | manifest.json scan, singleton detection | Haiku |
 
-## Kalite & Mimari
-| Agent | Rol | Model |
+## Quality & Architecture
+| Agent | Role | Model |
 |---|---|---|
-| `unity-optimizer` | Runtime performans denetimi | Sonnet |
-| `unity-linter` | Static analiz | Haiku |
-| `unity-architect` | Sistem tasarımı, sınır tanımı | Opus |
+| `unity-optimizer` | Runtime performance audit | Sonnet |
+| `unity-linter` | Static analysis | Haiku |
+| `unity-architect` | System design, boundary definition | Opus |
 | `unity-build-runner` | CI/build pipeline | Sonnet |

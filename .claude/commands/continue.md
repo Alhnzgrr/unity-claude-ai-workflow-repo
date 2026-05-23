@@ -1,8 +1,8 @@
 # /continue
 
-Kesilen /orchestrate'i kaldığı yerden devam ettirir.
+Resumes an interrupted /orchestrate from where it left off.
 
-## Kullanım
+## Usage
 
 ```
 /continue
@@ -10,25 +10,25 @@ Kesilen /orchestrate'i kaldığı yerden devam ettirir.
 
 ## Workflow
 
-### Adım 1 — State Oku
+### Step 1 — Read State
 
-`.claude/state/session.json` oku:
-- Hangi fazda kaldık?
-- Hangi task tamamlandı?
-- Hangi dosyalar değişti?
+Read `.claude/state/session.json`:
+- Which phase were we on?
+- Which task was completed?
+- Which files were changed?
 
-### Adım 2 — Checkpoint Oku (varsa)
+### Step 2 — Read Checkpoint (if present)
 
-`.claude/state/checkpoint.md` oku — bağlam topla.
+Read `.claude/state/checkpoint.md` — gather context.
 
-### Adım 3 — Devam Et
+### Step 3 — Resume
 
 ```
-Son durum: Faz [N], Task [M] tamamlanmış.
-[Task M+1]'den devam ediliyor...
+Last state: Phase [N], Task [M] completed.
+Resuming from [Task M+1]...
 ```
 
-`/orchestrate`'in Adım 1 Faz döngüsüne kalan task'tan gir.
+Enter the Phase Loop from Step 1 of `/orchestrate` at the remaining task.
 
 ## Session State Format
 

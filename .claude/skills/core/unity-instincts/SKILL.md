@@ -1,42 +1,42 @@
 ---
 name: unity-instincts
-description: Unity geliştirmede hızlı, güvenilir kararlar için proje genelinde geçerli instinct'ler.
+description: Project-wide instincts for fast, reliable decisions in Unity development.
 ---
 
 # Unity Instincts
 
-Sık tekrarlanan durumlar için önceden belirlenmiş kararlar. Her seferinde analiz yapmak yerine bu instinct'leri uygula.
+Pre-determined decisions for frequently recurring situations. Apply these instincts instead of analyzing from scratch each time.
 
-## Genel İnstinct'ler
+## General Instincts
 
-**Yeni bir sistem gerekiyor mu?**
-→ Önce Interface yaz, sonra implementasyon. Hiçbir zaman ters sırayla.
+**Need a new system?**
+→ Write the Interface first, then the implementation. Never in reverse order.
 
-**Servisler arası iletişim mi?**
-→ IEventBus. Doğrudan referans değil.
+**Communication between services?**
+→ IEventBus. Not direct references.
 
-**Async bir işlem mi?**
-→ UniTask + CancellationToken. Her zaman. İstisna yok.
+**An async operation?**
+→ UniTask + CancellationToken. Always. No exceptions.
 
-**MonoBehaviour'a bağımlılık mı?**
-→ [Inject] void Construct(...). Constructor değil.
+**Dependency on MonoBehaviour?**
+→ [Inject] void Construct(...). Not constructor.
 
-**Yeni GameObject gerekiyor mu?**
-→ Prefab'dan Instantiate. new GameObject() değil.
+**Need a new GameObject?**
+→ Instantiate from Prefab. Not new GameObject().
 
-**Coroutine → UniTask geçişi mi?**
+**Coroutine → UniTask migration?**
 → yield return new WaitForSeconds(t) → await UniTask.Delay(ms, ct)
 → yield return null → await UniTask.Yield()
 → yield return new WaitForEndOfFrame() → await UniTask.WaitForEndOfFrame()
 
-**Event subscribe/unsubscribe mi?**
-→ OnEnable'da subscribe, OnDisable'da unsubscribe. Her zaman eşleştirilmiş.
+**Event subscribe/unsubscribe?**
+→ Subscribe in OnEnable, unsubscribe in OnDisable. Always paired.
 
-**Performans sorusu mu?**
-→ Önce profiler. Varsayım yapma. Ölçümsüz optimizasyon yapma.
+**Performance question?**
+→ Profiler first. No assumptions. No optimization without measurement.
 
-**Test yazıyor musun?**
-→ Unity API gerektirmiyor → EditMode. Gerektiriyor → PlayMode. Scene lazım → PlayMode Scene.
+**Writing a test?**
+→ No Unity API required → EditMode. Required → PlayMode. Scene needed → PlayMode Scene.
 
-**Yeni dosya mı oluşturacaksın?**
-→ Önce interface, sonra concrete. Klasöre bak: Abstracts/ ve Concretes/ ayrı.
+**Creating a new file?**
+→ Interface first, then concrete. Check the folder: Abstracts/ and Concretes/ are separate.

@@ -1,8 +1,8 @@
 # /context-prime
 
-Session başında Claude'u proje bağlamına sokar.
+Brings Claude into the project context at the start of a session.
 
-## Kullanım
+## Usage
 
 ```
 /context-prime
@@ -10,26 +10,26 @@ Session başında Claude'u proje bağlamına sokar.
 
 ## Workflow
 
-### Adım 1 — Temel Dosyaları Oku
+### Step 1 — Read Core Files
 
-- `project-config.json` → DI, async, input, feature bayrakları
-- `production/review-mode.txt` → review modu
-- `docs/TDD.md` (varsa) → teknik tasarım özeti
-- `.claude/state/checkpoint.md` (varsa) → son session özeti
-- `docs/WORKFLOW.md` (varsa) → hangi fazda/task'ta?
+- `project-config.json` → DI, async, input, feature flags
+- `production/review-mode.txt` → review mode
+- `docs/TDD.md` (if present) → technical design summary
+- `.claude/state/checkpoint.md` (if present) → last session summary
+- `docs/WORKFLOW.md` (if present) → which phase/task are we on?
 
-### Adım 2 — Bağlam Özeti
+### Step 2 — Context Summary
 
 ```
-## Proje Bağlamı
+## Project Context
 
 **DI:** vcontainer | **Async:** UniTask | **Input:** New Input System
 **ECS:** false | **Addressables:** false | **XR:** false
 **Review Mode:** lean
 
-**TDD Durumu:** [özet]
-**WORKFLOW Durumu:** Faz [N], Task [M]
-**Son Checkpoint:** [tarih ve özet]
+**TDD Status:** [summary]
+**WORKFLOW Status:** Phase [N], Task [M]
+**Last Checkpoint:** [date and summary]
 
-Hazırım. Ne yapmak istersin?
+Ready. What would you like to do?
 ```

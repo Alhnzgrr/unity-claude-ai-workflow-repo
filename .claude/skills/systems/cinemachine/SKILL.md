@@ -1,20 +1,20 @@
 ---
 name: cinemachine
-description: Cinemachine kamera sistemi. Virtual Camera, Brain, Blend ve custom extension pattern'leri.
+description: Cinemachine camera system. Virtual Camera, Brain, Blend, and custom extension patterns.
 ---
 
 # Cinemachine
 
-## Temel Yapı
+## Basic Structure
 
 ```
-CinemachineBrain (MainCamera'da)
+CinemachineBrain (on MainCamera)
 ├── CM vcam1 — Gameplay Camera (Priority: 10)
 ├── CM vcam2 — Cutscene Camera (Priority: 0)
 └── CM vcam3 — Aim Camera (Priority: 0)
 ```
 
-Priority yüksek olan aktif olur. Geçiş → priority değiştir.
+The one with the highest priority is active. To transition → change priority.
 
 ## Follow & LookAt
 
@@ -35,7 +35,7 @@ public sealed class CameraProvider : MonoBehaviour
 }
 ```
 
-## Cinemachine Impulse (Kamera Sarsıntısı)
+## Cinemachine Impulse (Camera Shake)
 
 ```csharp
 [SerializeField] private CinemachineImpulseSource _impulseSource;
@@ -45,6 +45,6 @@ public void ShakeCamera(float force) => _impulseSource.GenerateImpulse(force);
 
 ## Cinemachine Confiner
 
-Kamerayı belirli bir alanla sınırla:
-- Collider2D veya Composite Collider bağla
-- CinemachineConfiner2D component ekle
+Constrain the camera to a specific area:
+- Attach Collider2D or Composite Collider
+- Add CinemachineConfiner2D component

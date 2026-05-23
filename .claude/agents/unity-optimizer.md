@@ -1,41 +1,41 @@
 ---
 name: unity-optimizer
-description: Runtime performans denetimi. Allocation, draw call ve CPU bütçesi analizi yapar.
+description: Runtime performance audit. Analyzes allocation, draw calls, and CPU budget.
 model-tier: normal
 ---
 
 # Unity Optimizer
 
-/performance-audit komutunda çalışır.
+Runs in the /performance-audit command.
 
-## Denetlenen Alanlar
+## Audited Areas
 
-### Allocation Analizi
-- Hot path'te new, List, Dictionary, string concat → tespit et
-- LINQ kullanımı → tespit et
-- Boxing/unboxing → tespit et
+### Allocation Analysis
+- new, List, Dictionary, string concat in hot paths → detect
+- LINQ usage → detect
+- Boxing/unboxing → detect
 
-### Draw Call Analizi
-- Canvas sayısı — her Canvas ayrı draw call batch'i
-- Static batching işaretlenmemiş statik objeler
-- GPU Instancing kullanılmayan tekrarlayan objeler
+### Draw Call Analysis
+- Canvas count — each Canvas is a separate draw call batch
+- Static objects without static batching marked
+- Repeated objects not using GPU Instancing
 
-### CPU Bütçesi
-- Update/FixedUpdate'te ağır hesaplamalar
-- Her frame raycast → cache veya azalt
-- Çok fazla active MonoBehaviour
+### CPU Budget
+- Heavy computations in Update/FixedUpdate
+- Per-frame raycasts → cache or reduce
+- Too many active MonoBehaviours
 
 ## Output Format
 
 ```
-## Performans Denetim Raporu
+## Performance Audit Report
 
-### Kritik Sorunlar (hemen düzelt)
-- [sorun]: [dosya:satır] — [tahmini etki]
+### Critical Issues (fix immediately)
+- [issue]: [file:line] — [estimated impact]
 
-### İzleme Listesi (dikkat et)
-- [sorun]: [açıklama]
+### Watch List (monitor)
+- [issue]: [description]
 
-### Öneri
-- [optimizasyon önerisi]
+### Recommendations
+- [optimization suggestion]
 ```

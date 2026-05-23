@@ -1,8 +1,8 @@
 # /smart-commit
 
-Dirty working tree'yi mantıksal semantic commit gruplarına böler.
+Splits a dirty working tree into logical semantic commit groups.
 
-## Kullanım
+## Usage
 
 ```
 /smart-commit
@@ -10,37 +10,37 @@ Dirty working tree'yi mantıksal semantic commit gruplarına böler.
 
 ## Workflow
 
-### Adım 1 — Değişiklikleri Tara
+### Step 1 — Scan Changes
 
 ```bash
 git diff --name-only
 git status --short
 ```
 
-### Adım 2 — Grupla
+### Step 2 — Group
 
-Değişiklikleri mantıksal gruplara ayır:
-- Aynı modüle ait dosyalar → tek commit
-- Test dosyaları → ayrı commit
-- Dokümantasyon → ayrı commit
-- Config değişiklikleri → ayrı commit
+Split changes into logical groups:
+- Files belonging to the same module → single commit
+- Test files → separate commit
+- Documentation → separate commit
+- Config changes → separate commit
 
-### Adım 3 — Kullanıcıya Göster
+### Step 3 — Show to User
 
 ```
-Önerilen commit grupları:
+Suggested commit groups:
 
-Grup 1: feat(audio) — AudioService, AudioInstaller, IAudioService
-Grup 2: test(audio) — AudioServiceTests
-Grup 3: docs — GDD.md güncellemesi
+Group 1: feat(audio) — AudioService, AudioInstaller, IAudioService
+Group 2: test(audio) — AudioServiceTests
+Group 3: docs — GDD.md update
 
-Onaylıyor musun? (go / grupları düzenle)
+Do you approve? (go / edit groups)
 ```
 
-### Adım 4 — Commit At
+### Step 4 — Create Commits
 
-Her grup için ayrı commit:
+A separate commit for each group:
 ```bash
-git add [grup dosyaları]
+git add [group files]
 git commit -m "[type]([scope]): [description]"
 ```

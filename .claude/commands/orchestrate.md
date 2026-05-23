@@ -1,75 +1,75 @@
 # /orchestrate
 
-WORKFLOW.md'yi faz faz execute eder. Tam otomatik pipeline.
+Executes WORKFLOW.md phase by phase. Fully automated pipeline.
 
-## Kullanım
+## Usage
 
 ```
 /orchestrate
 ```
 
-## Ön Koşul
+## Prerequisite
 
-`docs/WORKFLOW.md` mevcut olmalı. Yoksa `/plan-workflow` çalıştır.
+`docs/WORKFLOW.md` must exist. If not, run `/plan-workflow`.
 
 ## Workflow
 
-### Adım 0 — Başlatma
+### Step 0 — Initialization
 
-1. `docs/WORKFLOW.md` oku
-2. `Assets/_Framework/` ve `Assets/_GameFolders/` tara — mevcut kodu tespit et
-3. Pre-Scan raporu göster (hangi kodlar zaten var)
+1. Read `docs/WORKFLOW.md`
+2. Scan `Assets/_Framework/` and `Assets/_GameFolders/` — detect existing code
+3. Show Pre-Scan report (which code already exists)
 
 ### ▶ SCOPE_GATE
 
 ```
-WORKFLOW.md yüklendi.
-Fazlar: [N]
-Toplam task: [M]
+WORKFLOW.md loaded.
+Phases: [N]
+Total tasks: [M]
 
-Pre-Scan: [zaten var olan sistemler]
+Pre-Scan: [systems already present]
 
-Başlamak için "go" yaz.
+Type "go" to start.
 ```
 
-### Adım 1 — Faz Döngüsü
+### Step 1 — Phase Loop
 
-Her faz için:
+For each phase:
 
 ```
-=== FAZ [N]: [Faz Adı] ===
+=== PHASE [N]: [Phase Name] ===
 ```
 
-**Paralel task tespiti:**
-Aynı `parallel_group`'taki task'lar → aynı anda spawn et
-Çakışan output dosyaları → sıralı çalıştır
+**Parallel task detection:**
+Tasks in the same `parallel_group` → spawn at the same time
+Conflicting output files → run sequentially
 
 **Task execution:**
 → tester → coder/unity-coder → verifier → reviewer → committer
 
-**Faz sonu otomatik kalite:**
+**Automatic end-of-phase quality:**
 → `/ralph` (verify-fix loop)
 → `silent-failure-hunter`
 → `/validate`
 
-**Faz Kapısı (manual):**
+**Phase Gate (manual):**
 ```
-Faz [N] tamamlandı.
-Sonraki faza geç? (yes / no / stop)
+Phase [N] complete.
+Proceed to next phase? (yes / no / stop)
 ```
 
-### Adım 2 — Tamamlanma
+### Step 2 — Completion
 
-`docs/EVENTS.jsonl`'e append et:
+Append to `docs/EVENTS.jsonl`:
 ```json
 {"event":"ORCHESTRATION_COMPLETED","timestamp":"...","phases":[N],"tasks":[M]}
 ```
 
-`.claude/state/gate-cleared` sil.
+Delete `.claude/state/gate-cleared`.
 
 ```
 ✅ ORCHESTRATION COMPLETE
-   Fazlar: [N]
-   Task'lar: [M]
-   Commit'ler: [K]
+   Phases: [N]
+   Tasks: [M]
+   Commits: [K]
 ```

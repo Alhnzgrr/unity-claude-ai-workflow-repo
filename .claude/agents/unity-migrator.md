@@ -1,18 +1,18 @@
 ---
 name: unity-migrator
-description: Legacy pattern'leri modern eşdeğerlerine migrate eder. Coroutine→UniTask, Singleton→DI.
+description: Migrates legacy patterns to their modern equivalents. Coroutine→UniTask, Singleton→DI.
 model-tier: normal
 ---
 
 # Unity Migrator
 
-/migrate komutunda kullanılır. Mevcut kodu bozmadan modern pattern'lere geçirir.
+Used in the /migrate command. Transitions existing code to modern patterns without breaking it.
 
-## Desteklenen Migrasyon'lar
+## Supported Migrations
 
 ### Coroutine → UniTask
 ```csharp
-// ÖNCE
+// BEFORE
 IEnumerator LoadRoutine()
 {
     yield return new WaitForSeconds(1f);
@@ -20,7 +20,7 @@ IEnumerator LoadRoutine()
 }
 void Start() => StartCoroutine(LoadRoutine());
 
-// SONRA
+// AFTER
 async UniTask LoadAsync(CancellationToken ct)
 {
     await UniTask.Delay(1000, cancellationToken: ct);
@@ -31,39 +31,39 @@ void Start() => LoadAsync(destroyCancellationToken).Forget(e => Debug.LogExcepti
 
 ### Singleton → VContainer/Zenject
 ```csharp
-// ÖNCE
+// BEFORE
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
     void Awake() => Instance = this;
 }
 
-// SONRA
+// AFTER
 public sealed class AudioService : IAudioService
 {
     // constructor injection — no singleton
 }
-// + AudioInstaller.cs ile register et
+// + register via AudioInstaller.cs
 ```
 
-## Çalışma Şekli
+## How It Works
 
-1. Migrate edilecek dosyaları listele (unity-scout ile)
-2. BREAKING_GATE → kullanıcı onayı al
-3. Dosya dosya migrate et
-4. Her migrate sonrası verify et
+1. List files to migrate (with unity-scout)
+2. BREAKING_GATE → get user approval
+3. Migrate file by file
+4. Verify after each migration
 
 ## Output Format
 
 ```
-## Migrasyon Raporu
+## Migration Report
 
-**Migrate Edilen:** [N] dosya
+**Migrated:** [N] files
 **Pattern:** [coroutine→UniTask / singleton→DI / ...]
 
-### Değişiklikler
-- [dosya]: [ne değişti]
+### Changes
+- [file]: [what changed]
 
-### Kalan Riskler
-- [varsa]
+### Remaining Risks
+- [if any]
 ```

@@ -1,54 +1,54 @@
 ---
 name: context-management
-description: Review mode, context compaction ve checkpoint kullanım rehberi.
+description: Guide for review mode, context compaction, and checkpoint usage.
 ---
 
 # Context Management
 
 ## Review Mode
 
-`production/review-mode.txt` okunur, pipeline derinliği belirlenir:
+`production/review-mode.txt` is read to determine pipeline depth:
 
-| Mode | Test | Review | unity-developer | Kullanım |
+| Mode | Test | Review | unity-developer | Usage |
 |---|---|---|---|---|
-| `solo` | ❌ | ❌ | ❌ | Jam, prototip, hızlı deney |
-| `lean` | ✅ | ✅ | Opsiyonel | Normal geliştirme (default) |
-| `full` | ✅ | ✅ | Her zaman ✅ | Takım, öğrenme, kritik feature |
+| `solo` | ❌ | ❌ | ❌ | Jam, prototype, quick experiment |
+| `lean` | ✅ | ✅ | Optional | Normal development (default) |
+| `full` | ✅ | ✅ | Always ✅ | Team, learning, critical feature |
 
-Review mode okuma:
+Reading review mode:
 ```bash
 cat production/review-mode.txt
 ```
 
-## Checkpoint Kullanımı
+## Checkpoint Usage
 
-Uzun session'larda context kaybolmadan devam etmek için:
+To continue without losing context in long sessions:
 
 ```
 /checkpoint
 ```
 
-→ `.claude/state/checkpoint.md` oluşturur. Yeni session'da:
+→ Creates `.claude/state/checkpoint.md`. In a new session:
 
 ```
 /context-prime
 ```
 
-→ checkpoint'i yükler, projeyi tanıtır.
+→ Loads the checkpoint, introduces the project.
 
-## Context Tasarrufu
+## Context Economy
 
-- Uzun session'larda gereksiz dosya okumaktan kaçın
-- Bir session'da okunan dosyaları tekrar okuma
-- Skills yalnızca ilgili göreve yükle
-- `unity-scout` araştırmayı halleder, ana agent context'ini korur
+- Avoid reading unnecessary files in long sessions
+- Do not re-read files already read in a session
+- Load skills only for the relevant task
+- `unity-scout` handles research, preserving the main agent's context
 
-## Session State Dosyaları
+## Session State Files
 
 ```
 .claude/state/
-├── session.json      ← aktif branch, faz, değişen dosyalar
-├── checkpoint.md     ← /checkpoint ile oluşur
-├── gate-cleared      ← Director Gate onayı sonrası oluşur, pipeline biter bitmez silinir
-└── read-files.log    ← gateguard için okunan dosyalar listesi
+├── session.json      ← active branch, phase, changed files
+├── checkpoint.md     ← created by /checkpoint
+├── gate-cleared      ← created after Director Gate approval, deleted when pipeline ends
+└── read-files.log    ← list of files read for gateguard
 ```

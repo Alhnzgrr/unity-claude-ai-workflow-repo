@@ -1,13 +1,13 @@
 # Testing Rules
 
-## Test Tipi Karar Ağacı
+## Test Type Decision Tree
 
 ```
-Unity API var mı?
-├── Hayır → EditMode Test (NUnit, hızlı)
-└── Evet → Scene gerekiyor mu?
-    ├── Hayır → PlayMode Programmatic (MonoBehaviour olmadan)
-    └── Evet → PlayMode Scene Test
+Does it use the Unity API?
+├── No  → EditMode Test (NUnit, fast)
+└── Yes → Does it need a Scene?
+    ├── No  → PlayMode Programmatic (without MonoBehaviour)
+    └── Yes → PlayMode Scene Test
 ```
 
 ## EditMode Test (Pure C#)
@@ -49,7 +49,7 @@ public IEnumerator PlayerView_ReceivesInput_MovesCharacter()
 {
     var go = new GameObject();
     var view = go.AddComponent<PlayerView>();
-    yield return null; // Awake/Start çalışsın
+    yield return null; // let Awake/Start run
 
     view.SimulateInput(Vector2.right);
     yield return new WaitForSeconds(0.1f);
@@ -60,26 +60,26 @@ public IEnumerator PlayerView_ReceivesInput_MovesCharacter()
 }
 ```
 
-## NSubstitute Kuralları
+## NSubstitute Rules
 
 ```csharp
-// Mock oluştur
+// Create mock
 var mock = Substitute.For<IService>();
 
-// Davranış tanımla
+// Define behavior
 mock.GetValue().Returns(42);
 
-// Çağrı doğrula
+// Verify calls
 mock.Received(1).Process(Arg.Any<string>());
 mock.DidNotReceive().Process("forbidden");
 ```
 
-## AAA Pattern Zorunlu
+## AAA Pattern Required
 
-Her test: Arrange / Act / Assert bölümleriyle.
-Tek test → tek assertion konusu (birden fazla Assert kabul edilebilir ama tek davranışı test eder).
+Every test: Arrange / Act / Assert sections.
+One test → one assertion topic (multiple Asserts are acceptable but test a single behavior).
 
-## Test Dosya Konumu
+## Test File Location
 
 ```
 Scripts/Tests/

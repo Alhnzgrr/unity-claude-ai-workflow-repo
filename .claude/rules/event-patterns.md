@@ -1,39 +1,39 @@
 # Event Pattern Rules
 
-## UnityEvent Yasak
+## UnityEvent Forbidden
 
 ```csharp
-// YANLIŞ
+// WRONG
 [SerializeField] private UnityEvent<int> onScoreChanged;
 [SerializeField] private UnityEvent onPlayerDied;
 ```
 
-`check-unity-event.sh` hook'u bunu engeller.
+`check-unity-event.sh` hook blocks this.
 
-## IEventBus — Sistemler Arası İletişim
+## IEventBus — Cross-System Communication
 
-Farklı sistemler (servisler) arası iletişim için:
+For communication between different systems (services):
 
 ```csharp
-// Event tanımı
+// Event definition
 public readonly struct PlayerDiedEvent : IEvent
 {
     public readonly int PlayerId;
     public PlayerDiedEvent(int id) => PlayerId = id;
 }
 
-// Yayınla
+// Publish
 _eventBus.Publish(new PlayerDiedEvent(_playerId));
 
-// Dinle (OnEnable/OnDisable ile eşleştir)
+// Listen (pair with OnEnable/OnDisable)
 void OnEnable() => _eventBus.Subscribe<PlayerDiedEvent>(OnPlayerDied);
 void OnDisable() => _eventBus.Unsubscribe<PlayerDiedEvent>(OnPlayerDied);
 private void OnPlayerDied(PlayerDiedEvent e) { ... }
 ```
 
-## C# Event — Aynı Modül İçi
+## C# Event — Within the Same Module
 
-Aynı modül içindeki bileşenler arası sıkı bağlı iletişim için:
+For tightly coupled communication between components in the same module:
 
 ```csharp
 public class AudioService : IAudioService
@@ -45,17 +45,17 @@ public class AudioService : IAudioService
 
 ## Action/Func — Callback
 
-Tek seferlik callback veya delegate iletimi için:
+For one-time callbacks or delegate passing:
 
 ```csharp
 public void LoadAsync(Action<AudioClip> onComplete, CancellationToken ct) { }
 ```
 
-## Karar Ağacı
+## Decision Tree
 
 ```
-Farklı sistemler arası mı?     → IEventBus
-Aynı modül içinde mi?          → C# event
-Tek seferlik callback mi?      → Action/Func
-Inspector'dan atanacak mı?     → [SerializeField] Action (UnityEvent değil)
+Between different systems?      → IEventBus
+Within the same module?         → C# event
+One-time callback?              → Action/Func
+Assigned from the Inspector?    → [SerializeField] Action (not UnityEvent)
 ```

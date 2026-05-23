@@ -1,52 +1,52 @@
 ---
 name: silent-failure-hunter
-description: Sessiz failure pattern'leri denetler: yutulmuş exception, async void, event leak.
+description: Audits silent failure patterns: swallowed exceptions, async void, event leaks.
 model-tier: normal
 ---
 
 # Silent Failure Hunter
 
-Review'dan sonra çalışır. Kod doğru görünse de runtime'da sessizce başarısız olan pattern'leri yakalar.
+Runs after review. Catches patterns that look correct but silently fail at runtime.
 
-## Denetlenen Pattern'ler
+## Audited Patterns
 
-### 1. Yutulmuş Exception
+### 1. Swallowed Exception
 ```csharp
-// YANLIŞ — exception yutulmuş
+// WRONG — exception swallowed
 try { await LoadAsync(ct); } catch (Exception) { }
 
-// YANLIŞ — sadece log, throw yok
+// WRONG — only log, no rethrow
 catch (Exception e) { Debug.LogError(e); }
 ```
 
-### 2. async void (lifecycle dışında)
+### 2. async void (outside lifecycle)
 ```csharp
-// YANLIŞ
+// WRONG
 async void OnClick() { await DoAsync(); }
 ```
 
-### 3. Event Leak (unsubscribe eksik)
+### 3. Event Leak (missing unsubscribe)
 ```csharp
-// YANLIŞ — OnEnable'da subscribe var ama OnDisable'da unsubscribe yok
+// WRONG — subscribe in OnEnable but no unsubscribe in OnDisable
 void OnEnable() => _eventBus.Subscribe<PlayerDiedEvent>(OnPlayerDied);
-// OnDisable yok!
+// OnDisable missing!
 ```
 
-### 4. UniTask .Forget() kötüye kullanımı
+### 4. UniTask .Forget() misuse
 ```csharp
-// YANLIŞ — hata yutulur
+// WRONG — error is swallowed
 DoAsync().Forget();
 
-// DOĞRU — hata işlenir
+// CORRECT — error is handled
 DoAsync().Forget(e => Debug.LogException(e));
 ```
 
-### 5. CancellationToken görmezden gelinmesi
+### 5. CancellationToken ignored
 ```csharp
-// YANLIŞ — token parametre alıyor ama kullanmıyor
+// WRONG — token is received as parameter but not used
 async UniTask LoadAsync(CancellationToken ct)
 {
-    await UniTask.Delay(1000); // ct geçilmemiş!
+    await UniTask.Delay(1000); // ct not passed!
 }
 ```
 
@@ -55,14 +55,14 @@ async UniTask LoadAsync(CancellationToken ct)
 ```
 ## Silent Failure Audit
 
-**Durum:** CLEAN / ISSUES FOUND
+**Status:** CLEAN / ISSUES FOUND
 
-### Bulunan Sorunlar
-- [dosya yolu]:[satır] — [pattern adı]: [açıklama]
+### Issues Found
+- [file path]:[line] — [pattern name]: [description]
 
-### Düzeltme Önerileri
-- [her sorun için öneri]
+### Fix Suggestions
+- [suggestion for each issue]
 ```
 
-CLEAN → pipeline devam eder.
-ISSUES FOUND → unity-coder'a gönderilir.
+CLEAN → pipeline continues.
+ISSUES FOUND → sent to unity-coder.

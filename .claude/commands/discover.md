@@ -1,67 +1,67 @@
 # /discover
 
-Packages/manifest.json tarar, yüklü paketler için skill taslakları üretir.
+Scans Packages/manifest.json and generates skill drafts for installed packages.
 
-## Kullanım
+## Usage
 
 ```
 /discover [--dry-run | --write]
 ```
 
-- `--dry-run` → Ne üretileceğini gösterir, dosya yazmaz
-- `--write` → Skill dosyalarını yazar
-- Argüman yok → `--dry-run` gibi davranır, onay sorar
+- `--dry-run` → Shows what would be generated, does not write files
+- `--write` → Writes skill files
+- No argument → Behaves like `--dry-run`, asks for confirmation
 
 ## Workflow
 
-### Adım 1 — manifest.json Oku
+### Step 1 — Read manifest.json
 
-`Packages/manifest.json` oku. Tüm paketleri listele.
+Read `Packages/manifest.json`. List all packages.
 
-### Adım 2 — package-analyzer Spawn Et
+### Step 2 — Spawn package-analyzer
 
 `package-analyzer`:
-- Bilinen paketleri tanımla (VContainer, UniTask, DOTween...)
-- Singleton kullananları tespit et
-- Adapter ihtiyacı olanları işaretle
+- Identify known packages (VContainer, UniTask, DOTween...)
+- Detect those that use singletons
+- Flag those that need an adapter
 
-### Adım 3 — Skill Taslakları Üret
+### Step 3 — Generate Skill Drafts
 
-Her bilinmeyen paket için `skills/third-party/[paket-adı]/SKILL.md` taslağı:
+For each unknown package, a `skills/third-party/[package-name]/SKILL.md` draft:
 
 ```markdown
 ---
-name: [paket-adı]
-description: [paket amacı]
+name: [package-name]
+description: [package purpose]
 discovered: true
 ---
 
-# [Paket Adı]
+# [Package Name]
 
-## Kurulum
+## Installation
 
-[manifest.json'daki paket ID]
+[Package ID from manifest.json]
 
-## Temel Kullanım
+## Basic Usage
 
-[TODO: Temel pattern'leri doldur]
+[TODO: Fill in basic patterns]
 
-## DI Uyumu
+## DI Compatibility
 
-[Singleton mi? Adapter gerekiyor mu?]
+[Singleton? Does it need an adapter?]
 ```
 
-### Adım 4 — Kullanıcı Onayı
+### Step 4 — User Confirmation
 
 ```
-Bulunan paketler: [N]
-Yeni skill taslağı: [M]
-Adapter önerisi: [K paket]
+Packages found: [N]
+New skill drafts: [M]
+Adapter suggestions: [K packages]
 
-Yazılsın mı? (yes/no)
+Write them? (yes/no)
 ```
 
-### Adım 5 — Commit (--write veya onay verilince)
+### Step 5 — Commit (on --write or confirmation)
 
 ```bash
 git add .claude/skills/third-party/

@@ -13,9 +13,9 @@ INPUT_TYPE=$(jq -r '.input // "new"' "$CONFIG")
 if [[ "$INPUT_TYPE" != "new" ]]; then exit 0; fi
 
 if echo "$CONTENT" | grep -qE "Input\.(GetKey|GetKeyDown|GetKeyUp|GetAxis|GetButton|GetButtonDown|GetButtonUp|GetMouseButton)"; then
-    echo "HOOK BLOCK [check-input-system]: Legacy Input API kullanımı tespit edildi." >&2
-    echo "Proje New Input System kullanıyor. InputActionAsset ve InputAction kullanın." >&2
-    echo "Dosya: $FILE_PATH" >&2
+    echo "HOOK BLOCK [check-input-system]: Legacy Input API usage detected." >&2
+    echo "Project uses New Input System. Use InputActionAsset and InputAction instead." >&2
+    echo "File: $FILE_PATH" >&2
     exit 2
 fi
 

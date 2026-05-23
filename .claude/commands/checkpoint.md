@@ -1,8 +1,8 @@
 # /checkpoint
 
-Konuşma özetini state'e kaydeder. Uzun session'larda context kaybına karşı.
+Saves a conversation summary to state. Guards against context loss in long sessions.
 
-## Kullanım
+## Usage
 
 ```
 /checkpoint
@@ -10,37 +10,37 @@ Konuşma özetini state'e kaydeder. Uzun session'larda context kaybına karşı.
 
 ## Workflow
 
-### Adım 1 — Özet Oluştur
+### Step 1 — Create Summary
 
-Bu session'da yapılanları özetle:
-- Hangi task'lar tamamlandı
-- Hangi dosyalar oluşturuldu/değiştirildi
-- Hangi kararlar alındı
-- Nerede kaldık
+Summarize what was done in this session:
+- Which tasks were completed
+- Which files were created/modified
+- Which decisions were made
+- Where we left off
 
-### Adım 2 — Kaydet
+### Step 2 — Save
 
 `.claude/state/checkpoint.md`:
 
 ```markdown
-# Checkpoint — [Tarih Saat]
+# Checkpoint — [Date Time]
 
-## Bu Session'da Yapılanlar
-- [tamamlanan task'lar]
+## Completed This Session
+- [completed tasks]
 
-## Değiştirilen Dosyalar
-- [dosya listesi]
+## Modified Files
+- [file list]
 
-## Alınan Kararlar
-- [mimari kararlar, trade-off'lar]
+## Decisions Made
+- [architectural decisions, trade-offs]
 
-## Devam Noktası
-[Bir sonraki session nereye bağlanmalı]
+## Resume Point
+[Where the next session should pick up]
 ```
 
-### Adım 3 — Onay
+### Step 3 — Confirm
 
 ```
-✅ Checkpoint kaydedildi: .claude/state/checkpoint.md
-Yeni session'da /context-prime ile yüklenebilir.
+✅ Checkpoint saved: .claude/state/checkpoint.md
+Can be loaded in a new session with /context-prime.
 ```

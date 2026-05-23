@@ -1,55 +1,55 @@
 ---
 name: unity-mcp-patterns
-description: Unity Editor MCP entegrasyonu için kullanım pattern'leri ve fallback davranışları.
+description: Usage patterns and fallback behaviors for Unity Editor MCP integration.
 ---
 
 # Unity MCP Patterns
 
-## MCP Varlık Kontrolü
+## MCP Presence Check
 
-Session başında MCP bağlantısı kontrol edilir. Davranış buna göre değişir:
-
-```
-MCP bağlı mı?
-├── Evet → Unity Editor araçlarını kullan
-└── Hayır → Manuel talimatlar ver, kullanıcıdan onay bekle
-```
-
-## MCP ile Yapılabilecekler
-
-- Sahne hiyerarşisi okuma/yazma
-- GameObject oluşturma, component ekleme
-- ScriptableObject asset oluşturma
-- Prefab referansları bağlama
-- Compile tetikleme
-- Test runner çalıştırma
-- Console log okuma
-
-## MCP ile YAPILMAYACAKLAR
-
-- .unity dosyasını direkt Edit/Write ile değiştirme → `block-scene-edit.sh` engeller
-- .prefab dosyasını direkt Edit/Write ile değiştirme → engeller
-- .asset dosyasını direkt Edit/Write ile değiştirme → engeller
-
-## MCP Fallback Talimat Formatı
-
-MCP yoksa kullanıcıya net adımlar ver:
+MCP connection is checked at the start of the session. Behavior depends on this:
 
 ```
-📋 Unity Editor'da yapılacaklar:
-
-1. Hierarchy'de [Setup] container'ını seç
-2. Add Component → LifetimeScope ekle
-3. LifetimeScope'un Parent field'ına AppScope'u sürükle
-4. Inspector'da GameInstaller alanına GameInstaller asset'ini sürükle
-
-Tamamlayınca "hazır" yaz.
+Is MCP connected?
+├── Yes → Use Unity Editor tools
+└── No  → Provide manual instructions, wait for user confirmation
 ```
 
-## Sahne Manipülasyon Sırası
+## What Can Be Done with MCP
 
-1. Container'ları oluştur ([Setup], [Services], [UI]...)
-2. Core objeler: EventSystem → [UI], MainCamera → [Environment]
-3. LifetimeScope ve Installer'lar → [Setup]
-4. Provider MonoBehaviour'lar → [Services]
-5. Prefab instance'ları → ilgili container
+- Reading/writing scene hierarchy
+- Creating GameObjects, adding components
+- Creating ScriptableObject assets
+- Linking prefab references
+- Triggering compilation
+- Running test runner
+- Reading console logs
+
+## What NOT to Do with MCP
+
+- Editing .unity files directly with Edit/Write → `block-scene-edit.sh` blocks it
+- Editing .prefab files directly with Edit/Write → blocks it
+- Editing .asset files directly with Edit/Write → blocks it
+
+## MCP Fallback Instruction Format
+
+When MCP is unavailable, provide clear steps to the user:
+
+```
+📋 Steps to perform in Unity Editor:
+
+1. Select the [Setup] container in the Hierarchy
+2. Add Component → add LifetimeScope
+3. Drag AppScope to the Parent field of LifetimeScope
+4. Drag the GameInstaller asset to the GameInstaller field in the Inspector
+
+Type "ready" when done.
+```
+
+## Scene Manipulation Order
+
+1. Create containers ([Setup], [Services], [UI]...)
+2. Core objects: EventSystem → [UI], MainCamera → [Environment]
+3. LifetimeScope and Installers → [Setup]
+4. Provider MonoBehaviours → [Services]
+5. Prefab instances → relevant container

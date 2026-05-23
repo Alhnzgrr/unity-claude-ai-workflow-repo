@@ -1,43 +1,43 @@
 # /search
 
-Codebase araştırması ve action router.
+Codebase research and action router.
 
-## Kullanım
+## Usage
 
 ```
-/search <sorgu>
+/search <query>
 ```
 
-Örnekler:
+Examples:
 ```
-/search IAudioService nerede implement edilmiş?
-/search singleton pattern var mı?
-/search PlayerService'i kim kullanıyor?
+/search Where is IAudioService implemented?
+/search Is there a singleton pattern?
+/search Who uses PlayerService?
 ```
 
 ## Workflow
 
-### Adım 1 — unity-scout
+### Step 1 — unity-scout
 
-`unity-scout` spawn et:
-- Grep ve Glob ile soru ile ilgili kod bul
-- Bağımlılık haritası çıkar
-- Bulgular raporla
+Spawn `unity-scout`:
+- Find relevant code using Grep and Glob
+- Build a dependency map
+- Report findings
 
-### Adım 2 — unity-reviewer (analiz gerekiyorsa)
+### Step 2 — unity-reviewer (if analysis is needed)
 
-Bulgu review gerektiriyorsa (mimari ihlal vs.) → `unity-reviewer` ekle.
+If a finding requires review (architecture violation, etc.) → add `unity-reviewer`.
 
-### Adım 3 — Action Router
+### Step 3 — Action Router
 
-Sonuca göre öneri:
+Suggestion based on result:
 ```
-## Arama Sonucu
+## Search Result
 
-[Bulgular]
+[Findings]
 
-## Önerilen Aksiyon
-- Sorun var → /fix ile düzelt
-- Refactor gerekiyor → /implement ile yeni yaklaşım
-- Sadece bilgi → bilgi verildi, aksiyon gerekmez
+## Suggested Action
+- Issue found → fix with /fix
+- Refactor needed → new approach with /implement
+- Info only → information provided, no action needed
 ```

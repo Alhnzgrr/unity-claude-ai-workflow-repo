@@ -1,8 +1,8 @@
 # /dry-run
 
-WORKFLOW.md'yi execute etmeden önizler. Hangi agent'ların hangi sırayla çalışacağını gösterir.
+Previews WORKFLOW.md without executing it. Shows which agents will run in which order.
 
-## Kullanım
+## Usage
 
 ```
 /dry-run
@@ -10,38 +10,38 @@ WORKFLOW.md'yi execute etmeden önizler. Hangi agent'ların hangi sırayla çal�
 
 ## Workflow
 
-### Adım 1 — WORKFLOW.md Oku
+### Step 1 — Read WORKFLOW.md
 
-`docs/WORKFLOW.md` oku.
+Read `docs/WORKFLOW.md`.
 
-### Adım 2 — Execution Plan Oluştur
+### Step 2 — Create Execution Plan
 
-Her faz ve task için:
-- Hangi agent kullanılacak
-- Hangi task'lar paralel çalışacak (parallel_group)
-- Tahmini dosya değişiklikleri
-- Director Gate'ler nerede tetiklenecek
+For each phase and task:
+- Which agent will be used
+- Which tasks will run in parallel (parallel_group)
+- Estimated file changes
+- Where Director Gates will be triggered
 
-### Adım 3 — Raporu Göster
+### Step 3 — Show Report
 
 ```
-## Dry Run Raporu — WORKFLOW.md
+## Dry Run Report — WORKFLOW.md
 
-### Faz 1: Foundation (2 task, paralel)
+### Phase 1: Foundation (2 tasks, parallel)
   [parallel_group: foundation]
   ├── Task 1.1 → coder → EventBus.cs
   └── Task 1.2 → coder → UnityLogger.cs
-  Gate: SCOPE_GATE (faz başında)
+  Gate: SCOPE_GATE (at phase start)
 
-### Faz 2: Core Sistemler (3 task)
+### Phase 2: Core Systems (3 tasks)
   ├── Task 2.1 → unity-coder → AudioService + tests
   ├── Task 2.2 → unity-coder → PlayerService + tests
   └── Task 2.3 → unity-coder → EnemyService + tests
   Gate: SCOPE_GATE + COMMIT_GATE
 
-Toplam: [N] task, [M] agent spawn, [K] Director Gate
+Total: [N] tasks, [M] agent spawns, [K] Director Gates
 
-Çalıştırmak için: /orchestrate
+To execute: /orchestrate
 ```
 
-Değişiklik YAPILMAZ — sadece plan gösterilir.
+NO changes are made — only the plan is shown.

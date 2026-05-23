@@ -1,20 +1,20 @@
 ---
 name: shader-graph
-description: Shader Graph ile URP shader yazma pattern'leri. Custom node, SubGraph ve HLSL entegrasyonu.
+description: URP shader writing patterns with Shader Graph. Custom node, SubGraph, and HLSL integration.
 ---
 
 # Shader Graph
 
-## Ne Zaman Shader Graph, Ne Zaman HLSL?
+## When Shader Graph, When HLSL?
 
-| Durum | Tercih |
+| Situation | Preference |
 |---|---|
-| Basit efekt (dissolve, outline, fresnel) | Shader Graph |
-| Kompleks matematik / performans kritik | HLSL Custom Node |
-| Compute shader | HLSL direkt |
-| Existing shader'ı genişletme | HLSL |
+| Simple effect (dissolve, outline, fresnel) | Shader Graph |
+| Complex math / performance critical | HLSL Custom Node |
+| Compute shader | HLSL direct |
+| Extending existing shader | HLSL |
 
-## Shader Graph Klasör Yapısı
+## Shader Graph Folder Structure
 
 ```
 Arts/Shaders/
@@ -38,9 +38,9 @@ void MyCustomFunction_float(float3 input, out float3 output)
 }
 ```
 
-Shader Graph'ta: Custom Function Node → File seçeneği → HLSL dosyasını bağla.
+In Shader Graph: Custom Function Node → File option → link the HLSL file.
 
-## Shader Property Kontrolü
+## Shader Property Control
 
 ```csharp
 private static readonly int DissolveAmountID = Shader.PropertyToID("_DissolveAmount");

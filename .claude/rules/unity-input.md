@@ -1,19 +1,19 @@
 # Unity Input Rules
 
-## Input Sistemi Seçimi
+## Input System Selection
 
-`project-config.json`'daki `input` değerine göre:
-- `"new"` → New Input System (Input System paketi)
+Based on the `input` value in `project-config.json`:
+- `"new"` → New Input System (Input System package)
 - `"legacy"` → Legacy Input Manager
 
-`check-input-system.sh` hook'u: `input: "new"` ise `Input.GetKey/Axis` kullanımını engeller.
+`check-input-system.sh` hook: if `input: "new"`, blocks usage of `Input.GetKey/Axis`.
 
 ## New Input System Pattern
 
-Input logic View katmanında kalır, Core/Service'e sızmaz:
+Input logic stays in the View layer and does not leak into Core/Service:
 
 ```csharp
-// InputView.cs — MonoBehaviour, View katmanı
+// InputView.cs — MonoBehaviour, View layer
 public class PlayerInputView : MonoBehaviour
 {
     [SerializeField] private InputActionAsset _inputActions;
@@ -52,7 +52,7 @@ public class PlayerInputView : MonoBehaviour
 ## Legacy Input Pattern
 
 ```csharp
-// SADECE legacy seçiliyse geçerli
+// Valid ONLY when legacy is selected
 void Update()
 {
     var move = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -62,15 +62,15 @@ void Update()
 }
 ```
 
-## Yasak Patternler
+## Forbidden Patterns
 
 ```csharp
-// YANLIŞ — input logic service/environment'ta
+// WRONG — input logic in service/environment
 public class PlayerService : IPlayerService
 {
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) Jump(); // input buraya girmez
+        if (Input.GetKeyDown(KeyCode.Space)) Jump(); // input does not belong here
     }
 }
 ```

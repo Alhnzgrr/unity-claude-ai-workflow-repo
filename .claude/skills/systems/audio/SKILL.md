@@ -1,11 +1,11 @@
 ---
 name: audio
-description: Unity Audio sistemi pattern'leri. AudioSource, AudioMixer, modül yapısı.
+description: Unity Audio system patterns. AudioSource, AudioMixer, module structure.
 ---
 
 # Audio System
 
-## Modül Yapısı
+## Module Structure
 
 ```
 Abstracts/Audio/
@@ -52,15 +52,15 @@ public sealed class AudioConfiguration : ScriptableObject
 }
 ```
 
-## AudioMixer Kullanımı
+## AudioMixer Usage
 
-Her AudioSource bir AudioMixerGroup'a bağlanır:
-- Master → Music, SFX, UI alt grupları
-- Mixer parametreleri exposed → runtime volume control
+Each AudioSource is linked to an AudioMixerGroup:
+- Master → Music, SFX, UI sub-groups
+- Mixer parameters exposed → runtime volume control
 
-## Pool Kullanımı
+## Pool Usage
 
-Çok sayıda kısa ses efekti → AudioSource pool:
+Many short sound effects → AudioSource pool:
 ```csharp
 private IObjectPool<AudioSource> _sourcePool;
 ```

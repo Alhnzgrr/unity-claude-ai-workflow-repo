@@ -1,14 +1,14 @@
 ---
 name: dotween
-description: DOTween tween library pattern'leri. Adapter pattern ile DI uyumlu kullanım.
+description: DOTween tween library patterns. DI-compatible usage with adapter pattern.
 ---
 
 # DOTween
 
-## Önemli: DOTween Singleton Problemi
+## Important: DOTween Singleton Problem
 
-DOTween.Init() global singleton kullanır. Bu singleton, DI container'ın dışında.
-Çözüm: Adapter pattern ile sarmalayın.
+DOTween.Init() uses a global singleton. This singleton is outside the DI container.
+Solution: wrap it with an adapter pattern.
 
 ## Adapter Pattern
 
@@ -33,7 +33,7 @@ public sealed class DOTweenAdapter : ITweenService
 }
 ```
 
-## DOTween Init (AppScope'ta)
+## DOTween Init (in AppScope)
 
 ```csharp
 public class AppScope : LifetimeScope
@@ -63,7 +63,7 @@ public async UniTask AnimateEntryAsync(CancellationToken ct)
 }
 ```
 
-## Tween Temizleme
+## Tween Cleanup
 
 ```csharp
 void OnDisable()

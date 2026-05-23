@@ -1,18 +1,18 @@
 ---
 name: urp-pipeline
-description: Universal Render Pipeline konfigürasyonu. Render Feature, Volume, Shader Graph entegrasyonu.
+description: Universal Render Pipeline configuration. Render Feature, Volume, Shader Graph integration.
 ---
 
 # URP Pipeline
 
-## URP Asset Yapısı
+## URP Asset Structure
 
-Kalite tiers için ayrı URP Asset'ler:
-- `URP-Low.asset` — mobil, düşük detay
-- `URP-Medium.asset` — orta segment
-- `URP-High.asset` — PC yüksek kalite
+Separate URP Assets for quality tiers:
+- `URP-Low.asset` — mobile, low detail
+- `URP-Medium.asset` — mid-range
+- `URP-High.asset` — PC high quality
 
-## Volume Sistemi
+## Volume System
 
 ```csharp
 public sealed class PostProcessProvider : MonoBehaviour
@@ -54,6 +54,6 @@ public class OutlineRendererFeature : ScriptableRendererFeature
 }
 ```
 
-## URP Shader Uyumu
+## URP Shader Compatibility
 
-Built-in shader'lar URP'de çalışmaz. Her shader URP için yazılmalı veya Shader Graph ile oluşturulmalı.
+Built-in shaders do not work in URP. Every shader must be written for URP or created with Shader Graph.

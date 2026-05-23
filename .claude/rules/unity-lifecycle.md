@@ -1,59 +1,59 @@
 # Unity Lifecycle Rules
 
-## Lifecycle Disiplini
+## Lifecycle Discipline
 
-| Method | Kullanım |
+| Method | Usage |
 |---|---|
-| `Awake()` | Lokal referans init, GetComponent (sadece self) |
-| `OnEnable()` | Event subscribe, listener kayıt |
-| `OnDisable()` | Event unsubscribe, listener iptal |
-| `Start()` | SADECE basit başlangıç — kurulum recovery DEĞİL |
+| `Awake()` | Local reference init, GetComponent (self only) |
+| `OnEnable()` | Event subscribe, listener registration |
+| `OnDisable()` | Event unsubscribe, listener cancellation |
+| `Start()` | Simple initialization ONLY — NOT setup recovery |
 
 ```csharp
-// DOĞRU
+// CORRECT
 void Awake() => _rb = GetComponent<Rigidbody>();
 void OnEnable() => _eventBus.Subscribe<PlayerDiedEvent>(OnPlayerDied);
 void OnDisable() => _eventBus.Unsubscribe<PlayerDiedEvent>(OnPlayerDied);
 
-// YANLIŞ — Start'ta bağımlılık arama
+// WRONG — searching for dependency in Start
 void Start() { _service = FindObjectOfType<AudioService>(); }
 ```
 
 ## UnityEditor Guard
 
-Runtime kodda `UnityEditor` namespace kullanmak hook tarafından engellenir.
-Gerekiyorsa:
+Using the `UnityEditor` namespace in runtime code is blocked by the hook.
+If required:
 
 ```csharp
 #if UNITY_EDITOR
 using UnityEditor;
-// editor-only kod
+// editor-only code
 #endif
 ```
 
-## Threading Kuralları
+## Threading Rules
 
-- Unity API yalnızca main thread'den çağrılır
-- Background thread'den UI güncelleme → `UniTask.SwitchToMainThread()`
+- Unity API is called from the main thread only
+- UI updates from a background thread → `UniTask.SwitchToMainThread()`
 
 ```csharp
 await UniTask.SwitchToThreadPool();
 var data = await LoadHeavyDataAsync();
 await UniTask.SwitchToMainThread();
-_textComponent.text = data.ToString(); // main thread'de güvenli
+_textComponent.text = data.ToString(); // safe on main thread
 ```
 
-## Time Kuralları
+## Time Rules
 
-- `Time.timeScale` assignment yasak (hook engeller) — event yayınla
-- `Time.deltaTime` hot path'te her frame cachelenebilir
+- `Time.timeScale` assignment is forbidden (hook blocks it) — publish an event instead
+- `Time.deltaTime` can be cached each frame in hot paths
 
-## Platform Define'ları
+## Platform Defines
 
 ```csharp
 #if UNITY_ANDROID || UNITY_IOS
-    // mobil kod
+    // mobile code
 #elif UNITY_STANDALONE
-    // PC kod
+    // PC code
 #endif
 ```

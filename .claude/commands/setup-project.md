@@ -1,8 +1,8 @@
 # /setup-project
 
-Projeyi detect eder, konfigüre eder ve klasör yapısını oluşturur.
+Detects, configures, and creates the folder structure for the project.
 
-## Kullanım
+## Usage
 
 ```
 /setup-project
@@ -10,45 +10,45 @@ Projeyi detect eder, konfigüre eder ve klasör yapısını oluşturur.
 
 ## Workflow
 
-### Adım 1 — manifest.json Detect
+### Step 1 — Detect manifest.json
 
-`Packages/manifest.json` oku:
+Read `Packages/manifest.json`:
 
 ```bash
-# VContainer mı Zenject mi?
+# VContainer or Zenject?
 DI="none"
 grep -q "jp.hadashikick.vcontainer" Packages/manifest.json && DI="vcontainer"
 grep -q "com.svermeulen.extenject" Packages/manifest.json && DI="zenject"
 
-# UniTask var mı?
+# UniTask present?
 grep -q "com.cysharp.unitask" Packages/manifest.json && ASYNC="unitask"
 
-# DOTween var mı?
+# DOTween present?
 grep -q "com.demigiant.dotween" Packages/manifest.json && HAS_DOTWEEN=true
 ```
 
-### Adım 2 — Input Sistemi Detect
+### Step 2 — Detect Input System
 
-`ProjectSettings/ProjectVersion.txt` ve Input Manager'ı kontrol et:
-- New Input System paketi var mı? → `"input": "new"`
-- Yoksa → `"input": "legacy"`
+Check `ProjectSettings/ProjectVersion.txt` and Input Manager:
+- Is the New Input System package present? → `"input": "new"`
+- Otherwise → `"input": "legacy"`
 
-### Adım 3 — Opsiyonel Feature Seçimi
+### Step 3 — Optional Feature Selection
 
-Kullanıcıya sor (birer birer):
-1. ECS/DOTS kullanacak mısın? (ecs: true/false)
-2. Addressables kullanacak mısın? (addressables: true/false)
-3. XR/VR geliştirme yapacak mısın? (xr: true/false)
+Ask the user (one at a time):
+1. Will you use ECS/DOTS? (ecs: true/false)
+2. Will you use Addressables? (addressables: true/false)
+3. Will you do XR/VR development? (xr: true/false)
 
-### Adım 4 — project-config.json Güncelle
+### Step 4 — Update project-config.json
 
-`.claude/project-config.json` güncelle:
+Update `.claude/project-config.json`:
 
 ```json
 {
-  "di": "[detect edilen]",
+  "di": "[detected]",
   "async": "unitask",
-  "input": "[detect edilen]",
+  "input": "[detected]",
   "ecs": false,
   "addressables": false,
   "xr": false,
@@ -57,7 +57,7 @@ Kullanıcıya sor (birer birer):
 }
 ```
 
-### Adım 5 — Klasör Yapısını Oluştur
+### Step 5 — Create Folder Structure
 
 ```
 Assets/
@@ -71,15 +71,15 @@ Assets/
         │   ├── Abstracts/
         │   └── Concretes/
         ├── Tests/
-        │   ├── [Proje]EditModeTest/
-        │   └── [Proje]PlayModeTest/
+        │   ├── [Project]EditModeTest/
+        │   └── [Project]PlayModeTest/
         └── Editors/
 ```
 
-### Adım 6 — Özet Göster
+### Step 6 — Show Summary
 
 ```
-✅ Kurulum tamamlandı
+✅ Setup complete
 
 DI Container: vcontainer
 Async: unitask
@@ -88,7 +88,7 @@ ECS: false
 Addressables: false
 XR: false
 
-Klasör yapısı oluşturuldu: Assets/_Framework/ + Assets/_GameFolders/
+Folder structure created: Assets/_Framework/ + Assets/_GameFolders/
 
-Sonraki adım: /game-idea veya /implement
+Next step: /game-idea or /implement
 ```

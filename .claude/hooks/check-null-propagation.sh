@@ -8,24 +8,24 @@ if [[ ! "$FILE_PATH" =~ \.cs$ ]]; then exit 0; fi
 
 ISSUES=()
 
-# ?. operatörü — Unity object'lerde tehlikeli
+# ?. operator — dangerous on Unity objects
 NULL_CONDITIONAL=$(echo "$CONTENT" | grep -nE "\?\." | grep -vE "//.*\?\.")
 if [[ -n "$NULL_CONDITIONAL" ]]; then
-    ISSUES+=("'?.' operatörü Unity object'lerde destroyed check'ini atlatır")
+    ISSUES+=("'?.' operator bypasses the destroyed check on Unity objects")
 fi
 
-# is null — Unity object'lerde == null kullanılmalı
+# is null — use == null on Unity objects
 IS_NULL=$(echo "$CONTENT" | grep -nE "\bis null\b" | grep -vE "//.*is null")
 if [[ -n "$IS_NULL" ]]; then
-    ISSUES+=("'is null' Unity'nin == override'ını atlatır, '== null' kullanın")
+    ISSUES+=("'is null' bypasses Unity's == override, use '== null' instead")
 fi
 
 if [[ ${#ISSUES[@]} -gt 0 ]]; then
-    echo "HOOK WARN [check-null-propagation]: Unity object null check sorunları:" >&2
+    echo "HOOK WARN [check-null-propagation]: Unity object null check issues:" >&2
     for issue in "${ISSUES[@]}"; do
         echo "  - $issue" >&2
     done
-    echo "Dosya: $FILE_PATH" >&2
+    echo "File: $FILE_PATH" >&2
 fi
 
 exit 0

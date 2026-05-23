@@ -1,44 +1,44 @@
 # Scene Hierarchy Rules
 
-## 6 Container Standardı
+## 6-Container Standard
 
-Her sahne bu 6 root container'ı içerir, bu sırayla:
+Every scene contains these 6 root containers, in this order:
 
 ```
-[Setup]           ← LifetimeScope, Installer'lar, bootstrap
-[Services]        ← Service Provider MonoBehaviour'ları
-[UI]              ← Canvas'lar, HUD, popup'lar
-[Environment]     ← Zemin, duvarlar, ışık, kamera
-[Characters]      ← Player, NPC, Enemy prefab instance'ları
-[VFX]             ← Particle system'ler, efektler
+[Setup]           ← LifetimeScope, Installers, bootstrap
+[Services]        ← Service Provider MonoBehaviours
+[UI]              ← Canvases, HUD, popups
+[Environment]     ← Ground, walls, lights, camera
+[Characters]      ← Player, NPC, Enemy prefab instances
+[VFX]             ← Particle systems, effects
 ```
 
-## Container İsimlendirme
+## Container Naming
 
-Köşeli parantez zorunlu: `[Setup]`, `[Services]`, `[UI]`...
-Bu pattern ile hızlı Inspector gezintisi sağlanır.
+Square brackets are required: `[Setup]`, `[Services]`, `[UI]`...
+This pattern enables fast Inspector navigation.
 
-## [Setup] İçeriği
+## [Setup] Contents
 
 ```
 [Setup]
-└── GameScope (LifetimeScope component'li)
+└── GameScope (with LifetimeScope component)
     ├── GameInstaller
-    └── [diğer installer'lar]
+    └── [other installers]
 ```
 
-## [Services] İçeriği
+## [Services] Contents
 
 ```
 [Services]
 ├── AudioProvider
 ├── InputProvider
-└── [diğer provider MonoBehaviour'ları]
+└── [other provider MonoBehaviours]
 ```
 
-## Kural
+## Rules
 
-- Her prefab kendi container'ına yerleşir
-- Container'lar arası parent-child yasak (prefab → doğru container'ına)
-- EventSystem → [UI] altında
-- MainCamera → [Environment] altında
+- Each prefab is placed in its own container
+- Parent-child relationships between containers are forbidden (prefab → goes into its correct container)
+- EventSystem → under [UI]
+- MainCamera → under [Environment]

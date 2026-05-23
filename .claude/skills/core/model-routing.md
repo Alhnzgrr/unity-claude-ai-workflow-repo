@@ -1,24 +1,24 @@
 # Model Routing
 
-Hangi görev için hangi model kullanılır.
+Which model is used for which task.
 
-## Model Tier'ları
+## Model Tiers
 
-| Tier | Model | Ne Zaman |
+| Tier | Model | When |
 |---|---|---|
-| light | Haiku | Read-only, formatting, hızlı özet, linting |
-| normal | Sonnet | Kod üretimi, review, debugging, implementasyon |
-| heavy | Opus | Mimari tasarım, adversarial review, kritik kararlar |
+| light | Haiku | Read-only, formatting, quick summary, linting |
+| normal | Sonnet | Code generation, review, debugging, implementation |
+| heavy | Opus | Architecture design, adversarial review, critical decisions |
 
-## Agent → Tier Eşlemesi
+## Agent → Tier Mapping
 
 ### light (Haiku)
-- `unity-verifier` — compile/test sonuç okuma
-- `committer` — commit mesajı üretme
-- `unity-scout` — read-only araştırma
-- `unity-fixer-lite` — tek satır fix
-- `unity-linter` — convention kontrolü
-- `package-analyzer` — manifest okuma
+- `unity-verifier` — compile/test result reading
+- `committer` — commit message generation
+- `unity-scout` — read-only research
+- `unity-fixer-lite` — single-line fix
+- `unity-linter` — convention checking
+- `package-analyzer` — manifest reading
 
 ### normal (Sonnet)
 - `unity-coder`, `coder`, `unity-coder-lite`
@@ -30,19 +30,19 @@ Hangi görev için hangi model kullanılır.
 - `unity-optimizer`, `unity-build-runner`
 
 ### heavy (Opus)
-- `unity-architect` — sistem tasarımı
+- `unity-architect` — system design
 - `unity-critic` — adversarial plan review
 
-## Complexity Score → Model Seçimi
+## Complexity Score → Model Selection
 
-0.0 – 0.3 → light veya normal
+0.0 – 0.3 → light or normal
 0.4 – 0.6 → normal
 0.7 – 1.0 → heavy (architect) + normal (coder)
 
-Complexity hesaplama:
-- Yeni modül mü? +0.3
-- Birden fazla sistem etkiliyor mu? +0.2
-- ECS veya Addressables mı? +0.2
-- Test gerekiyor mu? +0.1
-- Mevcut kodu değiştiriyor mu? +0.1
-- Tek dosya tek metod mu? 0.1
+Complexity calculation:
+- New module? +0.3
+- Affects multiple systems? +0.2
+- ECS or Addressables? +0.2
+- Requires tests? +0.1
+- Modifies existing code? +0.1
+- Single file single method? 0.1

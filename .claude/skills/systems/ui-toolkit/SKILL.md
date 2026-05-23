@@ -1,11 +1,11 @@
 ---
 name: ui-toolkit
-description: Unity UI Toolkit (UIElements) pattern'leri. UXML, USS, runtime UI ve Editor tools.
+description: Unity UI Toolkit (UIElements) patterns. UXML, USS, runtime UI, and Editor tools.
 ---
 
 # UI Toolkit
 
-## Runtime UI Yapısı
+## Runtime UI Structure
 
 ```csharp
 public sealed class MainMenuView : MonoBehaviour
@@ -32,7 +32,7 @@ public sealed class MainMenuView : MonoBehaviour
 }
 ```
 
-## USS Değişkenleri
+## USS Variables
 
 ```css
 /* Variables.uss */
@@ -49,7 +49,7 @@ public sealed class MainMenuView : MonoBehaviour
 }
 ```
 
-## Editor Tools (UI Toolkit ile)
+## Editor Tools (with UI Toolkit)
 
 ```csharp
 public class MyEditorWindow : EditorWindow

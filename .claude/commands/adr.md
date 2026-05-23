@@ -1,53 +1,53 @@
 # /adr
 
-Architecture Decision Record oluşturur.
+Creates an Architecture Decision Record.
 
-## Kullanım
+## Usage
 
 ```
-/adr <karar başlığı>
+/adr <decision title>
 ```
 
-Örnek: `/adr VContainer yerine Zenject kullanma kararı`
+Example: `/adr Decision to use Zenject instead of VContainer`
 
 ## Workflow
 
-### Adım 1 — ADR Numarası Belirle
+### Step 1 — Determine ADR Number
 
-`docs/decisions/` klasörünü tara, son numarayı bul, +1 ekle.
+Scan the `docs/decisions/` folder, find the last number, add +1.
 
-### Adım 2 — ADR Dosyası Oluştur
+### Step 2 — Create ADR File
 
 `docs/decisions/[NNN]-[slug].md`:
 
 ```markdown
-# [NNN] — [Başlık]
+# [NNN] — [Title]
 
-**Tarih:** [YYYY-MM-DD]
-**Durum:** Kabul Edildi
+**Date:** [YYYY-MM-DD]
+**Status:** Accepted
 
-## Bağlam
+## Context
 
-[Neden bu karar alındı? Hangi sorunu çözüyor?]
+[Why was this decision made? What problem does it solve?]
 
-## Karar
+## Decision
 
-[Ne yapılacağına karar verildi]
+[What was decided]
 
-## Sonuçlar
+## Consequences
 
-**Olumlu:**
-- [avantajlar]
+**Positive:**
+- [advantages]
 
-**Olumsuz / Trade-off:**
-- [dezavantajlar]
+**Negative / Trade-off:**
+- [disadvantages]
 
-## Alternatifler
+## Alternatives
 
-[Değerlendirilen ama seçilmeyen seçenekler]
+[Options considered but not selected]
 ```
 
-### Adım 3 — Commit
+### Step 3 — Commit
 
 ```bash
 git add docs/decisions/
