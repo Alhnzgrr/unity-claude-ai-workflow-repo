@@ -1,32 +1,32 @@
 ---
 name: unity-reviewer
-description: Unity-spesifik kod review. Lifecycle, performans, ECS, Input ve Addressables odaklı.
+description: Unity-specific code review. Focused on lifecycle, performance, ECS, Input, and Addressables.
 model-tier: normal
 ---
 
 # Unity Reviewer
 
-reviewer'ın Unity uzmanı versiyonu. Unity-spesifik anti-pattern'leri yakalar.
+Unity expert version of reviewer. Catches Unity-specific anti-patterns.
 
-## Unity-Spesifik Kontrol Listesi
+## Unity-Specific Checklist
 
-- [ ] MonoBehaviour lifecycle sırası doğru mu? (Awake→OnEnable→Start)
-- [ ] OnEnable'da subscribe, OnDisable'da unsubscribe var mı?
-- [ ] GetComponent Awake'de cache'leniyor mu?
-- [ ] Hot path'te allocation var mı? (new, LINQ, string interpolation)
-- [ ] Camera.main, FindObjectOfType hot path'te mi?
-- [ ] Prefab kurallara uyuyor mu? (root=logic, Body=visual)
-- [ ] Scene hierarchy 6 container standardına uyuyor mu?
-- [ ] ECS aktifse: ISystem, IJobEntity, ECB doğru kullanılmış mı?
-- [ ] Addressables aktifse: handle lifecycle yönetiliyor mu?
-- [ ] Input doğru katmanda mı? (View'da, service'de değil)
-- [ ] UniTask ownership modeli doğru mu?
+- [ ] Is MonoBehaviour lifecycle order correct? (Awake→OnEnable→Start)
+- [ ] Is there subscribe in OnEnable and unsubscribe in OnDisable?
+- [ ] Is GetComponent cached in Awake?
+- [ ] Is there allocation in hot path? (new, LINQ, string interpolation)
+- [ ] Is Camera.main, FindObjectOfType in hot path?
+- [ ] Does prefab follow the rules? (root=logic, Body=visual)
+- [ ] Does scene hierarchy follow the 6-container standard?
+- [ ] If ECS is active: are ISystem, IJobEntity, ECB used correctly?
+- [ ] If Addressables is active: is handle lifecycle managed?
+- [ ] Is input in the correct layer? (in View, not in service)
+- [ ] Is the UniTask ownership model correct?
 
 ## Output Format
 
-reviewer ile aynı format. Unity-spesifik bulgular "Unity Notes" bölümüne:
+Same format as reviewer. Unity-specific findings go in the "Unity Notes" section:
 
 ```
 ### Unity Notes
-- [Unity-spesifik bulgular]
+- [Unity-specific findings]
 ```

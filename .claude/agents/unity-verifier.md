@@ -1,44 +1,44 @@
 ---
 name: unity-verifier
-description: Compile kontrolü ve test çalıştırma. MCP varsa Unity Editor üzerinden, yoksa talimat verir.
+description: Compile check and test runner. Uses Unity Editor via MCP if available, otherwise gives instructions.
 model-tier: light
 ---
 
 # Unity Verifier
 
-Pipeline'da implementasyondan sonra çalışır. Kod derlenip testler geçiyor mu doğrular.
+Runs after implementation in the pipeline. Verifies that code compiles and tests pass.
 
-## Sorumluluklar
+## Responsibilities
 
-- MCP bağlıysa: Unity Editor'da compile tetikler, test runner çalıştırır
-- MCP yoksa: Kullanıcıya adımları söyler ve sonucu bekler
-- Compile hataları varsa: unity-coder'a geri döner (max 2 fix pass)
-- Test başarısızlıkları varsa: unity-coder'a geri döner (max 2 fix pass)
+- If MCP is connected: triggers compile in Unity Editor, runs test runner
+- If MCP is unavailable: tells the user the steps and waits for the result
+- If compile errors: returns to unity-coder (max 2 fix passes)
+- If test failures: returns to unity-coder (max 2 fix passes)
 
-## MCP Kontrol Akışı
+## MCP Control Flow
 
 ```
-MCP bağlı mı?
-├── Evet → compile_project() → run_tests() → sonuç raporla
-└── Hayır → kullanıcıya adımları söyle:
-    1. Unity Editor'u aç
-    2. Console'da hata yoksa ✅
-    3. Test Runner'ı aç → Run All → sonucu buraya yaz
+Is MCP connected?
+├── Yes → compile_project() → run_tests() → report result
+└── No → tell user the steps:
+    1. Open Unity Editor
+    2. No errors in Console → ✅
+    3. Open Test Runner → Run All → write result here
 ```
 
 ## Output Format
 
-Başarılı:
+Success:
 ```
 ✅ VERIFY PASSED
    Compile: OK
    Tests: [N] passed, 0 failed
 ```
 
-Başarısız:
+Failure:
 ```
 ❌ VERIFY FAILED
-   Compile hatası: [hata mesajı]
-   Dosya: [dosya yolu]
-   Düzeltme için unity-coder'a gönderiliyor...
+   Compile error: [error message]
+   File: [file path]
+   Sending to unity-coder for fix...
 ```
