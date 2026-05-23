@@ -1,11 +1,31 @@
 ---
 name: physics
-description: Unity Physics and Physics2D patterns. Rigidbody, Collider, Layer management.
+description: Use when implementing or reviewing Unity Physics or Physics2D interactions, Rigidbody movement, collisions, raycasts, triggers, layers, or mobile-sensitive physics code.
 ---
 
 # Physics System
 
-## Layer-Based Collision
+## Purpose
+
+Help agents use Unity physics predictably, efficiently, and with clear separation between physics callbacks and game rules.
+
+## Core Idea
+
+Physics detects and moves. Game services decide what those detections mean.
+
+## Use When
+
+Use this skill for:
+
+- Rigidbody movement
+- trigger and collision handling
+- raycasts and overlap checks
+- layer masks
+- hit detection
+- projectile physics
+- character physics adapters
+
+## Configuration Pattern
 
 ```csharp
 [CreateAssetMenu(menuName = "Config/Physics")]
@@ -21,40 +41,127 @@ public sealed class PhysicsConfiguration : ScriptableObject
 }
 ```
 
-## Rigidbody Usage
+Layer masks should be config-driven when they are part of system policy.
+
+## Rigidbody Movement
+
+Use `FixedUpdate` for physics movement.
 
 ```csharp
-// Apply physics in FixedUpdate
-void FixedUpdate()
+private Rigidbody _rigidbody;
+private Vector3 _velocity;
+
+private void Awake()
 {
-    _rb.MovePosition(_rb.position + _velocity * Time.fixedDeltaTime);
+    _rigidbody = GetComponent<Rigidbody>();
 }
 
-// Never Transform.position = ... (breaks physics calculation)
+private void FixedUpdate()
+{
+    Vector3 nextPosition = _rigidbody.position + _velocity * Time.fixedDeltaTime;
+    _rigidbody.MovePosition(nextPosition);
+}
 ```
+
+Avoid setting `transform.position` for physics-driven objects because it bypasses expected Rigidbody behavior.
+
+## Trigger and Collision Ownership
+
+MonoBehaviours may receive Unity callbacks:
+
+```csharp
+private void OnTriggerEnter(Collider other)
+{
+    _hitService.ReportTriggerEnter(gameObject, other.gameObject);
+}
+```
+
+The callback should forward facts. The service should decide whether a hit is valid, what damage applies, and which events are published.
 
 ## Raycast Optimization
 
+Avoid allocation-heavy physics APIs in hot paths.
+
+Bad:
+
 ```csharp
-// WRONG — allocation every frame
-void Update()
-{
-    var hits = Physics.RaycastAll(origin, direction);
-}
+RaycastHit[] hits = Physics.RaycastAll(origin, direction);
+```
 
-// CORRECT — pre-allocated buffer
-private readonly RaycastHit[] _hitBuffer = new RaycastHit[10];
+Good:
 
-void Update()
+```csharp
+private readonly RaycastHit[] _hitBuffer = new RaycastHit[16];
+
+private int Raycast(Vector3 origin, Vector3 direction, float distance, LayerMask mask)
 {
-    int count = Physics.RaycastNonAlloc(origin, direction, _hitBuffer);
-    for (int i = 0; i < count; i++) { ... }
+    return Physics.RaycastNonAlloc(origin, direction, _hitBuffer, distance, mask);
 }
 ```
 
-## Trigger vs Collision
+## 2D vs 3D Rule
 
-- Trigger: `OnTriggerEnter/Exit` — no physical response, detection only
-- Collision: `OnCollisionEnter/Exit` — physical response present
+Do not mix 2D and 3D physics concepts in one system without an explicit adapter boundary.
 
-Both are handled in the View, notified to the service via event.
+Examples:
+
+- `Rigidbody` and `Collider` are 3D.
+- `Rigidbody2D` and `Collider2D` are 2D.
+- `Physics` and `Physics2D` queries are separate APIs.
+
+## Events
+
+Useful events:
+
+- `TriggerEnteredEvent`
+- `CollisionStartedEvent`
+- `GroundedChangedEvent`
+- `HitDetectedEvent`
+
+Events should carry stable domain information, not raw callback-only state when avoidable.
+
+## Testing Guidance
+
+Use EditMode tests for pure policy:
+
+- layer matching
+- damage validation
+- hit filtering
+- state transitions after reported contacts
+
+Use PlayMode tests for actual Rigidbody, Collider, and physics-scene behavior.
+
+## Good Pattern
+
+```text
+PhysicsView receives OnTriggerEnter
+PhysicsView reports contact to HitService
+HitService validates layers and state
+HitService publishes HitDetectedEvent
+```
+
+## Bad Pattern
+
+```text
+OnTriggerEnter computes damage, changes score, updates UI, plays sound, and destroys objects.
+```
+
+## Common Mistakes
+
+- using `RaycastAll` every frame
+- forgetting layer masks
+- deciding game rules inside physics callbacks
+- using `transform.position` for Rigidbody movement
+- mixing 2D and 3D physics APIs
+- relying on string tags instead of explicit layer or component checks
+
+## AI Review Guidance
+
+When reviewing physics code, check:
+
+- Is movement done in the correct update loop?
+- Are physics callbacks thin?
+- Are allocations avoided in hot physics queries?
+- Are layer masks explicit?
+- Are game rules handled by services instead of callbacks?
+- Are 2D and 3D APIs kept separate?

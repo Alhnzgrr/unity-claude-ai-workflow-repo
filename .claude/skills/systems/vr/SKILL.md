@@ -1,25 +1,46 @@
 ---
 name: vr
-description: XR Interaction Toolkit and XR Origin patterns. Controller input, performance, comfort.
+description: Use when implementing or reviewing XR/VR systems, XR Origin setup, controller input, locomotion, interaction, comfort, or VR performance.
 ---
 
 # VR Development
 
-> This skill is auto-loaded when `project-config.json` → `"xr": true`.
+## Purpose
+
+Help agents build VR features that respect comfort, performance, input ownership, and XR Interaction Toolkit conventions.
+
+## Core Idea
+
+VR is not just a display mode. Interaction, comfort, frame timing, scale, and input feedback must be designed from the start.
+
+## Use When
+
+Use this skill for:
+
+- XR Origin setup
+- controller input
+- hand interaction
+- grab/socket/ray interaction
+- VR UI
+- locomotion
+- comfort review
+- Quest or mobile VR performance
 
 ## XR Origin Structure
 
-```
+```text
 XR Origin
-├── Camera Offset
-│   └── Main Camera (XR camera)
-├── LeftHand Controller
-│   └── XR Controller (Left Hand)
-└── RightHand Controller
-    └── XR Controller (Right Hand)
+  Camera Offset
+    Main Camera
+  LeftHand Controller
+    XR Controller
+  RightHand Controller
+    XR Controller
 ```
 
-## Controller Input Pattern
+The XR camera should be controlled by XR systems, not by ordinary gameplay camera scripts.
+
+## Input Adapter Pattern
 
 ```csharp
 public sealed class VRInputProvider : MonoBehaviour
@@ -28,10 +49,14 @@ public sealed class VRInputProvider : MonoBehaviour
     [SerializeField] private InputActionReference _triggerAction;
 
     private IInteractionService _interactionService;
-    [Inject] void Construct(IInteractionService interactionService)
-        => _interactionService = interactionService;
 
-    void OnEnable()
+    [Inject]
+    private void Construct(IInteractionService interactionService)
+    {
+        _interactionService = interactionService;
+    }
+
+    private void OnEnable()
     {
         _gripAction.action.Enable();
         _triggerAction.action.Enable();
@@ -39,38 +64,98 @@ public sealed class VRInputProvider : MonoBehaviour
         _triggerAction.action.performed += OnTrigger;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
-        _gripAction.action.Disable();
-        _triggerAction.action.Disable();
         _gripAction.action.performed -= OnGrip;
         _triggerAction.action.performed -= OnTrigger;
+        _gripAction.action.Disable();
+        _triggerAction.action.Disable();
     }
 
-    private void OnGrip(InputAction.CallbackContext ctx)
-        => _interactionService.Grip(ctx.ReadValue<float>());
+    private void OnGrip(InputAction.CallbackContext context)
+    {
+        _interactionService.Grip(context.ReadValue<float>());
+    }
 
-    private void OnTrigger(InputAction.CallbackContext ctx)
-        => _interactionService.Trigger(ctx.ReadValue<float>());
+    private void OnTrigger(InputAction.CallbackContext context)
+    {
+        _interactionService.Trigger(context.ReadValue<float>());
+    }
 }
 ```
 
-## VR Performance Rules
+Input providers should forward intent. Services decide interaction legality.
 
-- **Target framerate:** 90 FPS (Quest 2), 120 FPS (Quest 3)
-- **Draw call limit:** <100 per eye
-- **Foveated Rendering:** Enable Oculus Foveated Rendering
-- **Single Pass Stereo:** Enable in Player Settings
-- **Fixed Foveated Rendering:** Required for Quest
+## Interaction Toolkit Guidance
 
-## Comfort (Locomotion)
+Common components:
 
-- Teleport locomotion → reduces dizziness
-- Continuous locomotion → add vignette (darken edges during movement)
-- Snap turn → use for sudden direction changes
+- `XR Grab Interactable` for grab objects
+- `XR Socket Interactor` for slot placement
+- `XR Ray Interactor` for distant interaction and UI
+- `XR Direct Interactor` for near-hand interaction
 
-## XR Interaction Toolkit
+Keep interaction layers explicit. Do not rely on broad default layer masks for important interactions.
 
-- XR Grab Interactable → grabbing objects
-- XR Socket Interactor → slot placement
-- XR Ray Interactor → remote interaction (for UI)
+## Comfort Rules
+
+- Prefer teleport locomotion when comfort is uncertain.
+- Use snap turn instead of smooth turn by default.
+- Add vignette or other comfort mitigation for continuous movement.
+- Avoid forced camera motion.
+- Avoid sudden acceleration.
+- Keep world scale believable.
+- Give immediate feedback for grab, hover, and invalid actions.
+
+## Performance Rules
+
+VR performance budgets are strict:
+
+- Target device frame rate must be explicit.
+- Avoid per-frame allocations.
+- Keep draw calls and overdraw low.
+- Use single-pass stereo where appropriate.
+- Use foveated rendering on supported standalone headsets.
+- Keep expensive post-processing modest.
+- Pool frequent VFX and interaction indicators.
+
+## VR UI Guidance
+
+- Prefer world-space UI that is readable at comfortable distances.
+- Use large targets and clear hover states.
+- Avoid tiny text and dense panels.
+- Support ray-based and direct interaction where appropriate.
+- Keep UI feedback immediate.
+
+## Good Pattern
+
+```text
+XR controller input -> interaction service command -> validated action -> haptics/audio/visual feedback
+```
+
+## Bad Pattern
+
+```text
+Controller callback directly mutates object state, plays effects, changes score, and moves the camera.
+```
+
+## Common Mistakes
+
+- treating VR like normal first-person camera mode
+- forced camera movement
+- no comfort strategy for continuous locomotion
+- interaction layers too broad
+- tiny UI targets
+- per-frame allocations in interaction code
+- forgetting haptic or visual feedback for important actions
+
+## AI Review Guidance
+
+When reviewing VR code, check:
+
+- Is input isolated from interaction rules?
+- Are comfort defaults conservative?
+- Are interaction layers explicit?
+- Is the frame budget protected?
+- Are UI targets readable and usable in headset?
+- Is feedback clear for hover, grab, release, valid, and invalid actions?
