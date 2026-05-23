@@ -1,0 +1,283 @@
+[
+  {
+    "name": "block-scene-edit blocks scene files",
+    "hook": ".claude/hooks/block-scene-edit.sh",
+    "expectedExit": 2,
+    "expectStderr": "HOOK BLOCK [block-scene-edit]",
+    "input": {
+      "tool_name": "Edit",
+      "tool_input": {
+        "file_path": "Assets/Scenes/Game.unity",
+        "old_string": "old",
+        "new_string": "new"
+      }
+    }
+  },
+  {
+    "name": "block-scene-edit allows C# files",
+    "hook": ".claude/hooks/block-scene-edit.sh",
+    "expectedExit": 0,
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/Player.cs",
+        "content": "public sealed class Player {}"
+      }
+    }
+  },
+  {
+    "name": "guard-editor-runtime blocks unguarded UnityEditor",
+    "hook": ".claude/hooks/guard-editor-runtime.sh",
+    "expectedExit": 2,
+    "expectStderr": "HOOK BLOCK [guard-editor-runtime]",
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/MyService.cs",
+        "content": "using UnityEditor;\npublic sealed class MyService {}"
+      }
+    }
+  },
+  {
+    "name": "guard-editor-runtime allows guarded UnityEditor",
+    "hook": ".claude/hooks/guard-editor-runtime.sh",
+    "expectedExit": 0,
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/MyService.cs",
+        "content": "#if UNITY_EDITOR\nusing UnityEditor;\n#endif\npublic sealed class MyService {}"
+      }
+    }
+  },
+  {
+    "name": "check-pure-csharp blocks UnityEngine in _Framework",
+    "hook": ".claude/hooks/check-pure-csharp.sh",
+    "expectedExit": 2,
+    "expectStderr": "HOOK BLOCK [check-pure-csharp]",
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/_Framework/Events/EventBus.cs",
+        "content": "using UnityEngine;\npublic sealed class EventBus {}"
+      }
+    }
+  },
+  {
+    "name": "check-pure-csharp allows pure C# in _Framework",
+    "hook": ".claude/hooks/check-pure-csharp.sh",
+    "expectedExit": 0,
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/_Framework/Events/EventBus.cs",
+        "content": "using System;\npublic sealed class EventBus {}"
+      }
+    }
+  },
+  {
+    "name": "check-input-system blocks legacy input",
+    "hook": ".claude/hooks/check-input-system.sh",
+    "expectedExit": 2,
+    "expectStderr": "HOOK BLOCK [check-input-system]",
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/InputView.cs",
+        "content": "using UnityEngine;\npublic sealed class InputView : MonoBehaviour { void Update() { if (Input.GetKeyDown(KeyCode.Space)) {} } }"
+      }
+    }
+  },
+  {
+    "name": "check-input-system allows InputAction",
+    "hook": ".claude/hooks/check-input-system.sh",
+    "expectedExit": 0,
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/InputView.cs",
+        "content": "using UnityEngine.InputSystem;\npublic sealed class InputView { private InputAction _jump; }"
+      }
+    }
+  },
+  {
+    "name": "check-singleton blocks static Instance",
+    "hook": ".claude/hooks/check-singleton.sh",
+    "expectedExit": 2,
+    "expectStderr": "HOOK BLOCK [check-singleton]",
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/GameManager.cs",
+        "content": "public sealed class GameManager { public static GameManager Instance { get; private set; } }"
+      }
+    }
+  },
+  {
+    "name": "check-singleton allows injected service",
+    "hook": ".claude/hooks/check-singleton.sh",
+    "expectedExit": 0,
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/GameService.cs",
+        "content": "public sealed class GameService : IGameService {}"
+      }
+    }
+  },
+  {
+    "name": "check-unity-event blocks UnityEvent",
+    "hook": ".claude/hooks/check-unity-event.sh",
+    "expectedExit": 2,
+    "expectStderr": "HOOK BLOCK [check-unity-event]",
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/ButtonView.cs",
+        "content": "using UnityEngine.Events;\npublic sealed class ButtonView { private UnityEvent _clicked; }"
+      }
+    }
+  },
+  {
+    "name": "check-unity-event allows C# event",
+    "hook": ".claude/hooks/check-unity-event.sh",
+    "expectedExit": 0,
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/ButtonView.cs",
+        "content": "using System;\npublic sealed class ButtonView { public event Action Clicked; }"
+      }
+    }
+  },
+  {
+    "name": "check-coroutine blocks StartCoroutine",
+    "hook": ".claude/hooks/check-coroutine.sh",
+    "expectedExit": 2,
+    "expectStderr": "HOOK BLOCK [check-coroutine]",
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/Loader.cs",
+        "content": "using System.Collections;\nusing UnityEngine;\npublic sealed class Loader : MonoBehaviour { void Start() { StartCoroutine(Load()); } IEnumerator Load() { yield return null; } }"
+      }
+    }
+  },
+  {
+    "name": "check-coroutine allows UniTask",
+    "hook": ".claude/hooks/check-coroutine.sh",
+    "expectedExit": 0,
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/Loader.cs",
+        "content": "using Cysharp.Threading.Tasks;\npublic sealed class Loader { public async UniTask LoadAsync() { await UniTask.Yield(); } }"
+      }
+    }
+  },
+  {
+    "name": "guard-config-files blocks settings",
+    "hook": ".claude/hooks/guard-config-files.sh",
+    "expectedExit": 2,
+    "expectStderr": "HOOK BLOCK [guard-config-files]",
+    "input": {
+      "tool_name": "Edit",
+      "tool_input": {
+        "file_path": ".claude/settings.json",
+        "old_string": "allow",
+        "new_string": "deny"
+      }
+    }
+  },
+  {
+    "name": "guard-config-files allows normal C#",
+    "hook": ".claude/hooks/guard-config-files.sh",
+    "expectedExit": 0,
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/Service.cs",
+        "content": "public sealed class Service {}"
+      }
+    }
+  },
+  {
+    "name": "check-linq-hotpath warns in Update",
+    "hook": ".claude/hooks/check-linq-hotpath.sh",
+    "expectedExit": 0,
+    "expectStderr": "HOOK WARN [check-linq-hotpath]",
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/EnemyView.cs",
+        "content": "using System.Linq;\npublic sealed class EnemyView { void Update() { var alive = _enemies.Where(e => e.IsAlive).ToList(); } }"
+      }
+    }
+  },
+  {
+    "name": "check-expensive-hotpath warns in Update",
+    "hook": ".claude/hooks/check-expensive-hotpath.sh",
+    "expectedExit": 0,
+    "expectStderr": "HOOK WARN [check-expensive-hotpath]",
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/EnemyView.cs",
+        "content": "using UnityEngine;\npublic sealed class EnemyView : MonoBehaviour { void Update() { GetComponent<Rigidbody>(); var camera = Camera.main; } }"
+      }
+    }
+  },
+  {
+    "name": "check-async-void warns outside lifecycle",
+    "hook": ".claude/hooks/check-async-void.sh",
+    "expectedExit": 0,
+    "expectStderr": "HOOK WARN [check-async-void]",
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/ButtonView.cs",
+        "content": "public sealed class ButtonView { async void OnClick() { await SaveAsync(); } }"
+      }
+    }
+  },
+  {
+    "name": "check-unitask-cancellation warns missing token",
+    "hook": ".claude/hooks/check-unitask-cancellation.sh",
+    "expectedExit": 0,
+    "expectStderr": "HOOK WARN [check-unitask-cancellation]",
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/Loader.cs",
+        "content": "using Cysharp.Threading.Tasks;\npublic sealed class Loader { public async UniTask LoadAsync() { await UniTask.Yield(); } }"
+      }
+    }
+  },
+  {
+    "name": "check-null-propagation warns",
+    "hook": ".claude/hooks/check-null-propagation.sh",
+    "expectedExit": 0,
+    "expectStderr": "HOOK WARN [check-null-propagation]",
+    "input": {
+      "tool_name": "Write",
+      "tool_input": {
+        "file_path": "Assets/Scripts/View.cs",
+        "content": "public sealed class View { void Render() { _text?.SetText(\"Hi\"); if (_go is null) { } } }"
+      }
+    }
+  },
+  {
+    "name": "warn-serialization warns renamed serialized field",
+    "hook": ".claude/hooks/warn-serialization.sh",
+    "expectedExit": 0,
+    "expectStderr": "HOOK WARN [warn-serialization]",
+    "input": {
+      "tool_name": "Edit",
+      "tool_input": {
+        "file_path": "Assets/Scripts/PlayerConfig.cs",
+        "old_string": "[SerializeField] private float _speed;",
+        "new_string": "[SerializeField] private float _moveSpeed;"
+      }
+    }
+  }
+]
