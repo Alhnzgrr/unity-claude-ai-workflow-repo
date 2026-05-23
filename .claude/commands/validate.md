@@ -1,36 +1,36 @@
 # /validate
 
-Tamamlanan faz için exit criteria kontrolü.
+Exit criteria check for the completed phase.
 
-## Kullanım
+## Usage
 
 ```
 /validate
 ```
 
-## Kontrol Listesi
+## Checklist
 
-- [ ] Compile: hata yok
-- [ ] EditMode testler: hepsi geçiyor
-- [ ] PlayMode testler (varsa): hepsi geçiyor
-- [ ] Console: error ve exception yok (warning kabul edilebilir)
-- [ ] Serialization riski: FormerlySerializedAs kontrol edildi
-- [ ] Silent failures: temiz
-- [ ] Mimari kurallar: ihlal yok (unity-linter çalıştır)
+- [ ] Compile: no errors
+- [ ] EditMode tests: all passing
+- [ ] PlayMode tests (if any): all passing
+- [ ] Console: no errors or exceptions (warnings acceptable)
+- [ ] Serialization risk: FormerlySerializedAs checked
+- [ ] Silent failures: clean
+- [ ] Architecture rules: no violations (run unity-linter)
 
 ## Output
 
 ```
-## Validation Raporu
+## Validation Report
 
 Compile: ✅ OK
 EditMode Tests: ✅ [N] passed
 PlayMode Tests: ✅ [N] passed
-Console Errors: ✅ Temiz
-Serialization: ✅ Risk yok
-Silent Failures: ✅ Temiz
+Console Errors: ✅ Clean
+Serialization: ✅ No risk
+Silent Failures: ✅ Clean
 
-Sonuç: PASS / PARTIAL / FAIL
+Result: PASS / PARTIAL / FAIL
 ```
 
-PARTIAL veya FAIL → hangi madde takıldığını belirt.
+PARTIAL or FAIL → specify which item is blocking.

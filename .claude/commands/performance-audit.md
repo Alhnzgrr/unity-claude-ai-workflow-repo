@@ -1,42 +1,42 @@
 # /performance-audit
 
-Hot path allocation ve draw call denetimi.
+Hot path allocation and draw call audit.
 
-## Kullanım
+## Usage
 
 ```
-/performance-audit [opsiyonel: klasör veya dosya]
+/performance-audit [optional: folder or file]
 ```
 
 ## Workflow
 
-### Adım 1 — Tarama Kapsamı
+### Step 1 — Scan Scope
 
-Belirtilmişse o dosya/klasör, yoksa tüm `Concretes/` klasörü.
+If specified, that file/folder; otherwise the entire `Concretes/` folder.
 
-### Adım 2 — unity-optimizer
+### Step 2 — unity-optimizer
 
-`unity-optimizer` spawn et:
-- Update/FixedUpdate metotlarını tara
-- Allocation pattern'leri bul
-- LINQ kullanımı
-- GetComponent/Camera.main/Find* hot path'te mi?
+Spawn `unity-optimizer`:
+- Scan Update/FixedUpdate methods
+- Find allocation patterns
+- LINQ usage
+- Is GetComponent/Camera.main/Find* in hot path?
 
-### Adım 3 — unity-developer (full modda)
+### Step 3 — unity-developer (in full mode)
 
-review-mode == `full` → `unity-developer` ek perspektif sunar.
+review-mode == `full` → `unity-developer` provides additional perspective.
 
-### Adım 4 — Rapor
+### Step 4 — Report
 
 ```
-## Performans Denetim Raporu
+## Performance Audit Report
 
-### Kritik (hemen düzelt)
-- [dosya:satır]: [sorun] → [öneri]
+### Critical (fix immediately)
+- [file:line]: [issue] → [suggestion]
 
-### İzle
-- [dosya:satır]: [sorun]
+### Watch
+- [file:line]: [issue]
 
-### Temiz
-- [N] dosya tarandı, sorun yok
+### Clean
+- [N] files scanned, no issues
 ```

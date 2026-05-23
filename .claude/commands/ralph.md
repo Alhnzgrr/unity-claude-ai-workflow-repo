@@ -1,8 +1,8 @@
 # /ralph
 
-Yeşil olana kadar verify-fix loop. Max 10 iterasyon.
+Verify-fix loop until green. Max 10 iterations.
 
-## Kullanım
+## Usage
 
 ```
 /ralph
@@ -11,25 +11,25 @@ Yeşil olana kadar verify-fix loop. Max 10 iterasyon.
 ## Workflow
 
 ```
-iterasyon = 0
+iteration = 0
 
 LOOP:
-  iterasyon += 1
+  iteration += 1
   unity-verifier → compile + test
   
-  PASSED → "Yeşil! [iterasyon] iterasyonda geçti." → DUR
+  PASSED → "Green! Passed in [iteration] iteration(s)." → STOP
   
   FAILED:
-    iterasyon >= 10 → "STUCK: 10 iterasyon sonra hala kırmızı." → DUR
-    unity-coder → hatayı düzelt
-    LOOP'a dön
+    iteration >= 10 → "STUCK: Still red after 10 iterations." → STOP
+    unity-coder → fix the error
+    go back to LOOP
 ```
 
-## Sıkışma Çıkışı
+## Stuck Exit
 
-10 iterasyon sonra geçmiyorsa:
+If not passing after 10 iterations:
 ```
 ❌ STUCK after 10 iterations
-Son hata: [hata mesajı]
-Öneri: /fix-deep ile root cause analizi yap
+Last error: [error message]
+Suggestion: run /fix-deep for root cause analysis
 ```

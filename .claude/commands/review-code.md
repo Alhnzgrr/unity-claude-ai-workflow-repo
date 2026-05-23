@@ -1,14 +1,14 @@
 # /review-code
 
-Belirli dosyaları derinlemesine review eder.
+Performs a deep review of specific files.
 
-## Kullanım
+## Usage
 
 ```
-/review-code <dosya yolu veya glob pattern>
+/review-code <file path or glob pattern>
 ```
 
-Örnekler:
+Examples:
 ```
 /review-code Assets/_GameFolders/Scripts/Games/Concretes/Audio/AudioService.cs
 /review-code Assets/_GameFolders/Scripts/Games/Concretes/Audio/
@@ -16,22 +16,22 @@ Belirli dosyaları derinlemesine review eder.
 
 ## Workflow
 
-### Adım 1 — Dosyaları Oku
+### Step 1 — Read Files
 
-Belirtilen dosyaları Read tool ile oku (gateguard bypass için zorunlu).
+Read the specified files with the Read tool (required to bypass gateguard).
 
-### Adım 2 — unity-reviewer
+### Step 2 — unity-reviewer
 
-`unity-reviewer` spawn et. Tam review kontrol listesi ile.
+Spawn `unity-reviewer`. With the full review checklist.
 
-### Adım 3 — Raporu Göster
+### Step 3 — Show Report
 
-Reviewer output'unu göster:
+Display the reviewer output:
 - Must Fix (blocker)
-- Should Improve (öneri)
+- Should Improve (suggestion)
 - Optional (nice-to-have)
-- Unity Notes (Unity-spesifik)
+- Unity Notes (Unity-specific)
 
-### Adım 4 — Kullanıcı Kararı
+### Step 4 — User Decision
 
-Must Fix varsa: "Düzeltmemi ister misin? (yes/no)"
+If Must Fix items exist: "Would you like me to fix them? (yes/no)"

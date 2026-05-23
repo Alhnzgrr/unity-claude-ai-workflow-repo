@@ -1,8 +1,8 @@
 # /catch-up
 
-İnsan-okunabilir codebase kılavuzu üretir.
+Generates a human-readable codebase guide.
 
-## Kullanım
+## Usage
 
 ```
 /catch-up
@@ -10,38 +10,38 @@
 
 ## Workflow
 
-### Adım 1 — Codebase Tara
+### Step 1 — Scan Codebase
 
-`unity-scout` ile:
-- Tüm Interface'leri listele
-- Tüm Service'leri listele
-- Bağımlılık grafiğini çıkar
+With `unity-scout`:
+- List all Interfaces
+- List all Services
+- Extract the dependency graph
 
-### Adım 2 — CATCH_UP.md Üret
+### Step 2 — Generate CATCH_UP.md
 
 `docs/CATCH_UP.md`:
 
 ```markdown
-# Codebase Kılavuzu — [Tarih]
+# Codebase Guide — [Date]
 
-## Sistemler
+## Systems
 
-| Sistem | Interface | Sorumluluk |
+| System | Interface | Responsibility |
 |---|---|---|
-| Audio | IAudioService | Ses çalma, durdurma, volume |
-| Player | IPlayerService | Hareket, input, state |
+| Audio | IAudioService | Play, stop, volume |
+| Player | IPlayerService | Movement, input, state |
 
-## Bağımlılık Grafiği
-[Metin diagram]
+## Dependency Graph
+[Text diagram]
 
 ## DI Wiring
-[AppScope / GameScope'ta ne register edilmiş]
+[What is registered in AppScope / GameScope]
 
-## Önemli Pattern'ler
-[Projede kullanılan kritik pattern'ler]
+## Key Patterns
+[Critical patterns used in the project]
 ```
 
-### Adım 3 — Commit
+### Step 3 — Commit
 
 ```bash
 git add docs/CATCH_UP.md
