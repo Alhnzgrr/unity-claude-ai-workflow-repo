@@ -1,0 +1,53 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(bash .claude/hooks/*)",
+      "Bash(cat *)",
+      "Bash(jq *)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Agent(*)",
+      "WebSearch(*)",
+      "WebFetch(*)"
+    ],
+    "deny": [
+      "Edit(.claude/settings.json)",
+      "Write(.claude/settings.json)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {"type": "command", "command": "bash .claude/hooks/block-scene-edit.sh"},
+          {"type": "command", "command": "bash .claude/hooks/guard-editor-runtime.sh"},
+          {"type": "command", "command": "bash .claude/hooks/check-pure-csharp.sh"},
+          {"type": "command", "command": "bash .claude/hooks/check-input-system.sh"},
+          {"type": "command", "command": "bash .claude/hooks/check-singleton.sh"},
+          {"type": "command", "command": "bash .claude/hooks/check-unity-event.sh"},
+          {"type": "command", "command": "bash .claude/hooks/check-coroutine.sh"},
+          {"type": "command", "command": "bash .claude/hooks/guard-config-files.sh"},
+          {"type": "command", "command": "bash .claude/hooks/gateguard.sh"}
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {"type": "command", "command": "bash .claude/hooks/check-linq-hotpath.sh"},
+          {"type": "command", "command": "bash .claude/hooks/check-expensive-hotpath.sh"},
+          {"type": "command", "command": "bash .claude/hooks/check-async-void.sh"},
+          {"type": "command", "command": "bash .claude/hooks/check-unitask-cancellation.sh"},
+          {"type": "command", "command": "bash .claude/hooks/check-null-propagation.sh"},
+          {"type": "command", "command": "bash .claude/hooks/warn-serialization.sh"}
+        ]
+      }
+    ]
+  }
+}

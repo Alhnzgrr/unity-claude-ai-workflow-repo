@@ -1,0 +1,16 @@
+# Claude session state — repoya gitmez
+.claude/state/session.json
+.claude/state/checkpoint.md
+.claude/state/gate-cleared
+.claude/state/learnings.jsonl
+.claude/state/instincts/
+
+# Runtime üretilen dosyalar
+production/session-state/
+
+# Worktree'ler
+.claude/worktrees/
+
+# OS
+.DS_Store
+Thumbs.db
