@@ -7,49 +7,71 @@ description: Usage patterns and fallback behaviors for Unity Editor MCP integrat
 
 ## MCP Presence Check
 
-MCP connection is checked at the start of the session. Behavior depends on this:
+Check MCP availability at the start of a session or before editor-state work.
 
-```
-Is MCP connected?
-├── Yes → Use Unity Editor tools
-└── No  → Provide manual instructions, wait for user confirmation
+```text
+MCP connected?
+  Yes -> use Unity Editor tools
+  No -> provide manual Unity Editor instructions and wait for user confirmation
 ```
 
 ## What Can Be Done with MCP
 
-- Reading/writing scene hierarchy
-- Creating GameObjects, adding components
-- Creating ScriptableObject assets
-- Linking prefab references
-- Triggering compilation
-- Running test runner
-- Reading console logs
+- read and write scene hierarchy
+- create GameObjects
+- add and configure components
+- create ScriptableObject assets
+- link prefab and asset references
+- trigger compilation
+- run tests
+- read console logs
 
-## What NOT to Do with MCP
+## What Not To Do
 
-- Editing .unity files directly with Edit/Write → `block-scene-edit.sh` blocks it
-- Editing .prefab files directly with Edit/Write → blocks it
-- Editing .asset files directly with Edit/Write → blocks it
+Do not edit these files directly with text tools:
+
+- `.unity`
+- `.prefab`
+- `.asset`
+
+The `block-scene-edit.sh` hook blocks those edits. Use MCP tools or manual Unity Editor steps instead.
+
+## Asset and ScriptableObject Setup
+
+Creating or modifying ScriptableObject assets should happen through one of these paths:
+
+1. Unity MCP asset/editor tools
+2. manual Unity Editor steps
+3. a deliberate editor utility script reviewed by the user
+
+Do not bypass Unity serialization by editing `.asset` YAML directly.
 
 ## MCP Fallback Instruction Format
 
-When MCP is unavailable, provide clear steps to the user:
+When MCP is unavailable, provide concrete steps:
 
-```
-📋 Steps to perform in Unity Editor:
+```text
+Unity Editor steps:
 
-1. Select the [Setup] container in the Hierarchy
-2. Add Component → add LifetimeScope
-3. Drag AppScope to the Parent field of LifetimeScope
-4. Drag the GameInstaller asset to the GameInstaller field in the Inspector
+1. Select the [Setup] container in the Hierarchy.
+2. Add a LifetimeScope component.
+3. Assign AppScope to the Parent field.
+4. Assign the GameInstaller asset in the Inspector.
 
 Type "ready" when done.
 ```
 
 ## Scene Manipulation Order
 
-1. Create containers ([Setup], [Services], [UI]...)
-2. Core objects: EventSystem → [UI], MainCamera → [Environment]
-3. LifetimeScope and Installers → [Setup]
-4. Provider MonoBehaviours → [Services]
-5. Prefab instances → relevant container
+1. Create root containers: `[Setup]`, `[Services]`, `[UI]`, `[Environment]`, `[Characters]`, `[VFX]`.
+2. Add core objects: EventSystem under `[UI]`, MainCamera under `[Environment]`.
+3. Add LifetimeScope and installers under `[Setup]`.
+4. Add provider MonoBehaviours under `[Services]`.
+5. Place prefab instances under the relevant containers.
+
+## Review Questions
+
+- Was editor state changed through MCP or explicit manual instructions?
+- Were `.unity`, `.prefab`, and `.asset` files left untouched by text edits?
+- Are manual steps concrete enough for the user to reproduce?
+- Are generated editor utilities clearly scoped and reviewed?

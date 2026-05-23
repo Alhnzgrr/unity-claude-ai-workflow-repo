@@ -2,59 +2,103 @@
 
 ## Every Scene Object Must Be a Prefab
 
-Every GameObject in the scene must be a prefab instance.
-Creating scene objects directly is forbidden:
+Every persistent GameObject in a scene should be a prefab instance.
+
+Creating runtime scene objects directly is forbidden in production gameplay code:
 
 ```csharp
-// WRONG
+// WRONG in production gameplay code
 var go = new GameObject("Enemy");
 var enemy = go.AddComponent<EnemyView>();
 
-// CORRECT — instantiate from prefab
+// CORRECT
 var enemy = Instantiate(_enemyPrefab, position, rotation);
 ```
 
-`check-pure-csharp.sh` and hooks catch the `new GameObject()` pattern.
+## Test Exception
+
+Programmatic PlayMode tests may create temporary `GameObject` instances to verify MonoBehaviour behavior.
+
+This exception is limited to test code. Temporary objects must be destroyed by the test.
+
+## Editor and MCP Exception
+
+Scene, prefab, and asset setup should be performed through Unity Editor, Unity MCP tools, or documented manual steps.
+
+Do not edit `.unity`, `.prefab`, or `.asset` files directly through text edits.
 
 ## Prefab Structure
 
-```
-EnemyPrefab (root)
-├── EnemyView.cs         ← logic component here
-└── Body (child)
-    └── MeshRenderer     ← visuals on child
+```text
+EnemyPrefab
+  EnemyView.cs
+  Body
+    MeshRenderer
 ```
 
-Root → logic components
-Body child → visual components (MeshRenderer, Animator)
+Root object:
+
+- logic components
+- dependency injection bridge components
+- identity components
+
+Child objects:
+
+- renderers
+- animators
+- particle systems
+- visual-only components
 
 ## Destroy Rules
 
 ```csharp
-// Pooled objects — calling Destroy is forbidden, return to pool
+// Pooled object
 _pool.Release(bulletView);
 
-// Non-pooled, to be removed from scene
+// Non-pooled runtime object
 Destroy(gameObject);
 
-// In Editor (testing)
+// Editor/test-only cleanup
 DestroyImmediate(gameObject);
 ```
 
+Do not call `Destroy` on pooled objects except through pool destroy callbacks.
+
 ## BaseCanvas Pattern
 
-Every Canvas → separate prefab, derived from `BaseCanvas` base class:
+Every Canvas should be a separate prefab when practical.
 
 ```csharp
 public abstract class BaseCanvas : MonoBehaviour
 {
     [SerializeField] private CanvasGroup _canvasGroup;
-    public void Show() => _canvasGroup.alpha = 1f;
-    public void Hide() => _canvasGroup.alpha = 0f;
+
+    public void Show()
+    {
+        _canvasGroup.alpha = 1f;
+    }
+
+    public void Hide()
+    {
+        _canvasGroup.alpha = 0f;
+    }
 }
 ```
 
-## Prefab Variant
+## Prefab Variants
 
-Use base prefab + Prefab Variant for similar prefabs:
-`EnemyBase.prefab` → `EnemyFast.prefab (variant)`, `EnemyTank.prefab (variant)`
+Use a base prefab plus Prefab Variants for similar objects.
+
+```text
+EnemyBase.prefab
+  EnemyFast.prefab
+  EnemyTank.prefab
+```
+
+## Common Mistakes
+
+- creating persistent scene objects from code instead of prefabs
+- treating test-only `new GameObject` setup as runtime approval
+- putting visual components and logic into one unstructured root
+- destroying pooled objects instead of releasing them
+- directly editing prefab files as text

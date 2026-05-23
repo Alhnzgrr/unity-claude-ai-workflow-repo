@@ -1,42 +1,61 @@
 ---
 name: unity-instincts
-description: Project-wide instincts for fast, reliable decisions in Unity development.
+description: Project-wide instincts for fast, reliable Unity development decisions.
 ---
 
 # Unity Instincts
 
-Pre-determined decisions for frequently recurring situations. Apply these instincts instead of analyzing from scratch each time.
+Use these as default decisions for common Unity development situations. If a rule-specific exception applies, follow the more specific rule and document the reason.
 
 ## General Instincts
 
-**Need a new system?**
-→ Write the Interface first, then the implementation. Never in reverse order.
+**Need a new system?**  
+Write the interface first, then the implementation.
 
-**Communication between services?**
-→ IEventBus. Not direct references.
+**Communication between services?**  
+Use `IEventBus` for cross-system communication. Avoid direct references unless the dependency is truly part of the same module boundary.
 
-**An async operation?**
-→ UniTask + CancellationToken. Always. No exceptions.
+**Async operation?**  
+Use UniTask and pass a `CancellationToken`. Test-only Unity coroutine runner usage is the only documented coroutine exception.
 
-**Dependency on MonoBehaviour?**
-→ [Inject] void Construct(...). Not constructor.
+**MonoBehaviour dependency?**  
+Use `[Inject] void Construct(...)`. Do not use constructors for MonoBehaviours.
 
-**Need a new GameObject?**
-→ Instantiate from Prefab. Not new GameObject().
+**Need a persistent scene object?**  
+Instantiate from a prefab or set it up through Unity Editor/MCP. Do not create persistent gameplay objects with `new GameObject`.
 
-**Coroutine → UniTask migration?**
-→ yield return new WaitForSeconds(t) → await UniTask.Delay(ms, ct)
-→ yield return null → await UniTask.Yield()
-→ yield return new WaitForEndOfFrame() → await UniTask.WaitForEndOfFrame()
+**Writing a PlayMode test?**  
+Temporary `new GameObject` setup is allowed only inside test code and must be cleaned up by the test.
 
-**Event subscribe/unsubscribe?**
-→ Subscribe in OnEnable, unsubscribe in OnDisable. Always paired.
+**Coroutine to UniTask migration?**
 
-**Performance question?**
-→ Profiler first. No assumptions. No optimization without measurement.
+```text
+yield return new WaitForSeconds(t) -> await UniTask.Delay(TimeSpan.FromSeconds(t), cancellationToken: ct)
+yield return null -> await UniTask.Yield(ct)
+yield return new WaitForEndOfFrame() -> await UniTask.WaitForEndOfFrame(ct)
+```
+
+**Event subscribe/unsubscribe?**  
+Subscribe in `OnEnable`, unsubscribe in `OnDisable`, and keep the pair together.
+
+**Performance question?**  
+Measure first. Use the profiler or targeted diagnostics before making broad optimizations.
 
 **Writing a test?**
-→ No Unity API required → EditMode. Required → PlayMode. Scene needed → PlayMode Scene.
 
-**Creating a new file?**
-→ Interface first, then concrete. Check the folder: Abstracts/ and Concretes/ are separate.
+```text
+No Unity API required -> EditMode
+Unity object behavior required -> PlayMode
+Scene integration required -> PlayMode scene test
+```
+
+**Creating a new module file set?**  
+Create Abstracts and Concretes in the expected module layout. Keep public API in interfaces and Unity bridge code in providers/views.
+
+## Common Mistakes
+
+- treating instincts as exceptions to stricter rules
+- copying test-only patterns into runtime code
+- using DI to hide unclear ownership
+- starting optimization without evidence
+- mixing input, rules, state mutation, and presentation in one MonoBehaviour

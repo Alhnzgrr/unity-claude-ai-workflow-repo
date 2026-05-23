@@ -2,7 +2,7 @@
 
 ## Required: UniTask
 
-All async operations use UniTask. `System.Threading.Tasks.Task` and coroutines are forbidden.
+Production async operations use UniTask. `System.Threading.Tasks.Task` and runtime coroutines are forbidden unless a rule explicitly states a test-only exception.
 
 ```csharp
 // CORRECT
@@ -11,22 +11,34 @@ public async UniTask LoadAsync(CancellationToken ct)
     await UniTask.Delay(1000, cancellationToken: ct);
 }
 
-// WRONG — coroutine
-IEnumerator LoadCoroutine() { yield return new WaitForSeconds(1f); }
+// WRONG in production code
+IEnumerator LoadCoroutine()
+{
+    yield return new WaitForSeconds(1f);
+}
 
-// WRONG — Task
-async Task LoadAsync() { await Task.Delay(1000); }
+// WRONG in Unity gameplay code
+async Task LoadAsync()
+{
+    await Task.Delay(1000);
+}
 ```
+
+## UnityTest Exception
+
+`IEnumerator` is allowed in test code when required by Unity's `[UnityTest]` runner.
+
+This exception does not permit runtime coroutines in production gameplay code.
 
 ## CancellationToken Requirement
 
-Every public async method takes a `CancellationToken` parameter:
+Every public async method takes a `CancellationToken` parameter, normally as the last parameter.
 
 ```csharp
 // CORRECT
 public async UniTask PlayAsync(string clipName, CancellationToken ct)
 
-// WRONG — no token
+// WRONG
 public async UniTask PlayAsync(string clipName)
 ```
 
@@ -34,28 +46,45 @@ public async UniTask PlayAsync(string clipName)
 
 ```csharp
 // FORBIDDEN
-async void OnButtonClick() { await DoSomethingAsync(); }
+async void OnButtonClick()
+{
+    await DoSomethingAsync();
+}
 
-// CORRECT — return UniTask or use .Forget()
-void OnButtonClick() { DoSomethingAsync(destroyCancellationToken).Forget(); }
+// CORRECT
+void OnButtonClick()
+{
+    DoSomethingAsync(destroyCancellationToken)
+        .Forget(Debug.LogException);
+}
 ```
+
+Unity lifecycle methods and event handlers may be `void`, but they should start UniTask flows with explicit cancellation and exception handling.
 
 ## Ownership Model
 
-- Views use `destroyCancellationToken` (cancelled when MonoBehaviour is destroyed)
-- Services create and dispose their own `CancellationTokenSource`
+- Views use `destroyCancellationToken`.
+- Services create and dispose their own `CancellationTokenSource` when they own long-running work.
+- Callers pass external tokens for user actions or feature lifetimes.
 
 ```csharp
-public class AudioService : IAudioService, IDisposable
+public sealed class AudioService : IAudioService, IDisposable
 {
-    private readonly CancellationTokenSource _cts = new();
-
-    public void Dispose() => _cts.Cancel();
+    private readonly CancellationTokenSource _lifetimeCts = new();
 
     public async UniTask PlayAsync(string clip, CancellationToken ct)
     {
-        var linked = CancellationTokenSource.CreateLinkedTokenSource(_cts.Token, ct);
-        await _audioClip.ToUniTask(cancellationToken: linked.Token);
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(
+            _lifetimeCts.Token,
+            ct);
+
+        await PlayInternalAsync(clip, linked.Token);
+    }
+
+    public void Dispose()
+    {
+        _lifetimeCts.Cancel();
+        _lifetimeCts.Dispose();
     }
 }
 ```
@@ -63,9 +92,17 @@ public class AudioService : IAudioService, IDisposable
 ## UniTask.WhenAll Usage
 
 ```csharp
-// Parallel async operations
 await UniTask.WhenAll(
     LoadAudioAsync(ct),
-    LoadTextureAsync(ct)
-);
+    LoadTextureAsync(ct));
 ```
+
+Parallel work should share cancellation and fail clearly when one branch fails.
+
+## Common Mistakes
+
+- missing cancellation tokens on public async methods
+- `.Forget()` without exception handling
+- runtime coroutines copied from UnityTest examples
+- creating `CancellationTokenSource` without disposing it
+- touching Unity API after switching to a background thread
